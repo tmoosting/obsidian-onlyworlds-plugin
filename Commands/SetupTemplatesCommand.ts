@@ -3,9 +3,11 @@ import { Category } from 'enums'; // Adjust path as needed
 
 export class SetupTemplatesCommand {
     app: App;
+    manifest: any;
 
-    constructor(app: App) {
+    constructor(app: App, manifest: any) {
         this.app = app;
+        this.manifest = manifest; 
     }
 
     async execute() {
@@ -17,7 +19,7 @@ export class SetupTemplatesCommand {
 
                 if (!templateExists) {
                     try {
-                        const internalTemplatePath = this.app.manifest.dir + `/Templates/${templateFileName}`;
+                        const internalTemplatePath = this.manifest.dir + `/Templates/${templateFileName}`;
                         const templateContent = await this.app.vault.adapter.read(internalTemplatePath);
                         await this.app.vault.create(templatesPath + templateFileName, templateContent);
                         new Notice(`Template created: ${templateFileName}`);
