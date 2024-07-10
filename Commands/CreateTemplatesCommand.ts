@@ -1,7 +1,7 @@
-import { App, Notice } from 'obsidian';
+import { App, Notice, TFile, normalizePath } from 'obsidian';
+import { readFileSync, existsSync } from 'fs';
+import { join, resolve } from 'path';
 import { Category } from '../enums'; // Adjust path as needed
-import * as fs from 'fs';
-import * as path from 'path';
 
 export class CreateTemplatesCommand {
     app: App;
@@ -12,57 +12,52 @@ export class CreateTemplatesCommand {
         this.manifest = manifest;
     }
 
-    async execute() {
-        const templatesPath = "Templates";
-        await this.createFolderIfNeeded(templatesPath);
+    async execute(): Promise<void> {
+        const templateFolder = normalizePath('Templates/OnlyWorlds');
+        const categories = Object.keys(Category);
 
-        const onlyWorldsPath = `${templatesPath}/OnlyWorlds`;
-        await this.createFolderIfNeeded(onlyWorldsPath);
+        // Ensure the Templates/OnlyWorlds folder exists
+        await this.createFolderIfNeeded(templateFolder);
 
-        for (const category in Category) {
-            if (isNaN(Number(category))) { // Check to only use string keys, not numeric values
-                const templateFileName = `${category}.md`;
-                const internalTemplatePath = path.join(this.manifest.dir, 'Templates', templateFileName);
-                const destinationPath = `${onlyWorldsPath}/${templateFileName}`;
+        // Create each template file in the user's vault
+        for (const category of categories) {
+            const fileName = `${category}.md`;
+            const sourcePath = resolve((this.app.vault.adapter as any).basePath, '.obsidian', 'plugins', 'obsidian-onlyworlds-plugin', 'Templates', fileName);
+            const targetPath = normalizePath(`${templateFolder}/${fileName}`);
 
-                try {
-                    const templateContent = await this.readFile(internalTemplatePath);
-                    if (templateContent) {
-                        await this.app.vault.create(destinationPath, templateContent);
-                        new Notice(`Template created: ${templateFileName}`);
-                    } else {
-                        console.error(`Template content for ${templateFileName} is empty or could not be read.`);
-                    }
-                } catch (error) {
-                    console.error(`Error setting up template ${templateFileName}: `, error);
-                }
+            console.log(`Processing template for category: ${category}`);
+            console.log(`Source path: ${sourcePath}`);
+            console.log(`Target path: ${targetPath}`);
+
+            // Read content from the source file and write it to the target file
+            if (existsSync(sourcePath)) {
+                console.log(`Template file found: ${sourcePath}`);
+                const content = readFileSync(sourcePath, 'utf-8');
+                await this.app.vault.create(targetPath, content);
+                new Notice(`Created template: ${targetPath}`);
+                console.log(`Created template: ${targetPath}`);
+            } else {
+                console.error(`Template file not found: ${sourcePath}`);
             }
         }
     }
 
     async createFolderIfNeeded(folderPath: string) {
-        let existingFolder = this.app.vault.getAbstractFileByPath(folderPath);
+        const normalizedPath = normalizePath(folderPath);
+        console.log(`Checking if folder exists: ${normalizedPath}`);
+        
+        let existingFolder = this.app.vault.getAbstractFileByPath(normalizedPath);
         if (!existingFolder) {
             try {
-                await this.app.vault.createFolder(folderPath);
-                new Notice(`Created folder: ${folderPath}`);
+                console.log(`Folder not found, creating: ${normalizedPath}`);
+                await this.app.vault.createFolder(normalizedPath);
+                new Notice(`Created folder: ${normalizedPath}`);
+                console.log(`Created folder: ${normalizedPath}`);
             } catch (error) {
-                console.error(`Error creating folder: ${folderPath}`, error);
+                console.error(`Error creating folder: ${normalizedPath}`, error);
             }
         } else {
-            console.log(`Folder already exists: ${folderPath}`);
+            console.log(`Folder already exists: ${normalizedPath}`);
         }
-    }
-
-    async readFile(filePath: string): Promise<string> {
-        return new Promise((resolve, reject) => {
-            fs.readFile(filePath, 'utf8', (err, data) => {
-                if (err) {
-                    console.error(`Error reading file at ${filePath}: `, err);
-                    reject(err);
-                }
-                resolve(data);
-            });
-        });
     }
 }
