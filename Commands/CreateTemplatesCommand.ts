@@ -14,7 +14,7 @@ export class CreateTemplatesCommand {
 
     async execute(): Promise<void> {
         const templateFolder = normalizePath('Templates/OnlyWorlds');
-        const categories = Object.keys(Category);
+        const categories = Object.keys(Category).filter(key => isNaN(Number(key)));
 
         // Ensure the Templates/OnlyWorlds folder exists
         await this.createFolderIfNeeded(templateFolder);
