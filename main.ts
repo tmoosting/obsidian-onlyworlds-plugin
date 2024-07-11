@@ -3,6 +3,7 @@ import { Category } from 'enums'; // Adjust path as needed
 import { CreateCategoryFoldersCommand } from './Commands/CreateCategoryFoldersCommand';
 import { CreateTemplatesCommand } from './Commands/CreateTemplatesCommand';
 import { RetrieveWorldCommand } from './Commands/RetrieveWorldCommand';
+import { SendWorldCommand } from 'Commands/SendWorldCommand';
 
 export default class OnlyWorldsPlugin extends Plugin {
     onload(): void {
@@ -11,6 +12,7 @@ export default class OnlyWorldsPlugin extends Plugin {
         const createCategoryFoldersCommand = new CreateCategoryFoldersCommand(this.app, this.manifest);
         const createTemplatesCommand = new CreateTemplatesCommand(this.app, this.manifest);
         const retrieveWorldCommand = new RetrieveWorldCommand(this.app, this.manifest);
+        const sendWorldCommand = new SendWorldCommand(this.app, this.manifest);
 
         // Register a command to create category folders
         this.addCommand({
@@ -34,6 +36,13 @@ export default class OnlyWorldsPlugin extends Plugin {
             id: 'fetch-world',
             name: 'Retrieve World Data',
             callback: () => retrieveWorldCommand.execute(),
+        });
+
+             // Register a command to convert nodes and send as world data
+        this.addCommand({
+            id: 'send-world',
+            name: 'Send World Data',
+            callback: () => sendWorldCommand.execute(),
         });
 
     }

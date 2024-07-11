@@ -1,5 +1,5 @@
 import { App, Notice, requestUrl, FileSystemAdapter, normalizePath  } from 'obsidian';
-import { WorldKeyModal } from 'Scripts/WorldKeyModal'; // Adjust path if necessary
+import { WorldKeyModal } from 'Scripts/WorldKeyModal'; 
 import Handlebars from 'handlebars';
 import { resolve } from 'path';
 import { Category } from '../enums'; 
