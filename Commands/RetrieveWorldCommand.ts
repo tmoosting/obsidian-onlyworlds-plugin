@@ -2,6 +2,7 @@ import { App, Notice, requestUrl, FileSystemAdapter, normalizePath  } from 'obsi
 import { WorldKeyModal } from 'Scripts/WorldKeyModal'; // Adjust path if necessary
 import Handlebars from 'handlebars';
 import { resolve } from 'path';
+import { Category } from '../enums'; 
 
 export class RetrieveWorldCommand {
     app: App;
@@ -26,9 +27,11 @@ export class RetrieveWorldCommand {
                         return;
                     }
                     const data = JSON.parse(response.text);
-                    console.log(data);  // Output the fetched world data to console
-                    if (data.Character) {
-                        await this.generateCharacterNotes(data.Character);
+                    console.log(data); // Output the fetched world data to console
+                    for (const category in Category) {
+                        if (isNaN(Number(category)) && data[category]) {
+                            await this.generateElementNotes(category, data[category]);
+                        }
                     }
                 } catch (error) {
                     console.error('Error fetching world data:', error);
@@ -40,31 +43,29 @@ export class RetrieveWorldCommand {
         }).open();
     }
 
-    async generateCharacterNotes(characters: any[]) {
+    async generateElementNotes(category: string, elements: any[]) {
         const fs: FileSystemAdapter = this.app.vault.adapter as FileSystemAdapter;
-        // Directly construct the path to the Handlebars template within the plugin folder
-        const templatePath = normalizePath(this.app.vault.configDir + '/plugins/obsidian-onlyworlds-plugin/Handlebars/CharacterHandlebar.md');
+        const templatePath = normalizePath(`${this.app.vault.configDir}/plugins/obsidian-onlyworlds-plugin/Handlebars/${category}Handlebar.md`);
         console.log(`Template Path: ${templatePath}`); // Debug to verify the correct path
-    
+
         try {
             const templateText = await fs.read(templatePath);
             const template = Handlebars.compile(templateText);
-    
-            // Ensure the directory for character notes exists
-            const charactersDirectory = 'Characters';
-            if (!this.app.vault.getAbstractFileByPath(charactersDirectory)) {
-                await this.app.vault.createFolder(charactersDirectory);
+            const categoryDirectory = normalizePath(`Elements/${category}`);
+
+            if (!this.app.vault.getAbstractFileByPath(categoryDirectory)) {
+                await this.app.vault.createFolder(categoryDirectory);
             }
-    
-            characters.forEach(async (character) => {
-                const noteContent = template(character);
-                const notePath = `${charactersDirectory}/Character_${character.id}.md`;
+
+            elements.forEach(async (element) => {
+                const noteContent = template(element);
+                const notePath = `${categoryDirectory}/${category}_${element.id}.md`;
                 await fs.write(notePath, noteContent);
-                new Notice(`Character note created: ${notePath}`);
+                new Notice(`${category} note created: ${notePath}`);
             });
         } catch (error) {
-            console.error('Error processing character notes:', error);
-            new Notice('Error processing character notes: ' + error.message);
+            console.error(`Error processing ${category} notes:`, error);
+            new Notice(`Error processing ${category} notes: ` + error.message);
         }
     }
     

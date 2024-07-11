@@ -1,5 +1,5 @@
 import { App, Notice } from 'obsidian';
-import { Category } from '../enums'; // Adjust path as needed
+import { Category } from '../enums'; 
 
 export class CreateCategoryFoldersCommand {
     app: App;
