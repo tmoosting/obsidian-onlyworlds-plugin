@@ -1,37 +1,5 @@
-import { App, Notice, Plugin, Modal, requestUrl } from 'obsidian';
-
-class WorldKeyModal extends Modal {
-    onEnter: (value: string) => void;
-
-    constructor(app: App, onEnter: (value: string) => void) {
-        super(app);
-        this.onEnter = onEnter;
-    }
-
-    onOpen() {
-        let { contentEl } = this;
-        contentEl.createEl('h3', { text: 'Enter World Key' });
-
-        const input = contentEl.createEl('input', {
-            type: 'text',
-            placeholder: '10-digit World Key'
-        });
-
-        input.addEventListener('keydown', (e: KeyboardEvent) => {
-            if (e.key === 'Enter') {
-                this.close();
-                this.onEnter(input.value);
-            }
-        });
-
-        input.focus();
-    }
-
-    onClose() {
-        let { contentEl } = this;
-        contentEl.empty();
-    }
-}
+import { App, Notice,  requestUrl } from 'obsidian';
+import { WorldKeyModal } from 'Scripts/WorldKeyModal'; 
 
 export class RetrieveWorldCommand {
     app: App;
@@ -43,6 +11,7 @@ export class RetrieveWorldCommand {
         this.manifest = manifest;
     }
 
+    
     async execute() {
         new WorldKeyModal(this.app, async (worldKey: string) => {
             if (worldKey.length === 10) {

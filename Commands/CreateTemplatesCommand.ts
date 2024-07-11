@@ -1,7 +1,7 @@
 import { App, Notice, TFile, normalizePath } from 'obsidian';
 import { readFileSync, existsSync } from 'fs';
 import { join, resolve } from 'path';
-import { Category } from '../enums'; // Adjust path as needed
+import { Category } from '../enums'; 
 
 export class CreateTemplatesCommand {
     app: App;
