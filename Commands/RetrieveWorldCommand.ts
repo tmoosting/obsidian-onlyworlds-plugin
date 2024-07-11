@@ -59,7 +59,7 @@ export class RetrieveWorldCommand {
 
             elements.forEach(async (element) => {
                 const noteContent = template(element);
-                const notePath = `${categoryDirectory}/${category}_${element.id}.md`;
+                const notePath = `${categoryDirectory}/${element.name}.md`;
                 await fs.write(notePath, noteContent);
                 new Notice(`${category} note created: ${notePath}`);
             });
