@@ -69,25 +69,24 @@ export class SendWorldCommand {
         return worldData;
     }
     
+      parseTemplate(content: string): Record<string, string> {
+        let currentSection: string | null = null;  // Use more specific types instead of 'any'
+        const data: Record<string, string> = {};
     
-    parseTemplate(content: string): any {
-        const data: Record<string, any> = {};
-    
-        // Handle both the newly formatted core attributes and the regular attributes uniformly
-        const keyValuePattern = /- \*\*(.*?):\*\* (.*)/; // This pattern is intended for the body attributes
-    
-        const coreAttributesPattern = /\*\*(.*?):\*\* (.*)/; // This pattern will catch core attributes formatted without a dash
+        const sectionPattern = /^##\s*(.+)$/; // Pattern to identify sections
+        const keyValuePattern = /- \*\*(.*?):\*\* (.*)/; // Pattern for key-value pairs
     
         const lines = content.split('\n');
         lines.forEach(line => {
-            // First try to match core attributes
-            let match = line.match(coreAttributesPattern);
-            if (!match) {
-                // If no core attribute match, try the regular key-value pattern
-                match = line.match(keyValuePattern);
+            const sectionMatch = line.match(sectionPattern);
+            if (sectionMatch) {
+                currentSection = sectionMatch[1].toLowerCase().replace(/\s+/g, '_');
+                return; // Continue to next iteration in forEach
             }
+    
+            const match = line.match(keyValuePattern);
             if (match) {
-                const key = match[1].trim().toLowerCase().replace(/\s+/g, '_'); // Normalize the key
+                const key = (currentSection ? currentSection + '_' : '') + match[1].trim().toLowerCase().replace(/\s+/g, '_');
                 const value = match[2].trim();
                 data[key] = value;
             }

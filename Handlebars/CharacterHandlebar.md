@@ -3,12 +3,11 @@
 ## Core Attributes
 - **ID:** {{id}}
 - **Name:** {{name}}
+- **Description:** {{description}}
 - **Supertype:** {{supertype}}
-- **Subtype:** {{subtype}}
-- **Species:** {{species}}
+- **Subtype:** {{subtype}} 
 
 ## General Information
-- **Description:** {{description}}
 - **Birthplace:** {{birthplace}}
 - **Background:** {{background}}
 - **Motivations:** {{motivations}}
@@ -19,7 +18,7 @@
 - **Height:** {{height}} cm
 - **Weight:** {{weight}} kg
 - **Physicality:** {{physicality}}
-- **Image URL:** [View Image]({{image_url}})
+- **Species:** {{species}}
 
 ## Characteristics
 - **Charisma:** {{charisma}}
