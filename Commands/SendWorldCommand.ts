@@ -12,26 +12,26 @@ export class SendWorldCommand {
         this.app = app;
         this.manifest = manifest;
     }
-
     async execute() {
         new WorldKeyModal(this.app, async (worldKey: string) => {
             if (worldKey.length === 10) {
                 try {
                     const worldData = await this.collectWorldData();
+                    const url = `${this.apiUrl}${worldKey}`; // Ensure there is no slash error
+                    console.log(`Sending data to URL: ${url}`); // Log the URL being hit
+                    
                     const response = await requestUrl({
-                        url: this.apiUrl + worldKey,  // Ensure this is the intended endpoint
+                        url: url,
                         method: 'POST',
                         contentType: 'application/json',
-                        body: JSON.stringify({  // 'body' instead of 'data'
-                            worldKey: worldKey,
-                            worldData: worldData
-                        })
+                        body: JSON.stringify(worldData) // Ensure that the body is correctly formatted
                     });
                     
                     if (response.status === 200 || response.status === 201) {
                         new Notice('World data successfully sent.');
                     } else {
-                        new Notice('Failed to send world data: ' + response.status);
+                        console.error(`Failed to send world data, status code: ${response.status}`);
+                        new Notice(`Failed to send world data: ${response.status}`);
                     }
                 } catch (error) {
                     console.error('Error sending world data:', error);
@@ -42,6 +42,7 @@ export class SendWorldCommand {
             }
         }).open();
     }
+    
 
     async collectWorldData() {
         const fs: FileSystemAdapter = this.app.vault.adapter as FileSystemAdapter;
@@ -58,13 +59,13 @@ export class SendWorldCommand {
                     const fileContent = await fs.read(file.path);
                     console.log(`Reading file: ${file.path}`);
                     const data = this.parseTemplate(fileContent);
-         //           console.log(`Data parsed from file: ${JSON.stringify(data)}`);
+                console.log(`Data parsed from file: ${JSON.stringify(data)}`);
                     return data;
                 }));
             }
         }
     
-        console.log(`Final collected world data: ${JSON.stringify(worldData)}`);
+        console.log(`${JSON.stringify(worldData)}`);
         return worldData;
     }
     
@@ -72,24 +73,21 @@ export class SendWorldCommand {
     parseTemplate(content: string): any {
         const data: Record<string, any> = {};
     
-        // First, extract the header with id, name, supertype, subtype, and species
-        const headerPattern = /---\nid: (.*)\nname: (.*)\nsupertype: (.*)\nsubtype: (.*)\nspecies: (.*)\n---/;
-        const headerMatch = content.match(headerPattern);
-        if (headerMatch) {
-            data['id'] = headerMatch[1].trim();
-            data['name'] = headerMatch[2].trim();
-            data['supertype'] = headerMatch[3].trim();
-            data['subtype'] = headerMatch[4].trim();
-            data['species'] = headerMatch[5].trim();
-        }
+        // Handle both the newly formatted core attributes and the regular attributes uniformly
+        const keyValuePattern = /- \*\*(.*?):\*\* (.*)/; // This pattern is intended for the body attributes
     
-        // Extracting simple key-value pairs from Handlebars output
+        const coreAttributesPattern = /\*\*(.*?):\*\* (.*)/; // This pattern will catch core attributes formatted without a dash
+    
         const lines = content.split('\n');
         lines.forEach(line => {
-            // Match lines like "- **Description:** Value"
-            const match = line.match(/- \*\*(.*?):\*\* (.*)/);
+            // First try to match core attributes
+            let match = line.match(coreAttributesPattern);
+            if (!match) {
+                // If no core attribute match, try the regular key-value pattern
+                match = line.match(keyValuePattern);
+            }
             if (match) {
-                const key = match[1].toLowerCase().replace(/\s+/g, '_'); // Convert "General Information" to "general_information"
+                const key = match[1].trim().toLowerCase().replace(/\s+/g, '_'); // Normalize the key
                 const value = match[2].trim();
                 data[key] = value;
             }
@@ -97,6 +95,7 @@ export class SendWorldCommand {
     
         return data;
     }
+    
     
     
     

@@ -1,12 +1,11 @@
----
-id: {{id}}
-name: {{name}}
-supertype: {{supertype}}
-subtype: {{subtype}}
-species: {{species}}
----
-
 # {{name}}
+
+## Core Attributes
+- **ID:** {{id}}
+- **Name:** {{name}}
+- **Supertype:** {{supertype}}
+- **Subtype:** {{subtype}}
+- **Species:** {{species}}
 
 ## General Information
 - **Description:** {{description}}
