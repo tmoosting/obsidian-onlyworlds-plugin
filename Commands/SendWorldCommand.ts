@@ -51,14 +51,29 @@ export class SendWorldCommand {
     async collectWorldData(worldFolder: string) {
         const fs: FileSystemAdapter = this.app.vault.adapter as FileSystemAdapter;
         let worldData: Record<string, any[]> = {};
-
+    
+        // Path to the 'World' file inside the selected world folder
+        const worldFilePath = normalizePath(`onlyworlds/Worlds/${worldFolder}/World.md`);
+    
+        // Read the 'World' file content and parse it
+        try {
+            const worldFileContent = await fs.read(worldFilePath);
+            console.log(`Reading World file: ${worldFilePath}`);
+            const worldInfo = this.parseTemplate(worldFileContent);
+            worldData['World'] = [worldInfo]; // Assuming there is one world data section per world
+        } catch (error) {
+            console.error('Error reading World file:', error);
+            new Notice('Failed to read World file: ' + error.message);
+            return {}; // Stop further processing if the World file cannot be read
+        }
+    
+        // Iterate over categories to collect their data
         for (const categoryKey in Category) {
             const category = Category[categoryKey];
             if (isNaN(Number(category))) {
-                // Update the path to include the selected world folder
                 const categoryDirectory = normalizePath(`onlyworlds/Worlds/${worldFolder}/Elements/${category}`);
                 const files = this.app.vault.getFiles().filter(file => file.path.startsWith(categoryDirectory));
-
+    
                 console.log(`Collecting data for category: ${category}`);
                 const categoryData = await Promise.all(files.map(async (file) => {
                     const fileContent = await fs.read(file.path);
@@ -67,14 +82,15 @@ export class SendWorldCommand {
                     console.log(`Data parsed from file: ${JSON.stringify(data)}`);
                     return data;
                 }));
-
+    
                 worldData[category] = categoryData.filter(item => Object.keys(item).length > 0);
             }
         }
-
+    
         console.log(`Final world data: ${JSON.stringify(worldData)}`);
         return worldData;
     }
+    
 
     parseTemplate(content: string): Record<string, string> {
         let currentSection: string | null = null;
