@@ -17,18 +17,23 @@ export class SendWorldCommand {
             if (worldKey.length === 10) {
                 try {
                     const worldData = await this.collectWorldData();
-                    const url = `${this.apiUrl}${worldKey}`; // Ensure there is no slash error
+                    const payload = {
+                        worldKey: worldKey,
+                        worldData: worldData
+                    };
+                    const url = this.apiUrl; // URL without appending the worldKey directly
+
                     console.log(`Sending data to URL: ${url}`); // Log the URL being hit
-                    
+
                     const response = await requestUrl({
                         url: url,
                         method: 'POST',
                         contentType: 'application/json',
-                        body: JSON.stringify(worldData) // Ensure that the body is correctly formatted
+                        body: JSON.stringify(payload) // Send payload with worldKey and worldData
                     });
-                    
+
                     if (response.status === 200 || response.status === 201) {
-                        new Notice('World data successfully sent.');
+                        new Notice('World data successfully sent. Status: ' + response.status);
                     } else {
                         console.error(`Failed to send world data, status code: ${response.status}`);
                         new Notice(`Failed to send world data: ${response.status}`);
@@ -46,7 +51,7 @@ export class SendWorldCommand {
 
     async collectWorldData() {
         const fs: FileSystemAdapter = this.app.vault.adapter as FileSystemAdapter;
-        let worldData: Record<string, any> = {};
+        let worldData: Record<string, any[]> = {};
     
         for (const categoryKey in Category) {
             const category = Category[categoryKey];
@@ -55,17 +60,20 @@ export class SendWorldCommand {
                 const files = this.app.vault.getFiles().filter(file => file.path.startsWith(categoryDirectory));
     
                 console.log(`Collecting data for category: ${category}`);
-                worldData[category] = await Promise.all(files.map(async (file) => {
+                const categoryData = await Promise.all(files.map(async (file) => {
                     const fileContent = await fs.read(file.path);
                     console.log(`Reading file: ${file.path}`);
                     const data = this.parseTemplate(fileContent);
-                console.log(`Data parsed from file: ${JSON.stringify(data)}`);
+                    console.log(`Data parsed from file: ${JSON.stringify(data)}`);
                     return data;
                 }));
+    
+                // Filter out empty objects from the array
+                worldData[category] = categoryData.filter(item => Object.keys(item).length > 0);
             }
         }
     
-        console.log(`${JSON.stringify(worldData)}`);
+        console.log(`Final world data: ${JSON.stringify(worldData)}`);
         return worldData;
     }
     
@@ -97,10 +105,6 @@ export class SendWorldCommand {
         });
     
         return data;
-    }
-    
-    
-    
-    
+    } 
     
 }
