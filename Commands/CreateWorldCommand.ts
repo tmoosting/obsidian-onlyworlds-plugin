@@ -1,5 +1,5 @@
 import { App, Notice, FileSystemAdapter, TFile, PluginManifest } from 'obsidian';
- import { v4 as uuidv4 } from 'uuid';
+ import { v7 as uuidv7 } from 'uuid';
 
 import Handlebars from 'handlebars';
 import { resolve } from 'path';
@@ -80,7 +80,7 @@ export class CreateWorldCommand {
 
     collectWorldData(worldName: string): any {
         // Enhanced data collection with world name
-        const worldId = uuidv4(); 
+        const worldId = uuidv7(); 
 
         return {
             id: worldId,

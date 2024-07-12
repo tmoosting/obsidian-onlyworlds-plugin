@@ -1,6 +1,7 @@
 # Character Template
 
 ## Basic Information
+- **ID**: `{{id}}`
 - **Name**: `{{name}}`
 - **Age**: `{{age}}`
 - **Gender**: `{{gender}}`
