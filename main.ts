@@ -4,6 +4,7 @@ import { CreateCategoryFoldersCommand } from './Commands/CreateCategoryFoldersCo
 import { CreateTemplatesCommand } from './Commands/CreateTemplatesCommand';
 import { RetrieveWorldCommand } from './Commands/RetrieveWorldCommand';
 import { SendWorldCommand } from 'Commands/SendWorldCommand';
+import { CreateWorldCommand } from 'Commands/CreateWorldCommand';
 
 export default class OnlyWorldsPlugin extends Plugin {
     onload(): void {
@@ -12,7 +13,8 @@ export default class OnlyWorldsPlugin extends Plugin {
         const createCategoryFoldersCommand = new CreateCategoryFoldersCommand(this.app, this.manifest);
         const createTemplatesCommand = new CreateTemplatesCommand(this.app, this.manifest);
         const retrieveWorldCommand = new RetrieveWorldCommand(this.app, this.manifest);
-        const sendWorldCommand = new SendWorldCommand(this.app, this.manifest);
+        const sendWorldCommand = new SendWorldCommand(this.app, this.manifest);        
+        const createWorldCommand = new CreateWorldCommand(this.app, this.manifest);
 
         // Register a command to create category folders
         this.addCommand({
@@ -43,6 +45,13 @@ export default class OnlyWorldsPlugin extends Plugin {
             id: 'send-world',
             name: 'Send World Data',
             callback: () => sendWorldCommand.execute(),
+        });
+
+             // Register a command to create a new world and OW file structures
+        this.addCommand({
+            id: 'create-world',
+            name: 'Create World',
+            callback: () => createWorldCommand.execute(),
         });
 
     }

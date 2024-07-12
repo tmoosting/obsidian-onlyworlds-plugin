@@ -6,6 +6,7 @@
 - **Description:** {{description}}
 - **Supertype:** {{supertype}}
 - **Subtype:** {{subtype}}
+- **Image URL:** ![World Image]({{image_url}})
 
 ## Constitution
 - **Physicality:** {{physicality}}
