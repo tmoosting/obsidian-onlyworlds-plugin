@@ -1,7 +1,7 @@
-import { App, Notice, TFile, normalizePath } from 'obsidian';
+import { App, Notice, normalizePath } from 'obsidian';
 import { readFileSync, existsSync } from 'fs';
 import { resolve } from 'path';
-import { Category } from '../enums'; 
+import { Category } from '../enums';
 
 export class CreateTemplatesCommand {
     app: App;
@@ -13,10 +13,11 @@ export class CreateTemplatesCommand {
     }
 
     async execute(): Promise<void> {
-        const templateFolder = normalizePath('Templates/OnlyWorlds');
+        // Update template folder path to new location under 'OnlyWorlds'
+        const templateFolder = normalizePath('OnlyWorlds/Templates');
         const categories = Object.keys(Category).filter(key => isNaN(Number(key)));
 
-        // Ensure the Templates/OnlyWorlds folder exists
+        // Ensure the new template folder exists
         await this.createFolderIfNeeded(templateFolder);
 
         // Create each template file in the user's vault

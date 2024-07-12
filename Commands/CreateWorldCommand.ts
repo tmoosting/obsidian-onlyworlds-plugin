@@ -18,34 +18,38 @@ export class CreateWorldCommand {
 
 
     async execute() {
-        console.log("execute 1");
+        console.log("Starting world creation process...");
 
         try {
             const worldName = await this.getWorldName();
-            console.log("World Name:", worldName);
             if (!worldName) {
-                console.log("No world name provided, exiting...");
+                console.log("World creation cancelled: no world name provided.");
                 return;  // User cancelled the input
             }
 
-            const worldBasePath = `OnlyWorlds/${worldName}`;
+            // Create base and subdirectories for the world
+            const worldBasePath = `OnlyWorlds/Worlds/${worldName}`;
             await this.createFolderIfNeeded(worldBasePath);
             const elementsPath = `${worldBasePath}/Elements`;
             await this.createFolderIfNeeded(elementsPath);
-            console.log("execute 2");
 
+            // Create folders for each category
             for (const category in Category) {
-                if (isNaN(Number(category))) {
+                if (isNaN(Number(category))) {  // Skip numeric keys of the enum
                     await this.createFolderIfNeeded(`${elementsPath}/${category}`);
                 }
             }
 
-            const worldData = this.collectWorldData();
+            // Create world overview note
+            const worldData = this.collectWorldData(worldName);
             const worldNoteContent = this.compileWorldNote(worldData);
             await this.app.vault.create(`${worldBasePath}/World.md`, worldNoteContent);
 
-            const createTemplatesCommand = new CreateTemplatesCommand(this.app, this.manifest);
-            await createTemplatesCommand.execute();  
+            // Generate templates in the new location
+            const templatesPath = `OnlyWorlds/Templates`;
+            const createTemplatesCommand = new CreateTemplatesCommand(this.app, this.manifest );
+            await createTemplatesCommand.execute();
+
             new Notice('World successfully created!');
         } catch (error) {
             console.error("Error during world creation:", error);
@@ -55,14 +59,11 @@ export class CreateWorldCommand {
 
     async getWorldName(): Promise<string | null> {
         return new Promise((resolve) => {
-            const modal = new WorldNameModal(this.app, (value) => {
-                resolve(value); // Modal will handle closure
-            });
+            const modal = new WorldNameModal(this.app, resolve);
             modal.open();
         });
     }
 
-  
     async createFolderIfNeeded(folderPath: string) {
         let existingFolder = this.app.vault.getAbstractFileByPath(folderPath);
         if (!existingFolder) {
@@ -77,13 +78,13 @@ export class CreateWorldCommand {
         }
     }
 
-    collectWorldData(): any {
-        // Placeholder for collecting or generating initial world data
+    collectWorldData(worldName: string): any {
+        // Enhanced data collection with world name
         return {
             id: "001",
             api_key: "API_KEY",
-            name: "Hyperion",
-            description: "A vibrant new world.",
+            name: worldName,
+            description: `A vibrant new world named ${worldName}.`,
             user_id: "default_user_id",
             ow_version: "16.00",
             image_url: "default_image_url",
