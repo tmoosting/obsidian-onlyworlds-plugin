@@ -1,7 +1,7 @@
 import { App, Notice, requestUrl, FileSystemAdapter, normalizePath } from 'obsidian';
 import Handlebars from 'handlebars';
 import { Category } from '../enums';
-import { WorldKeyModal } from 'Scripts/WorldKeyModal';  
+import { WorldKeySelectionModal } from 'Scripts/WorldKeySelectionModal';  
 
 export class SendWorldCommand {
     app: App;
@@ -12,24 +12,24 @@ export class SendWorldCommand {
         this.app = app;
         this.manifest = manifest;
     }
+
     async execute() {
-        new WorldKeyModal(this.app, async (worldKey: string) => {
+        new WorldKeySelectionModal(this.app, async (worldKey: string, worldFolder: string) => {
             if (worldKey.length === 10) {
                 try {
-                    const worldData = await this.collectWorldData();
+                    const worldData = await this.collectWorldData(worldFolder);  // Pass the selected world folder
                     const payload = {
                         worldKey: worldKey,
                         worldData: worldData
                     };
-                    const url = this.apiUrl; // URL without appending the worldKey directly
 
-                    console.log(`Sending data to URL: ${url}`); // Log the URL being hit
+                    console.log(`Sending data to URL: ${this.apiUrl}`);
 
                     const response = await requestUrl({
-                        url: url,
+                        url: this.apiUrl,
                         method: 'POST',
                         contentType: 'application/json',
-                        body: JSON.stringify(payload) // Send payload with worldKey and worldData
+                        body: JSON.stringify(payload)
                     });
 
                     if (response.status === 200 || response.status === 201) {
@@ -48,17 +48,17 @@ export class SendWorldCommand {
         }).open();
     }
     
-
-    async collectWorldData() {
+    async collectWorldData(worldFolder: string) {
         const fs: FileSystemAdapter = this.app.vault.adapter as FileSystemAdapter;
         let worldData: Record<string, any[]> = {};
-    
+
         for (const categoryKey in Category) {
             const category = Category[categoryKey];
             if (isNaN(Number(category))) {
-                const categoryDirectory = normalizePath(`Elements/${category}`);
+                // Update the path to include the selected world folder
+                const categoryDirectory = normalizePath(`onlyworlds/Worlds/${worldFolder}/Elements/${category}`);
                 const files = this.app.vault.getFiles().filter(file => file.path.startsWith(categoryDirectory));
-    
+
                 console.log(`Collecting data for category: ${category}`);
                 const categoryData = await Promise.all(files.map(async (file) => {
                     const fileContent = await fs.read(file.path);
@@ -67,44 +67,38 @@ export class SendWorldCommand {
                     console.log(`Data parsed from file: ${JSON.stringify(data)}`);
                     return data;
                 }));
-    
-                // Filter out empty objects from the array
+
                 worldData[category] = categoryData.filter(item => Object.keys(item).length > 0);
             }
         }
-    
+
         console.log(`Final world data: ${JSON.stringify(worldData)}`);
         return worldData;
     }
-    
+
     parseTemplate(content: string): Record<string, string> {
         let currentSection: string | null = null;
         const data: Record<string, string> = {};
-    
+
         const sectionPattern = /^##\s*(.+)$/; // Pattern to identify sections
         const keyValuePattern = /- \*\*(.*?):\*\* (.*)/; // Pattern for key-value pairs
-    
+
         const lines = content.split('\n');
         lines.forEach(line => {
             const sectionMatch = line.match(sectionPattern);
             if (sectionMatch) {
-                // We still record the current section if needed for debugging or future use,
-                // but we won't use it to prefix keys as you want to avoid it in your keys.
                 currentSection = sectionMatch[1].toLowerCase().replace(/\s+/g, '_');
-                return; // Continue to next iteration in forEach
+                return;
             }
-    
+
             const match = line.match(keyValuePattern);
             if (match) {
-                // Clean key by removing markdown syntax and additional spacing
                 let key = match[1].replace(/\*\*|\s/g, '').toLowerCase();
                 const value = match[2].trim();
-                // Use the plain key without prefix
                 data[key] = value;
             }
         });
-    
+
         return data;
     } 
-    
 }
