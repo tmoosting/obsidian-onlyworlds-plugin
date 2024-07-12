@@ -69,8 +69,8 @@ export class SendWorldCommand {
         return worldData;
     }
     
-      parseTemplate(content: string): Record<string, string> {
-        let currentSection: string | null = null;  // Use more specific types instead of 'any'
+    parseTemplate(content: string): Record<string, string> {
+        let currentSection: string | null = null;
         const data: Record<string, string> = {};
     
         const sectionPattern = /^##\s*(.+)$/; // Pattern to identify sections
@@ -80,20 +80,25 @@ export class SendWorldCommand {
         lines.forEach(line => {
             const sectionMatch = line.match(sectionPattern);
             if (sectionMatch) {
+                // We still record the current section if needed for debugging or future use,
+                // but we won't use it to prefix keys as you want to avoid it in your keys.
                 currentSection = sectionMatch[1].toLowerCase().replace(/\s+/g, '_');
                 return; // Continue to next iteration in forEach
             }
     
             const match = line.match(keyValuePattern);
             if (match) {
-                const key = (currentSection ? currentSection + '_' : '') + match[1].trim().toLowerCase().replace(/\s+/g, '_');
+                // Clean key by removing markdown syntax and additional spacing
+                let key = match[1].replace(/\*\*|\s/g, '').toLowerCase();
                 const value = match[2].trim();
+                // Use the plain key without prefix
                 data[key] = value;
             }
         });
     
         return data;
     }
+    
     
     
     

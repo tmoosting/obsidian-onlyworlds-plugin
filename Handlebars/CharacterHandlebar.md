@@ -1,6 +1,6 @@
 # {{name}}
 
-## Core Attributes
+## Core
 - **ID:** {{id}}
 - **Name:** {{name}}
 - **Description:** {{description}}
