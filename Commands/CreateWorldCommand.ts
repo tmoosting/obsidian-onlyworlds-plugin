@@ -1,5 +1,5 @@
 import { App, Notice, FileSystemAdapter, TFile, PluginManifest } from 'obsidian';
- 
+ import { v4 as uuidv4 } from 'uuid';
 
 import Handlebars from 'handlebars';
 import { resolve } from 'path';
@@ -80,14 +80,16 @@ export class CreateWorldCommand {
 
     collectWorldData(worldName: string): any {
         // Enhanced data collection with world name
+        const worldId = uuidv4(); 
+
         return {
-            id: "001",
-            api_key: "API_KEY",
+            id: worldId,
+            api_key: "0000000000",
             name: worldName,
-            description: `A vibrant new world named ${worldName}.`,
-            user_id: "default_user_id",
-            ow_version: "16.00",
-            image_url: "default_image_url",
+            description: ``,
+            user_id: "",
+            ow_version: "16.10",
+            image_url: "",
             focus_text: "",
             time_format_names: "Eon, Era, Period, Epoch, Age, Year, Month, Day, Hour, Minute, Second",
             time_format_equivalents: "Eon, Era, Period, Epoch, Age, Year, Month, Day, Hour, Minute, Second",

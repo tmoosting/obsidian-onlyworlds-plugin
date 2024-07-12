@@ -1,5 +1,5 @@
 import { Plugin } from 'obsidian';
-import { Category } from 'enums'; // Adjust path as needed
+import { Category } from 'enums'; 
 import { CreateCategoryFoldersCommand } from './Commands/CreateCategoryFoldersCommand';
 import { CreateTemplatesCommand } from './Commands/CreateTemplatesCommand';
 import { RetrieveWorldCommand } from './Commands/RetrieveWorldCommand';
