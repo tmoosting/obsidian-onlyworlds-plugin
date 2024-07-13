@@ -47,20 +47,19 @@ export class SendWorldCommand {
             }
         }).open();
     }
-    
     async collectWorldData(worldFolder: string) {
         const fs: FileSystemAdapter = this.app.vault.adapter as FileSystemAdapter;
-        let worldData: Record<string, any[]> = {};
+        let worldData: Record<string, any> = {};  // Change from any[] to any for flexible indexing
     
         // Path to the 'World' file inside the selected world folder
-        const worldFilePath = normalizePath(`onlyworlds/Worlds/${worldFolder}/World.md`);
+        const worldFilePath = normalizePath(`OnlyWorlds/Worlds/${worldFolder}/World.md`);
     
         // Read the 'World' file content and parse it
         try {
             const worldFileContent = await fs.read(worldFilePath);
             console.log(`Reading World file: ${worldFilePath}`);
             const worldInfo = this.parseTemplate(worldFileContent);
-            worldData['World'] = [worldInfo]; // Assuming there is one world data section per world
+            worldData['World'] = worldInfo; // Directly assign the object, not in an array
         } catch (error) {
             console.error('Error reading World file:', error);
             new Notice('Failed to read World file: ' + error.message);
@@ -71,18 +70,17 @@ export class SendWorldCommand {
         for (const categoryKey in Category) {
             const category = Category[categoryKey];
             if (isNaN(Number(category))) {
-                const categoryDirectory = normalizePath(`onlyworlds/Worlds/${worldFolder}/Elements/${category}`);
+                const categoryDirectory = normalizePath(`OnlyWorlds/Worlds/${worldFolder}/Elements/${category}`);
                 const files = this.app.vault.getFiles().filter(file => file.path.startsWith(categoryDirectory));
     
                 console.log(`Collecting data for category: ${category}`);
                 const categoryData = await Promise.all(files.map(async (file) => {
                     const fileContent = await fs.read(file.path);
                     console.log(`Reading file: ${file.path}`);
-                    const data = this.parseTemplate(fileContent);
-                    console.log(`Data parsed from file: ${JSON.stringify(data)}`);
-                    return data;
+                    return this.parseTemplate(fileContent);
                 }));
     
+                // Filter out empty entries
                 worldData[category] = categoryData.filter(item => Object.keys(item).length > 0);
             }
         }
