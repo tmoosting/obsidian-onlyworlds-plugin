@@ -3,7 +3,7 @@ import Handlebars from 'handlebars';
 import { Category } from '../enums';
 import { WorldKeySelectionModal } from 'Scripts/WorldKeySelectionModal';  
 
-export class SendWorldCommand {
+export class ExportWorldCommand {
     app: App;
     manifest: any;
     private apiUrl = 'https://www.onlyworlds.com/api/worlddata/';

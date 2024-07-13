@@ -2,8 +2,8 @@ import { Plugin } from 'obsidian';
 import { Category } from 'enums'; 
 import { CreateCategoryFoldersCommand } from './Commands/CreateCategoryFoldersCommand';
 import { CreateTemplatesCommand } from './Commands/CreateTemplatesCommand';
-import { RetrieveWorldCommand } from './Commands/RetrieveWorldCommand';
-import { SendWorldCommand } from 'Commands/SendWorldCommand';
+import { ImportWorldCommand } from './Commands/ImportWorldCommand';
+import { ExportWorldCommand } from 'Commands/ExportWorldCommand';
 import { CreateWorldCommand } from 'Commands/CreateWorldCommand';
 
 export default class OnlyWorldsPlugin extends Plugin {
@@ -12,8 +12,8 @@ export default class OnlyWorldsPlugin extends Plugin {
 
         const createCategoryFoldersCommand = new CreateCategoryFoldersCommand(this.app, this.manifest);
         const createTemplatesCommand = new CreateTemplatesCommand(this.app, this.manifest);
-        const retrieveWorldCommand = new RetrieveWorldCommand(this.app, this.manifest);
-        const sendWorldCommand = new SendWorldCommand(this.app, this.manifest);        
+        const retrieveWorldCommand = new ImportWorldCommand(this.app, this.manifest);
+        const sendWorldCommand = new ExportWorldCommand(this.app, this.manifest);        
         const createWorldCommand = new CreateWorldCommand(this.app, this.manifest);
 
         // Register a command to create category folders
@@ -35,15 +35,15 @@ export default class OnlyWorldsPlugin extends Plugin {
 
           // Register a command to fetch world data and convert to notes
         this.addCommand({
-            id: 'fetch-world',
-            name: 'Retrieve World Data',
+            id: 'import-world',
+            name: 'Import World',
             callback: () => retrieveWorldCommand.execute(),
         });
 
              // Register a command to convert nodes and send as world data
         this.addCommand({
-            id: 'send-world',
-            name: 'Send World Data',
+            id: 'export-world',
+            name: 'Export World',
             callback: () => sendWorldCommand.execute(),
         });
 

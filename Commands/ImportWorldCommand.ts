@@ -2,8 +2,9 @@ import { App, Notice, requestUrl, FileSystemAdapter, normalizePath } from 'obsid
 import Handlebars from 'handlebars';
 import { Category } from '../enums';
 import { WorldKeyModal } from 'Scripts/WorldKeyModal'; 
+import { CreateTemplatesCommand } from './CreateTemplatesCommand';
 
-export class RetrieveWorldCommand {
+export class ImportWorldCommand {
     app: App;
     manifest: any;
     private apiUrl = 'https://www.onlyworlds.com/api/worlddata/';
@@ -34,6 +35,8 @@ export class RetrieveWorldCommand {
                         new Notice('No valid world data found.');
                         return;
                     }
+                    const createTemplatesCommand = new CreateTemplatesCommand(this.app, this.manifest );
+                    await createTemplatesCommand.execute();
                     
                     const worldFolderPath = normalizePath(`OnlyWorlds/Worlds/${worldName}`);
                     if (!this.app.vault.getAbstractFileByPath(worldFolderPath)) {
