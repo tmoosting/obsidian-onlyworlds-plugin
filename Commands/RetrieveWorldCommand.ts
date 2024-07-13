@@ -1,8 +1,7 @@
-import { App, Notice, requestUrl, FileSystemAdapter, normalizePath  } from 'obsidian';
-import { WorldKeyModal } from 'Scripts/WorldKeyModal'; 
+import { App, Notice, requestUrl, FileSystemAdapter, normalizePath } from 'obsidian';
 import Handlebars from 'handlebars';
-import { resolve } from 'path';
-import { Category } from '../enums'; 
+import { Category } from '../enums';
+import { WorldKeyModal } from 'Scripts/WorldKeyModal'; 
 
 export class RetrieveWorldCommand {
     app: App;
@@ -28,9 +27,24 @@ export class RetrieveWorldCommand {
                     }
                     const data = JSON.parse(response.text);
                     console.log(data); // Output the fetched world data to console
+
+                    const worldData = data['World'];
+                    const worldName = worldData ? worldData.name : null;
+                    
+                    if (!worldName) {
+                        new Notice('No valid world data found.');
+                        return;
+                    }
+                    
+                    // Proceed to use worldName safely
+                    const worldFolderPath = normalizePath(`OnlyWorlds/Worlds/${worldName}/Elements`);
+                    if (!this.app.vault.getAbstractFileByPath(worldFolderPath)) {
+                        await this.app.vault.createFolder(worldFolderPath);
+                    }
+
                     for (const category in Category) {
                         if (isNaN(Number(category)) && data[category]) {
-                            await this.generateElementNotes(category, data[category]);
+                            await this.generateElementNotes(worldFolderPath, category, data[category]);
                         }
                     }
                 } catch (error) {
@@ -43,15 +57,14 @@ export class RetrieveWorldCommand {
         }).open();
     }
 
-    async generateElementNotes(category: string, elements: any[]) {
+    async generateElementNotes(worldFolderPath: string, category: string, elements: any[]) {
         const fs: FileSystemAdapter = this.app.vault.adapter as FileSystemAdapter;
         const templatePath = normalizePath(`${this.app.vault.configDir}/plugins/obsidian-onlyworlds-plugin/Handlebars/${category}Handlebar.md`);
-        console.log(`Template Path: ${templatePath}`); // Debug to verify the correct path
 
         try {
             const templateText = await fs.read(templatePath);
             const template = Handlebars.compile(templateText);
-            const categoryDirectory = normalizePath(`Elements/${category}`);
+            const categoryDirectory = normalizePath(`${worldFolderPath}/${category}`);
 
             if (!this.app.vault.getAbstractFileByPath(categoryDirectory)) {
                 await this.app.vault.createFolder(categoryDirectory);
@@ -68,5 +81,4 @@ export class RetrieveWorldCommand {
             new Notice(`Error processing ${category} notes: ` + error.message);
         }
     }
-    
 }
