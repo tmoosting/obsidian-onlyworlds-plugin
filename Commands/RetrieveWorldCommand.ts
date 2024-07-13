@@ -12,7 +12,6 @@ export class RetrieveWorldCommand {
         this.app = app;
         this.manifest = manifest;
     }
-
     async execute() {
         new WorldKeyModal(this.app, async (worldKey: string) => {
             if (worldKey.length === 10) {
@@ -27,7 +26,7 @@ export class RetrieveWorldCommand {
                     }
                     const data = JSON.parse(response.text);
                     console.log(data); // Output the fetched world data to console
-
+    
                     const worldData = data['World'];
                     const worldName = worldData ? worldData.name : null;
                     
@@ -36,15 +35,23 @@ export class RetrieveWorldCommand {
                         return;
                     }
                     
-                    // Proceed to use worldName safely
-                    const worldFolderPath = normalizePath(`OnlyWorlds/Worlds/${worldName}/Elements`);
+                    const worldFolderPath = normalizePath(`OnlyWorlds/Worlds/${worldName}`);
                     if (!this.app.vault.getAbstractFileByPath(worldFolderPath)) {
                         await this.app.vault.createFolder(worldFolderPath);
                     }
-
+    
+                    // Generate World file
+                    await this.generateWorldFile(worldData, worldFolderPath);
+    
+                    // Generate elements notes
+                    const elementsFolderPath = normalizePath(`${worldFolderPath}/Elements`);
+                    if (!this.app.vault.getAbstractFileByPath(elementsFolderPath)) {
+                        await this.app.vault.createFolder(elementsFolderPath);
+                    }
+    
                     for (const category in Category) {
                         if (isNaN(Number(category)) && data[category]) {
-                            await this.generateElementNotes(worldFolderPath, category, data[category]);
+                            await this.generateElementNotes(elementsFolderPath, category, data[category]);
                         }
                     }
                 } catch (error) {
@@ -56,7 +63,24 @@ export class RetrieveWorldCommand {
             }
         }).open();
     }
-
+    async generateWorldFile(worldData: any, worldFolderPath: string) {
+        const fs: FileSystemAdapter = this.app.vault.adapter as FileSystemAdapter;
+        const worldTemplatePath = normalizePath(`${this.app.vault.configDir}/plugins/obsidian-onlyworlds-plugin/Handlebars/WorldHandlebar.md`);
+    
+        try {
+            const worldTemplateText = await fs.read(worldTemplatePath);
+            const worldTemplate = Handlebars.compile(worldTemplateText);
+    
+            const worldContent = worldTemplate(worldData);
+            const worldFilePath = `${worldFolderPath}/World.md`;
+    
+            await fs.write(worldFilePath, worldContent);
+            new Notice(`World file created: ${worldFilePath}`);
+        } catch (error) {
+            console.error('Error creating world file:', error);
+            new Notice('Error creating world file: ' + error.message);
+        }
+    }
     async generateElementNotes(worldFolderPath: string, category: string, elements: any[]) {
         const fs: FileSystemAdapter = this.app.vault.adapter as FileSystemAdapter;
         const templatePath = normalizePath(`${this.app.vault.configDir}/plugins/obsidian-onlyworlds-plugin/Handlebars/${category}Handlebar.md`);
