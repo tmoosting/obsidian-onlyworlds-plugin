@@ -7,8 +7,7 @@
 - **Gender**: `{{gender}}`
 - **Species**: `{{species}}`
 - **Birth Date**: `{{birth_date}}`
-- **Birthplace**: `[[{{birthplace}}]]` (Link to location note)
-- **Image**: ![](URL_to_image_here)
+- **Birthplace**: `[[{{birthplace}}]]`   
 
 ## Physical Traits
 - **Height**: `{{height}}`

@@ -93,26 +93,32 @@ export class ExportWorldCommand {
     parseTemplate(content: string): Record<string, string> {
         let currentSection: string | null = null;
         const data: Record<string, string> = {};
-
+    
         const sectionPattern = /^##\s*(.+)$/; // Pattern to identify sections
         const keyValuePattern = /- \*\*(.*?):\*\* (.*)/; // Pattern for key-value pairs
-
+    
         const lines = content.split('\n');
         lines.forEach(line => {
             const sectionMatch = line.match(sectionPattern);
             if (sectionMatch) {
-                currentSection = sectionMatch[1].toLowerCase().replace(/\s+/g, '_');
+                currentSection = this.toSnakeCase(sectionMatch[1]);
                 return;
             }
-
+    
             const match = line.match(keyValuePattern);
             if (match) {
-                let key = match[1].replace(/\*\*|\s/g, '').toLowerCase();
+                let key = this.toSnakeCase(match[1].replace(/\*\*/g, ''));
                 const value = match[2].trim();
                 data[key] = value;
             }
         });
-
+    
         return data;
-    } 
+    }
+    
+    // Helper method to convert strings to snake_case
+    toSnakeCase(input: string): string {
+        return input.toLowerCase().replace(/\s+/g, '_').replace(/\(|\)|,/g, '');
+    }
+    
 }

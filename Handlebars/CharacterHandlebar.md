@@ -6,13 +6,13 @@
 - **Description:** {{description}}
 - **Supertype:** {{supertype}}
 - **Subtype:** {{subtype}}
-- **Image URL:** ![World Image]({{image_url}})
+- **Image URL:** {{image_url}}
 
 ## Constitution
 - **Physicality:** {{physicality}}
 - **Psychology:** {{psychology}}
-- **Height:** {{height}} cm
-- **Weight:** {{weight}} kg
+- **Height:** {{height}}
+- **Weight:** {{weight}}
 - **Species:** {{species}}
 - **Traits:** {{traits}}
 - **Abilities:** {{abilities}}
@@ -33,7 +33,7 @@
 - **Institutions:** {{institutions}}
 
 ## Personality
-- **Charisma:** {{charisma}}
+- **Charisma (Number, 0-100):** {{charisma}}
 - **Coercion:** {{coercion}}
 - **Capability:** {{capability}}
 - **Compassion:** {{compassion}}

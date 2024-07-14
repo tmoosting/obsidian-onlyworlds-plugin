@@ -45,8 +45,7 @@ export class CreateWorldCommand {
             const worldNoteContent = this.compileWorldNote(worldData);
             await this.app.vault.create(`${worldBasePath}/World.md`, worldNoteContent);
 
-            // Generate templates in the new location
-            const templatesPath = `OnlyWorlds/Templates`;
+            // Generate templates in the new location 
             const createTemplatesCommand = new CreateTemplatesCommand(this.app, this.manifest );
             await createTemplatesCommand.execute();
 
