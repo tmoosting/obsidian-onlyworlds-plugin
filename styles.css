@@ -1,10 +1,6 @@
 /* styles.css */
 
-.text-field, .number-field, .link-field, .multi-link-field {
-    font-weight: bold; /* Make text bold */
-    color: gray; /* Default color for text fields */
-    cursor: help; /* Shows a help cursor on hover */
-}
+ 
 
 .text-field::after, .number-field::after, .link-field::after, .multi-link-field::after  {
     content: attr(data-tooltip);
@@ -30,6 +26,7 @@
 
 .text-field {
     color: whitesmoke;
+    pointer-events: none; 
 }
 
 .number-field {

@@ -15,10 +15,21 @@ export default class OnlyWorldsPlugin extends Plugin {
         this.noteValidator.setupValidationListeners();
 
         this.setupCommands();
+        this.preventClickExpansion();
         
         console.log("OW Plugin loaded");
       }
-
+      preventClickExpansion(): void {
+        this.app.workspace.onLayoutReady(() => {
+            const textFields = document.querySelectorAll('.text-field');
+            textFields.forEach(field => {
+                field.addEventListener('click', (event) => {
+                    console.log("TEXT STOP PROPAGATE");
+                    event.stopPropagation(); // Prevents the click from affecting other elements
+                });
+            });
+        });
+    }
       setupCommands() {
        
         const createCategoryFoldersCommand = new CreateCategoryFoldersCommand(this.app, this.manifest);
