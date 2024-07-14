@@ -1,67 +1,70 @@
 # Character Template
 
-## Basic Information
-- **ID**: `{{id}}`
-- **Name**: `{{name}}`
-- **Age**: `{{age}}`
-- **Gender**: `{{gender}}`
-- **Species**: `{{species}}`
-- **Birth Date**: `{{birth_date}}`
-- **Birthplace**: `[[{{birthplace}}]]`   
+## Core
+- <span class="text-field" data-tooltip="Text">ID:</span>
+- <span class="text-field" data-tooltip="Text">Name:</span>
+- <span class="text-field" data-tooltip="Text">Description:</span>
+- <span class="text-field" data-tooltip="Text">Supertype:</span>
+- <span class="text-field" data-tooltip="Text">Subtype:</span>
+- <span class="text-field" data-tooltip="Text">Image URL:</span>
 
-## Physical Traits
-- **Height**: `{{height}}`
-- **Weight**: `{{weight}}`
-- **Physicality**: `{{physicality}}`
-- **Appearance**: `{{appearance}}`
+## Constitution
+- <span class="text-field" data-tooltip="Text">Physicality:</span>
+- <span class="text-field" data-tooltip="Text">Psychology:</span>
+- <span class="number-field" data-tooltip="Number">Height:</span>
+- <span class="number-field" data-tooltip="Number">Weight:</span>
+- <span class="link-field" data-tooltip="Multi Species">Species:</span>
+- <span class="multi-link-field" data-tooltip="Multi Trait">Traits:</span>
+- <span class="multi-link-field" data-tooltip="Multi Ability">Abilities:</span>
 
-## Psychological Profile
-- **Psychology**: `{{psychology}}`
-- **Motivations**: `{{motivations}}`
-- **Personality Traits**: `{{traits}}`
+## Origins
+- <span class="text-field" data-tooltip="Text">Background:</span>
+- <span class="text-field" data-tooltip="Text">Motivations:</span>
+- <span class="number-field" data-tooltip="Number">Birth Date:</span>
+- <span class="link-field" data-tooltip="Single Location">Birthplace:</span>
+- <span class="multi-link-field" data-tooltip="Multi Language">Languages:</span>
+- <span class="multi-link-field" data-tooltip="Multi Event">Events:</span>
 
-## Abilities and Skills
-- **Capabilities**: `{{capability}}`
-- **Power Level**: `{{power}}`
-- **Abilities**: `[[{{abilities}}]]` (Links to abilities)
-- **Proficiencies**: `{{proficiencies}}`
+## World
+- <span class="text-field" data-tooltip="Text">Situation:</span>
+- <span class="link-field" data-tooltip="Single Location">Location:</span>
+- <span class="multi-link-field" data-tooltip="Multi Title">Titles:</span>
+- <span class="multi-link-field" data-tooltip="Multi Object">Objects:</span>
+- <span class="multi-link-field" data-tooltip="Multi Institution">Institutions:</span>
 
-## Social Connections
-- **Family**: `[[{{family}}]]`
-- **Friends**: `[[{{friends}}]]`
-- **Rivals**: `[[{{rivals}}]]`
-- **Institutions**: `[[{{institutions}}]]`
+## Personality
+- <span class="number-field" data-tooltip="Number, max: 100">Charisma:</span>
+- <span class="number-field" data-tooltip="Number, max: 100">Coercion:</span>
+- <span class="number-field" data-tooltip="Number, max: 100">Capability:</span>
+- <span class="number-field" data-tooltip="Number, max: 100">Compassion:</span>
+- <span class="number-field" data-tooltip="Number, max: 100">Creativity:</span>
+- <span class="number-field" data-tooltip="Number, max: 100">Courage:</span>
 
-## Background and Current Situation
-- **Backstory**: `{{backstory}}`
-- **Current Situation**: `{{situation}}`
-- **Status**: `{{status}}`
+## Social
+- <span class="multi-link-field" data-tooltip="Multi Family">Family:</span>
+- <span class="multi-link-field" data-tooltip="Multi Friend">Friends:</span>
+- <span class="multi-link-field" data-tooltip="Multi Rival">Rivals:</span>
+- <span class="multi-link-field" data-tooltip="Multi Collective">Collectives:</span>
+- <span class="multi-link-field" data-tooltip="Multi Relation">Relations:</span>
 
-## Metrics
-- **Charisma**: `{{charisma}}`
-- **Coercion**: `{{coercion}}`
-- **Courage**: `{{courage}}`
-- **Corruption**: `{{corruption}}`
-
-## Combat and Adventure
-- **Hit Points**: `{{hit_points}}`
-- **Equipment**: `[[{{equipment}}]]` (Links to equipment)
-- **Class**: `{{tt_class}}`
-- **Alignment**: `{{alignment}}`
-
-## Extended Attributes (D&D-style stats)
-- **Strength (STR)**: `{{tt_str}}`
-- **Intelligence (INT)**: `{{tt_int}}`
-- **Constitution (CON)**: `{{tt_con}}`
-- **Dexterity (DEX)**: `{{tt_dex}}`
-- **Wisdom (WIS)**: `{{tt_wis}}`
-- **Charisma (CHA)**: `{{tt_cha}}`
-
-## Narrative Features
-- **Background Stories**: `{{background}}`
-- **Events**: `[[{{events}}]]` (Links to notable events)
-- **Inspirations**: `[[{{inspirations}}]]`
-
-## Additional Notes
-- **Languages**: `[[{{languages}}]]`
-- **Spells and Abilities**: `[[{{spells}}]]`
+## Games
+- <span class="text-field" data-tooltip="Text">Backstory:</span>
+- <span class="number-field" data-tooltip="Number, max: 100">Level:</span>
+- <span class="number-field" data-tooltip="Number">Power:</span>
+- <span class="number-field" data-tooltip="Number, max: 9999">Price:</span>
+- <span class="number-field" data-tooltip="Number, max: 999">Hit Points:</span>
+- <span class="number-field" data-tooltip="Number">Skill Stealth:</span>
+- <span class="number-field" data-tooltip="Number, max: 20">Strength (STR):</span>
+- <span class="number-field" data-tooltip="Number, max: 20">Intelligence (INT):</span>
+- <span the="number-field" data-tooltip="Number, max: 20">Constitution (CON):</span>
+- <span the="number-field" data-tooltip="Number, max: 20">Dexterity (DEX):</span>
+- <span the="number-field" data-tooltip="Number, max: 20">Wisdom (WIS):</span>
+- <span the="number-field" data-tooltip="Number, max: 20">Charisma (CHA):</span>
+- <span class="text-field" data-tooltip="Text">Class:</span>
+- <span class="text-field" data-tooltip="Text">Alignment:</span>
+- <span class="multi-link-field" data-tooltip="Multi Equipment">Equipment:</span>
+- <span the="multi-link-field" data-tooltip="Multi Backpack">Backpack:</span>
+- <span the="multi-link-field" data-tooltip="Multi Proficiency">Proficiencies:</span>
+- <span the="multi-link-field" data-tooltip="Multi Feature">Features:</span>
+- <span the="multi-link-field" data-tooltip="Multi Spell">Spells:</span>
+- <span the="multi-link-field" data-tooltip="Multi Inspiration">Inspirations:</span>

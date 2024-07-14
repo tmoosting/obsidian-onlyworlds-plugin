@@ -7,7 +7,7 @@
 - **Description:** {{description}}
 - **User ID:** {{user_id}}
 - **Version:** {{ow_version}}
-- **Image URL:** ![World Image]({{image_url}})
+- **Image URL:** {{image_url}}
 
 ## Time Settings
 - **Focus Text:** {{focus_text}}

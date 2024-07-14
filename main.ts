@@ -5,11 +5,22 @@ import { CreateTemplatesCommand } from './Commands/CreateTemplatesCommand';
 import { ImportWorldCommand } from './Commands/ImportWorldCommand';
 import { ExportWorldCommand } from 'Commands/ExportWorldCommand';
 import { CreateWorldCommand } from 'Commands/CreateWorldCommand';
+import { NoteValidator } from './Scripts/NoteValidator';
 
 export default class OnlyWorldsPlugin extends Plugin {
-    onload(): void {
-        console.log("OW Plugin loaded");
+    noteValidator: NoteValidator;
 
+      onload(): void {
+        this.noteValidator = new NoteValidator(this.app.vault);
+        this.noteValidator.setupValidationListeners();
+
+        this.setupCommands();
+        
+        console.log("OW Plugin loaded");
+      }
+
+      setupCommands() {
+       
         const createCategoryFoldersCommand = new CreateCategoryFoldersCommand(this.app, this.manifest);
         const createTemplatesCommand = new CreateTemplatesCommand(this.app, this.manifest);
         const retrieveWorldCommand = new ImportWorldCommand(this.app, this.manifest);
@@ -53,6 +64,7 @@ export default class OnlyWorldsPlugin extends Plugin {
             name: 'Create World',
             callback: () => createWorldCommand.execute(),
         });
-
     }
+
+   
 }

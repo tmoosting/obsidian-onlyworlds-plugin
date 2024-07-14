@@ -1,8 +1,49 @@
-/*
+/* styles.css */
 
-This CSS file will be included with your plugin, and
-available in the app when your plugin is enabled.
+.text-field, .number-field, .link-field, .multi-link-field {
+    font-weight: bold; /* Make text bold */
+    color: gray; /* Default color for text fields */
+    cursor: help; /* Shows a help cursor on hover */
+}
 
-If your plugin does not need CSS, delete this file.
+.text-field::after, .number-field::after, .link-field::after, .multi-link-field::after  {
+    content: attr(data-tooltip);
+    visibility: hidden;
+    background-color: black;
+    color: white;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 10px;
+    position: absolute;
+    z-index: 1;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: max-content;
+    max-width: 300px;
+    font-size: 0.75em;
+}
 
-*/
+.text-field:hover::after, .number-field:hover::after, .link-field:hover::after, .multi-link-field:hover::after {
+    visibility: visible;
+}
+
+.text-field {
+    color: whitesmoke;
+}
+
+.number-field {
+    color: whitesmoke;
+    border-bottom: 1px dotted rgb(154, 189, 154);
+}
+
+.link-field {
+    color: whitesmoke; 
+    border-bottom: 1px dotted blue;
+
+}
+.multi-link-field {
+    color: ghostwhite;
+    text-decoration: none;
+    border-bottom: 1px dotted blue; 
+}
