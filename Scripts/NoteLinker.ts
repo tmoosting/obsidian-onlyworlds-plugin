@@ -55,9 +55,28 @@ export class NoteLinker extends Plugin {
         }
     }
 
-    private async fetchElements(elementType: string): Promise<any[]> {
-        // Implementation depends on how you store and retrieve element data
-        return []; // Placeholder
+    private async fetchElements(elementType: string): Promise<void> {
+        const fs = this.app.vault.adapter;  // Get the file system adapter
+        const elementsPath = `OnlyWorlds/Worlds/OnlyWorld/Elements/${elementType}`;
+        const files = this.app.vault.getMarkdownFiles().filter(file => file.path.startsWith(elementsPath));
+        console.log(`files ${files}, elementType  ${elementType}  `);
+        for (const file of files) {
+            const content = await this.app.vault.read(file);
+            const {name, id} = this.parseElement(content);
+            console.log(`Element Name: ${name}, ID: ${id}`); // Log each element's name and ID
+        }
     }
+
+    private parseElement(content: string): {name: string, id: string} {
+        // Using regular expressions that extract text immediately following the specific HTML structure
+        const idMatch = content.match(/<span class="text-field" data-tooltip="Text">ID<\/span>:\s*([^<]+)/);
+        const nameMatch = content.match(/<span class="text-field" data-tooltip="Text">Name<\/span>:\s*([^<]+)/);
+    
+        return {
+            id: idMatch ? idMatch[1].trim() : "Unknown ID",
+            name: nameMatch ? nameMatch[1].trim() : "Unnamed Element"
+        };
+    }
+    
 }
  

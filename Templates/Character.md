@@ -42,8 +42,8 @@
 
 ## Social
 - <span class="multi-link-field" data-tooltip="Multi Family">Family</span>: 
-- <span class="multi-link-field" data-tooltip="Multi Friend">Friends</span>: 
-- <span class="multi-link-field" data-tooltip="Multi Rival">Rivals</span>: 
+- <span class="multi-link-field" data-tooltip="Multi Character">Friends</span>: 
+- <span class="multi-link-field" data-tooltip="Multi Character">Rivals</span>: 
 - <span class="multi-link-field" data-tooltip="Multi Collective">Collectives</span>: 
 - <span class="multi-link-field" data-tooltip="Multi Relation">Relations</span>: 
 
@@ -62,9 +62,9 @@
 - <span class="number-field" data-tooltip="Number, max: 20">Charisma (CHA)</span>: 
 - <span class="text-field" data-tooltip="Text">Class</span>: 
 - <span class="text-field" data-tooltip="Text">Alignment</span>: 
-- <span class="multi-link-field" data-tooltip="Multi Equipment">Equipment</span>: 
-- <span class="multi-link-field" data-tooltip="Multi Backpack">Backpack</span>: 
-- <span class="multi-link-field" data-tooltip="Multi Proficiency">Proficiencies</span>: 
-- <span class="multi-link-field" data-tooltip="Multi Feature">Features</span>: 
-- <span class="multi-link-field" data-tooltip="Multi Spell">Spells</span>: 
-- <span class="multi-link-field" data-tooltip="Multi Inspiration">Inspirations</span>: 
+- <span class="multi-link-field" data-tooltip="Multi Object">Equipment</span>: 
+- <span class="multi-link-field" data-tooltip="Multi Object">Backpack</span>: 
+- <span class="multi-link-field" data-tooltip="Multi Ability">Proficiencies</span>: 
+- <span class="multi-link-field" data-tooltip="Multi Trait">Features</span>: 
+- <span class="multi-link-field" data-tooltip="Multi Ability">Spells</span>: 
+- <span class="multi-link-field" data-tooltip="Multi Construct">Inspirations</span>: 
