@@ -49,14 +49,14 @@ export class NoteLinker extends Plugin {
             const currentContent = await this.app.vault.read(currentFile);
             const { id: currentId } = this.parseElement(currentContent); // Parses the current document for an ID
             console.log(`Current Note ID: ${currentId}`);
-    
+        
             const worldName = this.extractWorldName(currentFile.path); // Extract the world name based on the file's path
             console.log(`Current World Name: ${worldName}`);
-    
+        
             const match = /data-tooltip="(Single|Multi) (.*?)">/.exec(lineText);
             if (match) {
                 const elementType = match[2];
-                const elements = await this.fetchElements(elementType, worldName); // Pass the world name to fetch elements dynamically
+                const elements = await this.fetchElements(elementType, worldName, currentId); // Pass the world name and current ID to fetch elements dynamically
             }
         }
     }
@@ -70,14 +70,16 @@ export class NoteLinker extends Plugin {
         }
         return "Unknown World";  // Default if the world name cannot be determined
     }
-    private async fetchElements(elementType: string, worldName: string): Promise<void> {
+    private async fetchElements(elementType: string, worldName: string, currentId: string): Promise<void> {
         const elementsPath = `OnlyWorlds/Worlds/${worldName}/Elements/${elementType}`; // Uses the dynamic world name
         const files = this.app.vault.getMarkdownFiles().filter(file => file.path.startsWith(elementsPath));
         console.log(`Files found: ${files.length}, Element Type: ${elementType}`);
         for (const file of files) {
             const content = await this.app.vault.read(file);
             const { name, id } = this.parseElement(content);
-            console.log(`Element Name: ${name}, ID: ${id}`);
+            if (id !== currentId) { // Filter out elements with the same ID as the current note
+                console.log(`Element Name: ${name}, ID: ${id}`);
+            }
         }
     }
 
