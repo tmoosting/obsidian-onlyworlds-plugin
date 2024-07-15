@@ -95,7 +95,7 @@ export class ExportWorldCommand {
         const data: Record<string, string> = {};
     
         const sectionPattern = /^##\s*(.+)$/; // Pattern to identify sections
-        const keyValuePattern = /- \*\*(.*?):\*\* (.*)/; // Pattern for key-value pairs
+        const keyValuePattern = /- <span class="[^"]+" data-tooltip="[^"]+">(.+?)<\/span>:\s*(.*)/; // Pattern for key-value pairs
     
         const lines = content.split('\n');
         lines.forEach(line => {
@@ -115,6 +115,7 @@ export class ExportWorldCommand {
     
         return data;
     }
+    
     
     // Helper method to convert strings to snake_case
     toSnakeCase(input: string): string {
