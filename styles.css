@@ -44,3 +44,14 @@
     text-decoration: none;
     border-bottom: 1px dotted blue; 
 }
+
+.custom-link {
+    color: var(--text-link);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.custom-link:hover {
+    color: var(--text-link-hover);
+    text-decoration: underline;
+}

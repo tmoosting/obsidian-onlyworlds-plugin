@@ -136,9 +136,9 @@ export class NoteLinker extends Plugin {
         currentValues = currentValues.replace(/[\r\n-]+/g, '').trim();
         console.log(`Current Values After Cleanup: ${currentValues}`);
     
-        // Append the new IDs to the current values
-        const newIds = selectedElements.map(el => el.id).join(',');
-        const updatedValues = currentValues ? `${currentValues},${newIds}` : newIds;
+        // Append the new names to the current values
+        const newEntries = selectedElements.map(el => `[[${el.name}]]`).join(',');
+        const updatedValues = currentValues ? `${currentValues},${newEntries}` : newEntries;
         console.log(`Updated Values: ${updatedValues}`);
     
         // Update the line content
@@ -148,4 +148,9 @@ export class NoteLinker extends Plugin {
         // Replace the line with the updated content
         editor.setLine(cursor.line, updatedLineContent);
     }
+    
+    
+    
+    
+    
 }
