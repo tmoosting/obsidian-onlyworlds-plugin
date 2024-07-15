@@ -81,6 +81,7 @@ export class NoteLinker extends Plugin {
         }
         return elements;
     }
+
     private extractWorldName(filePath: string): string {
         // Assumes the path format is 'OnlyWorlds/Worlds/{WorldName}/...'
         const pathParts = filePath.split('/');
@@ -95,8 +96,8 @@ export class NoteLinker extends Plugin {
     private parseElement(content: string): {name: string, id: string} {
         console.log("Parsing element content...");
         // Using regular expressions that extract text immediately following the specific HTML structure
-        const idMatch = content.match(/<span class="text-field" data-tooltip="Text">ID<\/span>:\s*([^<]+)/);
-        const nameMatch = content.match(/<span class="text-field" data-tooltip="Text">Name<\/span>:\s*([^<]+)/);
+        const idMatch = content.match(/<span class="text-field" data-tooltip="Text">ID<\/span>:\s*([^<\r\n-]+)/);
+        const nameMatch = content.match(/<span class="text-field" data-tooltip="Text">Name<\/span>:\s*([^<\r\n-]+)/);
     
         if (idMatch) {
             console.log(`Raw ID Match: ${idMatch[1]}`);
@@ -110,15 +111,15 @@ export class NoteLinker extends Plugin {
             console.log("No Name match found.");
         }
     
-        const id = idMatch ? idMatch[1].trim().replace(/-$/, '') : "Unknown ID";
-        const name = nameMatch ? nameMatch[1].trim().replace(/-$/, '') : "Unnamed Element";
+        const id = idMatch ? idMatch[1].trim() : "Unknown ID";
+        const name = nameMatch ? nameMatch[1].trim() : "Unnamed Element";
     
         console.log(`Parsed ID: ${id}`);
         console.log(`Parsed Name: ${name}`);
     
         return { id, name };
     }
-    
+
     private handleElementSelection(editor: Editor, cursor: EditorPosition, lineText: string, selectedElements: { name: string; id: string }[]) {
         // Get the current content of the line
         let lineContent = editor.getLine(cursor.line);
@@ -132,7 +133,7 @@ export class NoteLinker extends Plugin {
         console.log(`Current Values Before Cleanup: ${currentValues}`);
     
         // Remove any trailing unwanted characters (like the unwanted dash and newlines)
-        currentValues = currentValues.replace(/[\r\n-]/g, '').trim();
+        currentValues = currentValues.replace(/[\r\n-]+/g, '').trim();
         console.log(`Current Values After Cleanup: ${currentValues}`);
     
         // Append the new IDs to the current values
@@ -147,10 +148,4 @@ export class NoteLinker extends Plugin {
         // Replace the line with the updated content
         editor.setLine(cursor.line, updatedLineContent);
     }
-    
-    
-    
-    
-    
 }
- 
