@@ -16,18 +16,22 @@ export class ElementSelectionModal extends Modal {
 
         contentEl.createEl('h2', { text: 'Select Elements' });
 
-        this.elements.forEach(element => {
-            new Setting(contentEl)
-                .setName(element.name)
-                .setDesc(`ID: ${element.id}`)
-                .addButton(button => {
-                    button.setButtonText('Select')
-                        .onClick(() => {
-                            this.onSelect([element]);
-                            this.close();
-                        });
-                });
-        });
+        if (this.elements.length === 0) {
+            contentEl.createEl('p', { text: 'No elements found.' });
+        } else {
+            this.elements.forEach(element => {
+                new Setting(contentEl)
+                    .setName(element.name)
+                    .setDesc(`ID: ${element.id}`)
+                    .addButton(button => {
+                        button.setButtonText('Select')
+                            .onClick(() => {
+                                this.onSelect([element]);
+                                this.close();
+                            });
+                    });
+            });
+        }
     }
 
     onClose() {
