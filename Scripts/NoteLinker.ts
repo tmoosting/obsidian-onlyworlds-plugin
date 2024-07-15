@@ -5,8 +5,8 @@ export class NoteLinker extends Plugin {
 
     setupLinkerListeners() {
         this.addCommand({
-            id: 'check-special-field',
-            name: 'Check if cursor is behind a special field',
+            id: 'link-to-element',
+            name: 'Link an element',
             hotkeys: [{
                 modifiers: ["Shift"],
                 key: 'l'
@@ -17,13 +17,8 @@ export class NoteLinker extends Plugin {
                     const lineText = this.currentEditor.getLine(cursor.line);
                     console.log(`Line text at cursor: '${lineText}'`);
                     console.log(`Cursor position: ${cursor.ch}`);
-                    const isBehindSpecialField = this.isLineLinkField(lineText );
-                    console.log(`Is cursor behind a special field: ${isBehindSpecialField}`);
-                    if (isBehindSpecialField) {
-                        new Notice('Cursor is behind a special field.');
-                    } else {
-                        new Notice('Cursor is not behind a special field.');
-                    }
+                    const isLineLinkField = this.isLineLinkField(lineText );
+                  // only execute if isLineLinkField is true
                 }
             }
         });
