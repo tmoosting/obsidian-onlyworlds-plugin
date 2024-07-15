@@ -50,45 +50,73 @@ export class ExportWorldCommand {
     async collectWorldData(worldFolder: string) {
         const fs: FileSystemAdapter = this.app.vault.adapter as FileSystemAdapter;
         let worldData: Record<string, any> = {};  // Change from any[] to any for flexible indexing
-
+    
         // Path to the 'World' file inside the selected world folder
         const worldFilePath = normalizePath(`OnlyWorlds/Worlds/${worldFolder}/World.md`);
-
+    
         // Read the 'World' file content and parse it
         try {
             const worldFileContent = await fs.read(worldFilePath);
             console.log(`Reading World file: ${worldFilePath}`);
-            const worldInfo = await this.parseTemplate(worldFileContent);
+            const worldInfo = this.parseWorldFile(worldFileContent);
             worldData['World'] = worldInfo; // Directly assign the object, not in an array
         } catch (error) {
             console.error('Error reading World file:', error);
             new Notice('Failed to read World file: ' + error.message);
             return {}; // Stop further processing if the World file cannot be read
         }
-
+    
         // Iterate over categories to collect their data
         for (const categoryKey in Category) {
             const category = Category[categoryKey];
             if (isNaN(Number(category))) {
                 const categoryDirectory = normalizePath(`OnlyWorlds/Worlds/${worldFolder}/Elements/${category}`);
                 const files = this.app.vault.getFiles().filter(file => file.path.startsWith(categoryDirectory));
-
+    
                 console.log(`Collecting data for category: ${category}`);
                 const categoryData = await Promise.all(files.map(async (file) => {
                     const fileContent = await fs.read(file.path);
                     console.log(`Reading file: ${file.path}`);
                     return await this.parseTemplate(fileContent);
                 }));
-
+    
                 // Filter out empty entries
                 worldData[category] = categoryData.filter(item => Object.keys(item).length > 0);
             }
         }
-
+    
         console.log(`Final world data: ${JSON.stringify(worldData)}`);
         return worldData;
     }
-
+    
+    private parseWorldFile(content: string): Record<string, string> {
+        let currentSection: string | null = null;
+        const data: Record<string, string> = {};
+    
+        const sectionPattern = /^##\s*(.+)$/; // Pattern to identify sections
+        const keyValuePattern = /- \*\*(.*?):\*\* (.*)/; // Pattern for key-value pairs
+    
+        const lines = content.split('\n');
+        lines.forEach(line => {
+            const sectionMatch = line.match(sectionPattern);
+            if (sectionMatch) {
+                currentSection = this.toSnakeCase(sectionMatch[1]);
+                return;
+            }
+    
+            const match = line.match(keyValuePattern);
+            if (match) {
+                let key = this.toSnakeCase(match[1].replace(/\*\*/g, ''));
+                const value = match[2].trim();
+                data[key] = value;
+            }
+        });
+    
+        return data;
+    }
+    
+    
+    
     private async extractLinkedIds(linkedText: string, lineText: string): Promise<string[]> {
         const linkPattern = /\[\[(.*?)\]\]/g;
         const ids: string[] = [];
