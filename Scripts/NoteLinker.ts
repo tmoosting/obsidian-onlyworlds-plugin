@@ -1,4 +1,5 @@
 import { App, Plugin, MarkdownView, Editor, Notice, WorkspaceLeaf, EditorPosition } from 'obsidian';
+import { ElementSelectionModal } from './ElementSelectionModal';
 
 export class NoteLinker extends Plugin {
     private currentEditor: Editor | null = null;
@@ -57,10 +58,29 @@ export class NoteLinker extends Plugin {
             if (match) {
                 const elementType = match[2];
                 const elements = await this.fetchElements(elementType, worldName, currentId); // Pass the world name and current ID to fetch elements dynamically
+                
+                // Open the selection modal with the fetched elements
+                new ElementSelectionModal(this.app, elements, (selectedElements) => {
+                    this.handleElementSelection(editor, cursor, selectedElements);
+                }).open();
             }
         }
     }
     
+    private async fetchElements(elementType: string, worldName: string, currentId: string): Promise<{ name: string; id: string }[]> {
+        const elementsPath = `OnlyWorlds/Worlds/${worldName}/Elements/${elementType}`; // Uses the dynamic world name
+        const files = this.app.vault.getMarkdownFiles().filter(file => file.path.startsWith(elementsPath));
+        console.log(`Files found: ${files.length}, Element Type: ${elementType}`);
+        const elements = [];
+        for (const file of files) {
+            const content = await this.app.vault.read(file);
+            const { name, id } = this.parseElement(content);
+            if (id !== currentId) { // Filter out elements with the same ID as the current note
+                elements.push({ name, id });
+            }
+        }
+        return elements;
+    }
     private extractWorldName(filePath: string): string {
         // Assumes the path format is 'OnlyWorlds/Worlds/{WorldName}/...'
         const pathParts = filePath.split('/');
@@ -70,18 +90,7 @@ export class NoteLinker extends Plugin {
         }
         return "Unknown World";  // Default if the world name cannot be determined
     }
-    private async fetchElements(elementType: string, worldName: string, currentId: string): Promise<void> {
-        const elementsPath = `OnlyWorlds/Worlds/${worldName}/Elements/${elementType}`; // Uses the dynamic world name
-        const files = this.app.vault.getMarkdownFiles().filter(file => file.path.startsWith(elementsPath));
-        console.log(`Files found: ${files.length}, Element Type: ${elementType}`);
-        for (const file of files) {
-            const content = await this.app.vault.read(file);
-            const { name, id } = this.parseElement(content);
-            if (id !== currentId) { // Filter out elements with the same ID as the current note
-                console.log(`Element Name: ${name}, ID: ${id}`);
-            }
-        }
-    }
+   
 
     private parseElement(content: string): {name: string, id: string} {
         // Using regular expressions that extract text immediately following the specific HTML structure
@@ -93,6 +102,12 @@ export class NoteLinker extends Plugin {
             name: nameMatch ? nameMatch[1].trim() : "Unnamed Element"
         };
     }
-    
+    private handleElementSelection(editor: Editor, cursor: EditorPosition, selectedElements: { name: string; id: string }[]) {
+        // Implement the logic to handle the selected elements here
+        // For example, insert links to the selected elements in the editor
+        selectedElements.forEach(element => {
+            editor.replaceRange(`[[${element.name}|${element.id}]]`, cursor);
+        });
+    }
 }
  
