@@ -61,7 +61,7 @@ export class NoteLinker extends Plugin {
                 
                 // Open the selection modal with the fetched elements
                 new ElementSelectionModal(this.app, elements, (selectedElements) => {
-                    this.handleElementSelection(editor, cursor, selectedElements);
+                    this.handleElementSelection(editor, cursor, lineText, selectedElements);
                 }).open();
             }
         }
@@ -93,21 +93,64 @@ export class NoteLinker extends Plugin {
    
 
     private parseElement(content: string): {name: string, id: string} {
+        console.log("Parsing element content...");
         // Using regular expressions that extract text immediately following the specific HTML structure
         const idMatch = content.match(/<span class="text-field" data-tooltip="Text">ID<\/span>:\s*([^<]+)/);
         const nameMatch = content.match(/<span class="text-field" data-tooltip="Text">Name<\/span>:\s*([^<]+)/);
     
-        return {
-            id: idMatch ? idMatch[1].trim() : "Unknown ID",
-            name: nameMatch ? nameMatch[1].trim() : "Unnamed Element"
-        };
+        if (idMatch) {
+            console.log(`Raw ID Match: ${idMatch[1]}`);
+        } else {
+            console.log("No ID match found.");
+        }
+    
+        if (nameMatch) {
+            console.log(`Raw Name Match: ${nameMatch[1]}`);
+        } else {
+            console.log("No Name match found.");
+        }
+    
+        const id = idMatch ? idMatch[1].trim().replace(/-$/, '') : "Unknown ID";
+        const name = nameMatch ? nameMatch[1].trim().replace(/-$/, '') : "Unnamed Element";
+    
+        console.log(`Parsed ID: ${id}`);
+        console.log(`Parsed Name: ${name}`);
+    
+        return { id, name };
     }
-    private handleElementSelection(editor: Editor, cursor: EditorPosition, selectedElements: { name: string; id: string }[]) {
-        // Implement the logic to handle the selected elements here
-        // For example, insert links to the selected elements in the editor
-        selectedElements.forEach(element => {
-            editor.replaceRange(`[[${element.name}|${element.id}]]`, cursor);
-        });
+    
+    private handleElementSelection(editor: Editor, cursor: EditorPosition, lineText: string, selectedElements: { name: string; id: string }[]) {
+        // Get the current content of the line
+        let lineContent = editor.getLine(cursor.line);
+        console.log(`Original Line Content: ${lineContent}`);
+    
+        // Find the position to insert the new IDs
+        const insertionPoint = lineContent.indexOf('</span>:') + '</span>:'.length;
+    
+        // Extract the current values if any
+        let currentValues = lineContent.substring(insertionPoint).trim();
+        console.log(`Current Values Before Cleanup: ${currentValues}`);
+    
+        // Remove any trailing unwanted characters (like the unwanted dash and newlines)
+        currentValues = currentValues.replace(/[\r\n-]/g, '').trim();
+        console.log(`Current Values After Cleanup: ${currentValues}`);
+    
+        // Append the new IDs to the current values
+        const newIds = selectedElements.map(el => el.id).join(',');
+        const updatedValues = currentValues ? `${currentValues},${newIds}` : newIds;
+        console.log(`Updated Values: ${updatedValues}`);
+    
+        // Update the line content
+        const updatedLineContent = lineContent.substring(0, insertionPoint) + ' ' + updatedValues;
+        console.log(`Updated Line Content: ${updatedLineContent}`);
+    
+        // Replace the line with the updated content
+        editor.setLine(cursor.line, updatedLineContent);
     }
+    
+    
+    
+    
+    
 }
  

@@ -1,4 +1,4 @@
-import { App, Plugin, MarkdownView, Editor, Notice, WorkspaceLeaf, EditorPosition, Modal, Setting } from 'obsidian';
+import { App, Modal, Setting } from 'obsidian';
 
 export class ElementSelectionModal extends Modal {
     private elements: { name: string; id: string }[];
