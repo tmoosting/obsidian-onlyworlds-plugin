@@ -44,17 +44,40 @@ export class NoteLinker extends Plugin {
 
     private async linkElement(editor: Editor, cursor: EditorPosition, lineText: string) {
         console.log("LINKK 1");
+    
+        // Get the current active file and extract information
+        const currentFile = this.app.workspace.getActiveFile();
+        if (currentFile) {
+            // Extract ID from the current file's content
+            const currentContent = await this.app.vault.read(currentFile);
+            const { id: currentId } = this.parseElement(currentContent);
+            console.log(`Current Note ID: ${currentId}`);  // Log the ID of the current note
+    
+            // Determine the world by traversing up the folder structure or reading from the world file
+            const worldName = this.extractWorldName(currentFile.path);
+            console.log(`Current World Name: ${worldName}`);
+        }
+    
         // Parse the element type from the line text
         const match = /data-tooltip="(Single|Multi) (.*?)">/.exec(lineText);
         if (match) {
             console.log("LINKK  MATCH");
             const elementType = match[2];
-            // Fetch elements of this type
+            // Fetch elements of this type, excluding the current ID
             const elements = await this.fetchElements(elementType);
             // Implement an autocomplete selection here
         }
     }
-
+    
+    private extractWorldName(filePath: string): string {
+        // Assumes the path format is 'OnlyWorlds/Worlds/{WorldName}/...'
+        const pathParts = filePath.split('/');
+        const worldIndex = pathParts.indexOf('Worlds');
+        if (worldIndex !== -1 && pathParts.length > worldIndex + 1) {
+            return pathParts[worldIndex + 1];
+        }
+        return "Unknown World";  // Default if the world name cannot be determined
+    }
     private async fetchElements(elementType: string): Promise<void> {
         const fs = this.app.vault.adapter;  // Get the file system adapter
         const elementsPath = `OnlyWorlds/Worlds/OnlyWorld/Elements/${elementType}`;
