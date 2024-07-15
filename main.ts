@@ -6,11 +6,15 @@ import { ImportWorldCommand } from './Commands/ImportWorldCommand';
 import { ExportWorldCommand } from 'Commands/ExportWorldCommand';
 import { CreateWorldCommand } from 'Commands/CreateWorldCommand';
 import { NoteLinker } from './Scripts/NoteLinker';
+import Handlebars from 'handlebars';
 
 export default class OnlyWorldsPlugin extends Plugin {
     noteLinker: NoteLinker;
 
       onload(): void {
+    
+          this.registerHandlebarsHelpers();
+    
         this.noteLinker = new NoteLinker(this.app, this.manifest); 
         this.noteLinker.setupLinkerListeners();
 
@@ -18,6 +22,21 @@ export default class OnlyWorldsPlugin extends Plugin {
 
       
         console.log("OW Plugin loaded");
+      }
+
+   
+
+      registerHandlebarsHelpers() {
+        if (typeof Handlebars === 'undefined') {
+          console.error("Handlebars is not available.");
+          return;
+        }
+        
+        Handlebars.registerHelper('linkify', (ids: string, options: Handlebars.HelperOptions) => {
+          if (!ids) return '';
+          // Transform CSV IDs into linked markdown format
+          return ids.split(',').map(id => `[[${id.trim()}]]`).join(', ');
+        });
       }
 
       setupCommands() {

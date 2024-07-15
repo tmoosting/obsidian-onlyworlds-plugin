@@ -41,11 +41,11 @@
 - <span class="number-field" data-tooltip="Number, max: 100">Courage</span>: {{courage}}
 
 ## Social
-- <span class="multi-link-field" data-tooltip="Multi Family">Family</span>: {{family}}
-- <span class="multi-link-field" data-tooltip="Multi Character">Friends</span>: {{friends}}
-- <span class="multi-link-field" data-tooltip="Multi Character">Rivals</span>: {{rivals}}
-- <span class="multi-link-field" data-tooltip="Multi Collective">Collectives</span>: {{collectives}}
-- <span class="multi-link-field" data-tooltip="Multi Relation">Relations</span>: {{relations}}
+- <span class="multi-link-field" data-tooltip="Multi Family">Family</span>: {{linkify family}}
+- <span class="multi-link-field" data-tooltip="Multi Character">Friends</span>: {{linkify friends}}
+- <span class="multi-link-field" data-tooltip="Multi Character">Rivals</span>: {{linkify rivals}}
+- <span class="multi-link-field" data-tooltip="Multi Collective">Collectives</span>: {{linkify collectives}}
+- <span class="multi-link-field" data-tooltip="Multi Relation">Relations</span>: {{linkify relations}}
 
 ## Games
 - <span class="text-field" data-tooltip="Text">Backstory</span>: {{backstory}}
