@@ -13,24 +13,24 @@
 - <span class="text-field" data-tooltip="Text">Psychology</span>: {{psychology}}
 - <span class="number-field" data-tooltip="Number">Height</span>: {{height}}
 - <span class="number-field" data-tooltip="Number">Weight</span>: {{weight}}
-- <span class="link-field" data-tooltip="Multi Species">Species</span>: {{species}}
-- <span class="multi-link-field" data-tooltip="Multi Trait">Traits</span>: {{traits}}
-- <span class="multi-link-field" data-tooltip="Multi Ability">Abilities</span>: {{abilities}}
+- <span class="link-field" data-tooltip="Multi Species">Species</span>: {{linkify species}}
+- <span class="multi-link-field" data-tooltip="Multi Trait">Traits</span>: {{linkify traits}}
+- <span class="multi-link-field" data-tooltip="Multi Ability">Abilities</span>: {{linkify abilities}}
 
 ## Origins
 - <span class="text-field" data-tooltip="Text">Background</span>: {{background}}
 - <span class="text-field" data-tooltip="Text">Motivations</span>: {{motivations}}
 - <span class="number-field" data-tooltip="Number">Birth Date</span>: {{birth_date}}
-- <span class="link-field" data-tooltip="Single Location">Birthplace</span>: {{birthplace}}
-- <span class="multi-link-field" data-tooltip="Multi Language">Languages</span>: {{languages}}
-- <span class="multi-link-field" data-tooltip="Multi Event">Events</span>: {{events}}
+- <span class="link-field" data-tooltip="Single Location">Birthplace</span>: {{linkify birthplace}}
+- <span class="multi-link-field" data-tooltip="Multi Language">Languages</span>: {{linkify languages}}
+- <span class="multi-link-field" data-tooltip="Multi Event">Events</span>: {{linkify events}}
 
 ## World
 - <span class="text-field" data-tooltip="Text">Situation</span>: {{situation}}
-- <span class="link-field" data-tooltip="Single Location">Location</span>: {{location}}
-- <span class="multi-link-field" data-tooltip="Multi Title">Titles</span>: {{titles}}
-- <span class="multi-link-field" data-tooltip="Multi Object">Objects</span>: {{objects}}
-- <span class="multi-link-field" data-tooltip="Multi Institution">Institutions</span>: {{institutions}}
+- <span class="link-field" data-tooltip="Single Location">Location</span>: {{linkify location}}
+- <span class="multi-link-field" data-tooltip="Multi Title">Titles</span>: {{linkify titles}}
+- <span class="multi-link-field" data-tooltip="Multi Object">Objects</span>: {{linkify objects}}
+- <span class="multi-link-field" data-tooltip="Multi Institution">Institutions</span>: {{linkify institutions}}
 
 ## Personality
 - <span class="number-field" data-tooltip="Number, max: 100">Charisma</span>: {{charisma}}
@@ -62,9 +62,10 @@
 - <span class="number-field" data-tooltip="Number, max: 20">Charisma (CHA)</span>: {{tt_cha}}
 - <span class="text-field" data-tooltip="Text">Class</span>: {{class}}
 - <span class="text-field" data-tooltip="Text">Alignment</span>: {{alignment}}
-- <span class="multi-link-field" data-tooltip="Multi Object">Equipment</span>: {{equipment}}
-- <span class="multi-link-field" data-tooltip="Multi Object">Backpack</span>: {{backpack}}
-- <span class="multi-link-field" data-tooltip="Multi Ability">Proficiencies</span>: {{proficiencies}}
-- <span class="multi-link-field" data-tooltip="Multi Trait">Features</span>: {{features}}
-- <span class="multi-link-field" data-tooltip="Multi Ability">Spells</span>: {{spells}}
-- <span class="multi-link-field" data-tooltip="Multi Construct">Inspirations</span>: {{inspirations}}
+- <span class="multi-link-field" data-tooltip="Multi Object">Equipment</span>: {{linkify equipment}}
+- <span class="multi-link-field" data-tooltip="Multi Object">Backpack</span>: {{linkify backpack}}
+- <span class="multi-link-field" data-tooltip="Multi Ability">Proficiencies</span>: {{linkify proficiencies}}
+- <span class="multi-link-field" data-tooltip="Multi Trait">Features</span>: {{linkify features}}
+- <span class="multi-link-field" data-tooltip="Multi Ability">Spells</span>: {{linkify spells}}
+- <span class="multi-link-field" data-tooltip="Multi Construct">Inspirations</span>: {{linkify inspirations}}
+
