@@ -14,7 +14,7 @@ export class ImportWorldCommand {
         this.manifest = manifest;
     }
 
-    async execute(overwrite: boolean = true) {
+    async execute(overwrite: boolean = false) {
         new WorldKeyModal(this.app, async (worldKey: string) => {
             if (worldKey.length === 10) {
                 try {
