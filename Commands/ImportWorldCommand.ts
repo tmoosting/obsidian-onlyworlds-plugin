@@ -16,7 +16,7 @@ export class ImportWorldCommand {
     async execute() {
         new WorldKeyModal(this.app, async (worldKey: string) => {
             if (worldKey.length === 10) {
-                try {
+                try {                
                     const response = await requestUrl({
                         url: this.apiUrl + worldKey,
                         method: 'GET'
@@ -25,6 +25,7 @@ export class ImportWorldCommand {
                         new Notice('Failed to fetch world data: ' + response.status);
                         return;
                     }
+                    // Get the world data
                     const data = JSON.parse(response.text);
                     console.log(data); // Output the fetched world data to console
     
@@ -35,6 +36,8 @@ export class ImportWorldCommand {
                         new Notice('No valid world data found.');
                         return;
                     }
+
+                    // Create template notes from plugin files
                     const createTemplatesCommand = new CreateTemplatesCommand(this.app, this.manifest );
                     await createTemplatesCommand.execute();
                     
@@ -43,19 +46,19 @@ export class ImportWorldCommand {
                         await this.app.vault.createFolder(worldFolderPath);
                     }
     
-                    // Generate World file
+                    // Generate World data file
                     await this.generateWorldFile(worldData, worldFolderPath);
     
                     // Generate elements notes
                     const elementsFolderPath = normalizePath(`${worldFolderPath}/Elements`);
                     if (!this.app.vault.getAbstractFileByPath(elementsFolderPath)) {
                         await this.app.vault.createFolder(elementsFolderPath);
-                    }
-    
+                    }    
                     for (const category in Category) {
                         if (isNaN(Number(category)) && data[category]) {
-                            await this.generateElementNotes(elementsFolderPath, category, data[category]);
+                            await this.generateElementNotes(elementsFolderPath, category, data[category], data);
                         }
+
                     }
                 } catch (error) {
                     console.error('Error fetching world data:', error);
@@ -66,6 +69,8 @@ export class ImportWorldCommand {
             }
         }).open();
     }
+
+    // this function works, pls leave alone
     async generateWorldFile(worldData: any, worldFolderPath: string) {
         const fs: FileSystemAdapter = this.app.vault.adapter as FileSystemAdapter;
         const worldTemplatePath = normalizePath(`${this.app.vault.configDir}/plugins/obsidian-onlyworlds-plugin/Handlebars/WorldHandlebar.md`);
@@ -84,12 +89,19 @@ export class ImportWorldCommand {
             new Notice('Error creating world file: ' + error.message);
         }
     }
+    private extractWorldName(worldFolderPath: string): string {
+        const pathParts = worldFolderPath.split('/');
+        const worldIndex = pathParts.indexOf('Worlds');
+        return pathParts[worldIndex + 1];
+    }
 
-    async generateElementNotes(worldFolderPath: string, category: string, elements: any[]): Promise<void> {
+
+    // here we: read the json data; use handlebars to create data objects
+    async generateElementNotes(worldFolderPath: string, category: string, elements: any[], worldData: any): Promise<void> {
         const fs: FileSystemAdapter = this.app.vault.adapter as FileSystemAdapter;
         const templatePath = normalizePath(`${this.app.vault.configDir}/plugins/obsidian-onlyworlds-plugin/Handlebars/${category}Handlebar.md`);
         const worldName = this.extractWorldName(worldFolderPath);
-        const idToNameMap = await this.getIdToNameMap(worldName, category);
+        const idToNameMap = await this.getIdToNameMapFromWorldData(worldData);
     
         try {
             const templateText = await fs.read(templatePath);
@@ -112,55 +124,86 @@ export class ImportWorldCommand {
             new Notice(`Error processing ${category} notes: ` + error.message);
         }
     }
-        async getIdToNameMap(worldName: string, category: string): Promise<{ [id: string]: string }> {
-        const idToNameMap: { [id: string]: string } = {};
-        const categoryDirectory = normalizePath(`OnlyWorlds/Worlds/${worldName}/Elements/${category}`);
-
-        // Get all files in the category directory
-        const files = this.app.vault.getFiles().filter(file => file.path.startsWith(categoryDirectory));
-
-        // Iterate over each file and extract ID and Name
-        for (const file of files) {
-            const content = await this.app.vault.read(file as TFile);
-            const id = this.extractIdFromContent(content);
-            if (id) {
-                idToNameMap[id] = file.basename;  // Using file basename as the name
-            }
+    async getIdToNameMapFromWorldData(worldData: any): Promise<{[id: string]: string}> {
+        const idToNameMap: {[id: string]: string} = {};
+    
+        // Log the incoming worldData for debugging
+        console.log("Received worldData:", worldData);
+    
+        // Checking if worldData actually contains data under the 'Character' category
+        if (worldData && worldData.Character) {
+            console.log("Processing Characters:", worldData.Character);
+            worldData.Character.forEach((character: { id: string; name: string }) => {
+                if (character.id && character.name) {
+                    idToNameMap[character.id] = character.name;
+                    console.log(`Mapped ${character.id} to ${character.name}`);
+                }
+            });
+        } else {
+            console.log("No 'Character' category found or it is empty", worldData);
         }
-
+    
+        // Check and log if any other categories exist and process them
+        // Example for 'Object' category, add similar blocks for other categories if needed
+        if (worldData && worldData.Object) {
+            console.log("Processing Objects:", worldData.Object);
+            worldData.Object.forEach((object: { id: string; name: string }) => {
+                if (object.id && object.name) {
+                    idToNameMap[object.id] = object.name;
+                    console.log(`Mapped ${object.id} to ${object.name}`);
+                }
+            });
+        }
+    
         return idToNameMap;
     }
-
-    // Helper function to extract the ID from file content
-    private extractIdFromContent(content: string): string | null {
-        const match = content.match(/<span class="text-field" data-tooltip="Text">ID<\/span>:\s*([^<\r\n]+)/);
-        return match ? match[1].trim() : null;
-    }
- 
-
-    // Method to extract world name from a path
-    private extractWorldName(worldFolderPath: string): string {
-        const pathParts = worldFolderPath.split('/');
-        const worldIndex = pathParts.indexOf('Worlds');
-        return pathParts[worldIndex + 1];
-    }
     
+    
+     
+
+   
     replaceIdsWithLinks(element: Element, idToNameMap: IdToNameMap): Element {
+        console.log(`Replacing IDs in element with name: ${element.name}`);
         Object.keys(element).forEach(key => {
-          if (typeof element[key] === 'string' && element[key].includes(',')) {
-            let links = element[key].split(',').map(id => this.linkify(idToNameMap[id.trim()] || id.trim()));
-            element[key] = links.join(', ');
-          }
+            const original = element[key];
+            if (typeof original === 'string') {
+                console.log(`Original ${key}: ${original}`);
+                element[key] = original.split(',').map(id => {
+                    const trimmedId = id.trim();
+                    const name = idToNameMap[trimmedId];
+                    if (name) {
+                        console.log(`Replacing ID ${trimmedId} with link to ${name}`);
+                        return `[[${name}]]`;
+                    } else {
+                        console.log(`No name found for ID ${trimmedId}, leaving as is`);
+                        return trimmedId;
+                    }
+                }).join(', ');
+                console.log(`Updated ${key}: ${element[key]}`);
+            }
         });
         return element;
-      }
+    }
+    
+
     
       // Helper method for linkify
       linkify(id: string): string {
         return `[[${id}]]`;
+
+        // log data lement again to see changes
       }
+      private extractIdFromContent(content: string): string | null {
+        // This regex matches the ID line regardless of the field type specified in data-tooltip
+        const match = content.match(/<span class="[^"]*" data-tooltip="[^"]*">ID<\/span>:\s*([^\n]+)/);
+        return match ? match[1].trim() : null;
+    }
     
+ 
 }
+
+
+
 interface Element {
     [key: string]: string;  // Adjust according to actual data structure
   }

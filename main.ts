@@ -20,7 +20,12 @@ export default class OnlyWorldsPlugin extends Plugin {
 
         this.setupCommands();
 
-      
+        Handlebars.registerHelper('linkify', (ids:string) => {
+          if (!ids) return '';
+          // Log the input IDs to verify they're being received correctly.
+          console.log(`Linkifying IDs: ${ids}`);
+          return ids.split(',').map(id => `[[${id.trim()}]]`).join(', ');
+      });
         console.log("OW Plugin loaded");
       }
 
