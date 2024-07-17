@@ -112,32 +112,21 @@ export class NoteLinker extends Plugin {
     }
    
 
-    private parseElement(content: string): {name: string, id: string} {
-        console.log("Parsing element content...");
-        // Using regular expressions that extract text immediately following the specific HTML structure
-        const idMatch = content.match(/<span class="text-field" data-tooltip="Text">ID<\/span>:\s*([^<\r\n-]+)/);
-        const nameMatch = content.match(/<span class="text-field" data-tooltip="Text">Name<\/span>:\s*([^<\r\n-]+)/);
-    
-        if (idMatch) {
-            console.log(`Raw ID Match: ${idMatch[1]}`);
-        } else {
-            console.log("No ID match found.");
-        }
-    
-        if (nameMatch) {
-            console.log(`Raw Name Match: ${nameMatch[1]}`);
-        } else {
-            console.log("No Name match found.");
-        }
-    
-        const id = idMatch ? idMatch[1].trim() : "Unknown ID";
-        const name = nameMatch ? nameMatch[1].trim() : "Unnamed Element";
-    
-        console.log(`Parsed ID: ${id}`);
-        console.log(`Parsed Name: ${name}`);
-    
-        return { id, name };
-    }
+  private parseElement(content: string): { name: string, id: string } {
+    console.log("Parsing element content...");
+    // Adjust the regex to capture the full ID including dashes and potential special characters
+    const idMatch = content.match(/<span class="text-field" data-tooltip="Text">ID<\/span>:\s*([\w-]+)/);
+    const nameMatch = content.match(/<span class="text-field" data-tooltip="Text">Name<\/span>:\s*(.+)/);
+
+    const id = idMatch ? idMatch[1].trim() : "Unknown ID";
+    const name = nameMatch ? nameMatch[1].trim() : "Unnamed Element";
+
+    console.log(`Parsed ID: ${id}`);
+    console.log(`Parsed Name: ${name}`);
+
+    return { id, name };
+}
+
 
     private handleElementSelection(editor: Editor, cursor: EditorPosition, lineText: string, selectedElements: { name: string; id: string }[]) {
         // Get the current content of the line

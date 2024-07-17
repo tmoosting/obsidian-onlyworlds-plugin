@@ -212,11 +212,27 @@ export class ExportWorldCommand {
         return "Unknown World";  // Default if the world name cannot be determined
     }
     
-    private parseElement(content: string): { id: string } {
-        const idMatch = content.match(/<span class="text-field" data-tooltip="Text">ID<\/span>:\s*([^<\r\n-]+)/);
+    private parseElement(content: string): { name: string, id: string } {
+        console.log("Parsing element content...");
+        // Adjust the regex to capture the full ID including dashes
+        const idMatch = content.match(/<span class="text-field" data-tooltip="Text">ID<\/span>:\s*([^\s<]+)/);
+        const nameMatch = content.match(/<span class="text-field" data-tooltip="Text">Name<\/span>:\s*([^\s<]+)/);
+        
         const id = idMatch ? idMatch[1].trim() : "Unknown ID";
-        return { id };
+        const name = nameMatch ? nameMatch[1].trim() : "Unnamed Element";
+        
+        console.log(`Parsed ID: ${id}`);
+        console.log(`Parsed Name: ${name}`);
+        
+        return { id, name };
     }
+    
+    // stop at dash 
+    // private parseElement(content: string): { id: string } {
+    //     const idMatch = content.match(/<span class="text-field" data-tooltip="Text">ID<\/span>:\s*([^<\r\n-]+)/);
+    //     const id = idMatch ? idMatch[1].trim() : "Unknown ID";
+    //     return { id };
+    // }
 
   
     // Helper method to convert strings to snake_case
