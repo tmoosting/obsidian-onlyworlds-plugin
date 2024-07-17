@@ -7,6 +7,8 @@ import { ExportWorldCommand } from 'Commands/ExportWorldCommand';
 import { CreateWorldCommand } from 'Commands/CreateWorldCommand';
 import { NoteLinker } from './Scripts/NoteLinker';
 import Handlebars from 'handlebars';
+import { CreateElementCommand } from 'Commands/CreateElementCommand';
+import { TemplateSelectionModal } from 'Scripts/TemplateSelectionModal';
 
 export default class OnlyWorldsPlugin extends Plugin {
     noteLinker: NoteLinker;
@@ -89,6 +91,17 @@ export default class OnlyWorldsPlugin extends Plugin {
             name: 'Create World',
             callback: () => createWorldCommand.execute(),
         });
+
+        this.addCommand({
+          id: 'create-element',
+          name: 'New OW Element',
+          callback: () => {
+              let modal = new TemplateSelectionModal(this.app, (category) => {
+                  new CreateElementCommand(this.app, this.manifest).execute(category);
+              });
+              modal.open();
+          }
+      });
     }
 
    
