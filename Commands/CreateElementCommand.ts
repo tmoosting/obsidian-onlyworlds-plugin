@@ -40,7 +40,10 @@ export class CreateElementCommand {
         const worldFolder = normalizePath(`OnlyWorlds/Worlds/${topWorld}/Elements/${category}`);
         await this.createFolderIfNeeded(worldFolder);
     
-        const newNotePath = normalizePath(`${worldFolder}/New ${category}.md`);
+        const baseName = `New ${category}`;
+        let newNotePath = normalizePath(`${worldFolder}/${baseName}.md`);
+        newNotePath = await this.generateUniqueFilename(worldFolder, baseName, 0);
+        
         try {
             const createdFile = await this.app.vault.create(newNotePath, content);
             new Notice(`New ${category} element created successfully with ID: ${id}`);
@@ -49,6 +52,15 @@ export class CreateElementCommand {
             console.error(`Failed to create note: ${newNotePath}`, error);
             new Notice(`Failed to create note: ${newNotePath}`);
         }
+    }
+
+    async generateUniqueFilename(folderPath: string, baseName: string, index: number): Promise<string> {
+        let testPath = normalizePath(`${folderPath}/${baseName}${index ? ` ${index}` : ''}.md`);
+        while (await this.app.vault.adapter.exists(testPath)) {
+            index++;
+            testPath = normalizePath(`${folderPath}/${baseName} ${index}.md`);
+        }
+        return testPath;
     }
 
     async openNoteInNewPane(file: TFile) {
@@ -61,9 +73,9 @@ export class CreateElementCommand {
         const worldsFolder = this.app.vault.getAbstractFileByPath(worldsPath);
         if (worldsFolder instanceof TFolder) {
             const subFolders = worldsFolder.children.filter(child => child instanceof TFolder);
-            return subFolders.length > 0 ? subFolders[0].name : 'DefaultWorld'; // or some logic to choose the correct folder
+            return subFolders.length > 0 ? subFolders[0].name : 'DefaultWorld';
         }
-        return 'DefaultWorld'; // default folder name if no other folders found
+        return 'DefaultWorld';
     }
 
     async createFolderIfNeeded(folderPath: string): Promise<void> {

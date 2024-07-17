@@ -30,17 +30,36 @@ export class TemplateSelectionModal extends Modal {
             dataListEl.createEl('option', { value: category });
         });
     
-        // Handle selection or input
+        // Handle keydown to select the top suggestion on 'Enter'
+        inputEl.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Prevent the default form submit behavior
+                // Check if the current input value matches one of the categories
+                const currentInput = inputEl.value;
+                if (categories.includes(currentInput)) {
+                    this.executeCreation(currentInput);
+                    this.close();
+                } else {
+                    // If no match, select the first suggestion from the datalist
+                    const firstOption = dataListEl.querySelector('option');
+                    if (firstOption) {
+                        this.executeCreation(firstOption.value);
+                        this.close();
+                    }
+                }
+            }
+        });
+    
+        // Handle input changes for direct matches
         inputEl.addEventListener('input', () => {
             const value = inputEl.value;
             if (categories.includes(value)) {
                 this.executeCreation(value);
                 this.close();
-            } else {
-                new Notice('Please select a valid category.');
             }
         });
     
+        // Change handler for direct selection from the suggestions
         inputEl.addEventListener('change', () => {
             const value = inputEl.value;
             if (categories.includes(value)) {
@@ -54,5 +73,6 @@ export class TemplateSelectionModal extends Modal {
         let { contentEl } = this;
         contentEl.empty();
     }
+    
     
 }
