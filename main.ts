@@ -113,7 +113,7 @@ export default class OnlyWorldsPlugin extends Plugin {
 
         this.addCommand({
           id: 'create-element',
-          name: 'Create OnlyWorlds Element',
+          name: 'Create New OnlyWorlds Element',
           callback: () => {
               let modal = new TemplateSelectionModal(this.app, (category) => {
                   new CreateElementCommand(this.app, this.manifest).execute(category);

@@ -1,4 +1,4 @@
-import { App, Plugin, MarkdownView, Editor, Notice, WorkspaceLeaf, EditorPosition } from 'obsidian';
+import { App, Plugin, MarkdownView, Editor, Notice, WorkspaceLeaf, EditorPosition, normalizePath, TFolder } from 'obsidian';
 import { ElementSelectionModal } from './ElementSelectionModal';
 
 export class NoteLinker extends Plugin {
@@ -57,8 +57,8 @@ export class NoteLinker extends Plugin {
             const match = /data-tooltip="(Single|Multi) (.*?)">/.exec(lineText);
             if (match) {
                 const elementType = match[2];
-                const elements = await this.fetchElements(elementType, worldName, currentId); // Pass the world name and current ID to fetch elements dynamically
-                
+                const elements = await this.fetchElements(elementType, currentId); // Pass the world name and current ID to fetch elements dynamically
+                console.log("ELEMENT AMOUNT " + elements.length);
                 // Open the selection modal with the fetched elements
                 new ElementSelectionModal(this.app, elements, (selectedElements) => {
                     this.handleElementSelection(editor, cursor, lineText, selectedElements);
@@ -67,20 +67,41 @@ export class NoteLinker extends Plugin {
         }
     }
     
-    private async fetchElements(elementType: string, worldName: string, currentId: string): Promise<{ name: string; id: string }[]> {
-        const elementsPath = `OnlyWorlds/Worlds/${worldName}/Elements/${elementType}`; // Uses the dynamic world name
+    private async fetchElements(elementType: string, currentId: string): Promise<{ name: string; id: string }[]> {
+        const topWorldName = await this.determineTopWorldFolder();
+        const elementsPath = `OnlyWorlds/Worlds/${topWorldName}/Elements/${elementType}`;
+        console.log(`Looking for elements in: ${elementsPath}`); // Confirm the path
+    
         const files = this.app.vault.getMarkdownFiles().filter(file => file.path.startsWith(elementsPath));
-        console.log(`Files found: ${files.length}, Element Type: ${elementType}`);
+        console.log(`Total files found in the path: ${files.length}`); // Log the number of files found
+    
         const elements = [];
         for (const file of files) {
             const content = await this.app.vault.read(file);
             const { name, id } = this.parseElement(content);
-            if (id !== currentId) { // Filter out elements with the same ID as the current note
+            console.log(`Checking file: ${file.path}, Found ID: ${id}, Name: ${name}`); // Detailed log for each file
+    
+            if (id !== currentId) {
                 elements.push({ name, id });
+                console.log(`Added element: ${name} with ID: ${id}`); // Log each element added
             }
         }
+    
+        console.log(`Total elements added: ${elements.length}`); // Final count of elements added
         return elements;
     }
+    
+    
+    private async determineTopWorldFolder(): Promise<string> {
+        const worldsPath = normalizePath('OnlyWorlds/Worlds');
+        const worldsFolder = this.app.vault.getAbstractFileByPath(worldsPath);
+        if (worldsFolder instanceof TFolder) {
+            const subFolders = worldsFolder.children.filter(child => child instanceof TFolder);
+            return subFolders.length > 0 ? subFolders[0].name : 'DefaultWorld';
+        }
+        return 'DefaultWorld';  // Fallback if no subfolder is present
+    }
+    
 
     private extractWorldName(filePath: string): string {
         // Assumes the path format is 'OnlyWorlds/Worlds/{WorldName}/...'

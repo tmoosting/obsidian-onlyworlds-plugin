@@ -13,19 +13,22 @@ export class ElementSelectionModal extends Modal {
     onOpen() {
         const { contentEl } = this;
         contentEl.empty();
-
         contentEl.createEl('h2', { text: 'Select Elements' });
-
-        if (this.elements.length === 0) {
+    
+        console.log('Elements passed to modal:', this.elements); // Debug output right before processing
+    
+        if (!this.elements || this.elements.length === 0) {
             contentEl.createEl('p', { text: 'No elements found.' });
         } else {
             this.elements.forEach(element => {
+                console.log(`Processing element: ${element.name}, ID: ${element.id}`); // Log each element being processed
                 new Setting(contentEl)
                     .setName(element.name)
                     .setDesc(`ID: ${element.id}`)
                     .addButton(button => {
                         button.setButtonText('Select')
                             .onClick(() => {
+                                console.log(`Element selected: ${element.name}`); // Log on selection
                                 this.onSelect([element]);
                                 this.close();
                             });
@@ -33,6 +36,7 @@ export class ElementSelectionModal extends Modal {
             });
         }
     }
+    
 
     onClose() {
         const { contentEl } = this;
