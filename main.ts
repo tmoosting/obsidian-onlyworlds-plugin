@@ -5,15 +5,17 @@ import { CreateTemplatesCommand } from './Commands/CreateTemplatesCommand';
 import { ImportWorldCommand } from './Commands/ImportWorldCommand';
 import { ExportWorldCommand } from 'Commands/ExportWorldCommand';
 import { CreateWorldCommand } from 'Commands/CreateWorldCommand';
-import { NoteLinker } from './Scripts/NoteLinker';
+import { NoteLinker } from './Listeners/NoteLinker';
 import Handlebars from 'handlebars';
 import { CreateElementCommand } from 'Commands/CreateElementCommand';
-import { TemplateSelectionModal } from 'Scripts/TemplateSelectionModal';
+import { TemplateSelectionModal } from 'Modals/TemplateSelectionModal';
 import { GraphViewExtensions } from 'Extensions/GraphViewExtensions';
+import { NameChanger } from 'Listeners/NameChanger';
 
 export default class OnlyWorldsPlugin extends Plugin {
   graphViewExtensions: GraphViewExtensions;
     noteLinker: NoteLinker;
+    nameChanger: NameChanger;
 
       onload(): void {
     
@@ -24,6 +26,8 @@ export default class OnlyWorldsPlugin extends Plugin {
       //   this.graphViewExtensions.initializeGraphView();
       // this.addStyles();
         
+        this.nameChanger = new NameChanger(this.app, this.manifest); 
+        this.nameChanger.setupNameChangeListener();
         this.noteLinker = new NoteLinker(this.app, this.manifest); 
         this.noteLinker.setupLinkerListeners();
 

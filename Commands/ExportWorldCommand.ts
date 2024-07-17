@@ -1,6 +1,6 @@
 import { App, Notice, requestUrl, FileSystemAdapter, normalizePath, TFile } from 'obsidian';
 import { Category } from '../enums';
-import { WorldKeySelectionModal } from 'Scripts/WorldKeySelectionModal';
+import { WorldKeySelectionModal } from 'Modals/WorldKeySelectionModal';
 
 export class ExportWorldCommand {
     app: App;
@@ -226,7 +226,7 @@ export class ExportWorldCommand {
         
         return { id, name };
     }
-    
+
     // stop at dash 
     // private parseElement(content: string): { id: string } {
     //     const idMatch = content.match(/<span class="text-field" data-tooltip="Text">ID<\/span>:\s*([^<\r\n-]+)/);

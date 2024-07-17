@@ -5,7 +5,7 @@ import Handlebars from 'handlebars';
 import { resolve } from 'path';
 import { Category } from '../enums';
 import { CreateTemplatesCommand } from './CreateTemplatesCommand'; // Ensure correct path
-import { WorldNameModal } from 'Scripts/WorldNameModal';
+import { WorldNameModal } from 'Modals/WorldNameModal';
 
 export class CreateWorldCommand {
     app: App;

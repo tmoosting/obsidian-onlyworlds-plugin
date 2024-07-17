@@ -1,5 +1,5 @@
 import { App, Plugin, MarkdownView, Editor, Notice, WorkspaceLeaf, EditorPosition, normalizePath, TFolder } from 'obsidian';
-import { ElementSelectionModal } from './ElementSelectionModal';
+import { ElementSelectionModal } from '../Modals/ElementSelectionModal';
 
 export class NoteLinker extends Plugin {
     private currentEditor: Editor | null = null;

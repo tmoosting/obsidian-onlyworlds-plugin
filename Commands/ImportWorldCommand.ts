@@ -1,7 +1,7 @@
 import { App, Notice, requestUrl, FileSystemAdapter, normalizePath } from 'obsidian';
 import Handlebars from 'handlebars';
 import { Category } from '../enums';
-import { WorldKeyModal } from 'Scripts/WorldKeyModal'; 
+import { WorldKeyModal } from 'Modals/WorldKeyModal'; 
 import { CreateTemplatesCommand } from './CreateTemplatesCommand';
 
 export class ImportWorldCommand {
