@@ -1,38 +1,38 @@
 ## Core
-- <span class="text-field" data-tooltip="Text">ID</span>:
-- <span class="text-field" data-tooltip="Text">Name</span>:
-- <span class="text-field" data-tooltip="Text">Description</span>:
-- <span class="text-field" data-tooltip="Text">Supertype</span>:
-- <span class="text-field" data-tooltip="Text">Subtype</span>:
-- <span class="text-field" data-tooltip="Text">Image URL</span>:
+- <span class="text-field" data-tooltip="Text">ID</span>: 
+- <span class="text-field" data-tooltip="Text">Name</span>: 
+- <span class="text-field" data-tooltip="Text">Description</span>: 
+- <span class="text-field" data-tooltip="Text">Supertype</span>: 
+- <span class="text-field" data-tooltip="Text">Subtype</span>: 
+- <span class="text-field" data-tooltip="Text">Image URL</span>: 
 
 ## Form
-- <span class="text-field" data-tooltip="Text">Aesthetics</span>:
-- <span class="number-field" data-tooltip="Number">Weight</span>:
-- <span class="number-field" data-tooltip="Number">Amount</span>:
-- <span class="link-field" data-tooltip="Single Object">Parent Object</span>:
-- <span class="multi-link-field" data-tooltip="Multi Construct">Technology</span>:
-- <span class="reverse-link-field" data-tooltip="Multi Object">Components</span>:
+- <span class="text-field" data-tooltip="Text">Aesthetics</span>: 
+- <span class="number-field" data-tooltip="Number">Weight</span>: 
+- <span class="number-field" data-tooltip="Number">Amount</span>: 
+- <span class="link-field" data-tooltip="Single Object">Parent Object</span>: 
+- <span class="multi-link-field" data-tooltip="Multi Construct">Technology</span>: 
+- <span class="reverse-link-field" data-tooltip="Multi Object">Components</span>: 
 
 ## Function
-- <span class="text-field" data-tooltip="Text">Utility</span>:
-- <span class="multi-link-field" data-tooltip="Multi Phenomenon">Effects</span>:
-- <span class="multi-link-field" data-tooltip="Multi Ability">Enables</span>:
-- <span class="multi-link-field" data-tooltip="Multi Construct">Consumes</span>:
+- <span class="text-field" data-tooltip="Text">Utility</span>: 
+- <span class="multi-link-field" data-tooltip="Multi Phenomenon">Effects</span>: 
+- <span class="multi-link-field" data-tooltip="Multi Ability">Enables</span>: 
+- <span class="multi-link-field" data-tooltip="Multi Construct">Consumes</span>: 
 
 ## World
-- <span class="text-field" data-tooltip="Text">Origins</span>:
-- <span class="link-field" data-tooltip="Single Location">Location</span>:
-- <span class="reverse-link-field" data-tooltip="Multi Title">Titles</span>:
-- <span class="reverse-link-field" data-tooltip="Multi Institution">Claimants</span>:
+- <span class="text-field" data-tooltip="Text">Origins</span>: 
+- <span class="link-field" data-tooltip="Single Location">Location</span>: 
+- <span class="reverse-link-field" data-tooltip="Multi Title">Titles</span>: 
+- <span class="reverse-link-field" data-tooltip="Multi Institution">Claimants</span>: 
 
 ## Games
-- <span class="text-field" data-tooltip="Text">Craftsmanship</span>:
-- <span class="text-field" data-tooltip="Text">Requirements</span>:
-- <span class="text-field" data-tooltip="Text">Durability</span>:
-- <span class="number-field" data-tooltip="Number">Value</span>:
-- <span class="number-field" data-tooltip="Number">Damage</span>:
-- <span class="number-field" data-tooltip="Number">Armor</span>:
-- <span class="text-field" data-tooltip="Text">Rarity</span>:
-- <span class="link-field" data-tooltip="Single Language">Language</span>:
-- <span class="multi-link-field" data-tooltip="Multi Trait">Requires</span>:
+- <span class="text-field" data-tooltip="Text">Craftsmanship</span>: 
+- <span class="text-field" data-tooltip="Text">Requirements</span>: 
+- <span class="text-field" data-tooltip="Text">Durability</span>: 
+- <span class="number-field" data-tooltip="Number">Value</span>: 
+- <span class="number-field" data-tooltip="Number">Damage</span>: 
+- <span class="number-field" data-tooltip="Number">Armor</span>: 
+- <span class="text-field" data-tooltip="Text">Rarity</span>: 
+- <span class="link-field" data-tooltip="Single Language">Language</span>: 
+- <span class="multi-link-field" data-tooltip="Multi Trait">Requires</span>: 

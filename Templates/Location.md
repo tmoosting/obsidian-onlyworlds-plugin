@@ -1,33 +1,33 @@
 # Core 
-- <span class="text-field" data-tooltip="Text">ID</span>:
-- <span class="text-field" data-tooltip="Text">Name</span>:
-- <span class="text-field" data-tooltip="Text">Description</span>:
-- <span class="text-field" data-tooltip="Text">Supertype</span>:
-- <span class="text-field" data-tooltip="Text">Subtype</span>:
-- <span class="text-field" data-tooltip="Text">Image URL</span>:
+- <span class="text-field" data-tooltip="Text">ID</span>: 
+- <span class="text-field" data-tooltip="Text">Name</span>: 
+- <span class="text-field" data-tooltip="Text">Description</span>: 
+- <span class="text-field" data-tooltip="Text">Supertype</span>: 
+- <span class="text-field" data-tooltip="Text">Subtype</span>: 
+- <span class="text-field" data-tooltip="Text">Image URL</span>: 
 
 ## Locality
-- <span class="text-field" data-tooltip="Text">Scene</span>:
-- <span class="text-field" data-tooltip="Text">Activity</span>:
-- <span class="number-field" data-tooltip="Number">Founding Date</span>:
-- <span class="number-field" data-tooltip="Number">Population Size</span>:
-- <span class="link-field" data-tooltip="Single Location">Parent Location</span>:
-- <span class="multi-link-field" data-tooltip="Multi Collective">Populations</span>:
-- <span class="reverse-link-field" data-tooltip="Multi Location">Places</span>:
+- <span class="text-field" data-tooltip="Text">Scene</span>: 
+- <span class="text-field" data-tooltip="Text">Activity</span>: 
+- <span class="number-field" data-tooltip="Number">Founding Date</span>: 
+- <span class="number-field" data-tooltip="Number">Population Size</span>: 
+- <span class="link-field" data-tooltip="Single Location">Parent Location</span>: 
+- <span class="multi-link-field" data-tooltip="Multi Collective">Populations</span>: 
+- <span class="reverse-link-field" data-tooltip="Multi Location">Places</span>: 
 
 ## Culture
-- <span class="text-field" data-tooltip="Text">Traditions</span>:
-- <span class="text-field" data-tooltip="Text">Celebrations</span>:
-- <span class="link-field" data-tooltip="Single Construct">Primary Cult</span>:
-- <span class="multi-link-field" data-tooltip="Multi Construct">Secondary Cults</span>:
-- <span class="multi-link-field" data-tooltip="Multi Species">Delicacies</span>:
+- <span class="text-field" data-tooltip="Text">Traditions</span>: 
+- <span class="text-field" data-tooltip="Text">Celebrations</span>: 
+- <span class="link-field" data-tooltip="Single Construct">Primary Cult</span>: 
+- <span class="multi-link-field" data-tooltip="Multi Construct">Secondary Cults</span>: 
+- <span class="multi-link-field" data-tooltip="Multi Species">Delicacies</span>: 
 
 ## World
-- <span class="text-field" data-tooltip="Text">Coordinates</span>:
-- <span class="multi-link-field" data-tooltip="Multi Character">Founders</span>:
-- <span class="reverse-link-field" data-tooltip="Multi Event">Events</span>:
-- <span class="reverse-link-field" data-tooltip="Multi Relation">Maps</span>:
-- <span class="reverse-link-field" data-tooltip="Multi Relation">Pins</span>:
+- <span class="text-field" data-tooltip="Text">Coordinates</span>: 
+- <span class="multi-link-field" data-tooltip="Multi Character">Founders</span>: 
+- <span class="reverse-link-field" data-tooltip="Multi Event">Events</span>: 
+- <span class="reverse-link-field" data-tooltip="Multi Relation">Maps</span>: 
+- <span class="reverse-link-field" data-tooltip="Multi Relation">Pins</span>: 
 
 ## Construction
 - <span class="text-field" data-tooltip="Text">Logistics</span>:

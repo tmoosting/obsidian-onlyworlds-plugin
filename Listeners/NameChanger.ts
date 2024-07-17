@@ -1,58 +1,35 @@
-import { Category } from 'enums';
 import { App, Plugin, MarkdownView, Notice, TFile } from 'obsidian';
 
 export class NameChanger extends Plugin {
-    setupNameChangeListener() {
-        // Listen for file changes to sync names
-        this.app.vault.on('modify', (file: TFile) => {
-            if (file instanceof TFile && file.extension === 'md') {
-                this.checkAndSyncNameField(file);
-            }
-        });
+    
 
-        // Listen for file opening to highlight name fields
+    setupNameChangeListener() { 
+
         this.registerEvent(
-            this.app.workspace.on('file-open', (file: TFile) => {
-                if (file instanceof TFile && file.extension === 'md') {
-                    this.highlightNameField(file);
+            this.app.vault.on('rename', async (file: TFile, oldPath: string) => { 
+                const oldName = oldPath.split('/').pop()?.replace(/\.md$/, '');
+                if (file instanceof TFile && file.extension === 'md' && oldName) {
+                    const newName = file.basename;
+                 //   console.log('CHECK 1  newname ' + newName);
+                //    console.log('CHECK 1  oldName ' + oldName);
+                    const content = await this.app.vault.read(file);
+                    const nameRegex = new RegExp(`<span class="text-field" data-tooltip="Text">Name</span>:\\s*${oldName}(\\n|$)`);
+                //    console.log('CHECK 1  nameRegex ' + nameRegex);
+                //    console.log('CHECK 1  content ' + content);
+                    
+                    if (nameRegex.test(content)) { 
+                    const newContent = content.replace(nameRegex, `<span class="text-field" data-tooltip="Text">Name</span>: ${newName}$1`);
+                        await this.app.vault.modify(file, newContent);
+
+                        const activeView = this.app.workspace.getActiveViewOfType(MarkdownView);
+                        if (activeView && activeView.file === file) {
+                            const editor = activeView.editor;
+                            editor.setValue(newContent);
+                            new Notice('Name synchronized to: ' + newName);
+                        }
+                    }
                 }
             })
         );
     }
-
-    async checkAndSyncNameField(file: TFile) {
-        const fileContent = await this.app.vault.read(file);
-        const nameRegex = /<span class="text-field" data-tooltip="Text">Name<\/span>:\s*(.+)/;
-        const nameMatch = fileContent.match(nameRegex);
-
-        if (nameMatch && nameMatch[1].trim() !== file.basename) {
-            const updatedContent = fileContent.replace(nameRegex, `<span class="text-field" data-tooltip="Text">Name</span>: ${file.basename}`);
-            await this.app.vault.modify(file, updatedContent);
-        }
-    }
-
-    async highlightNameField(file: TFile) {
-        const fileContent = await this.app.vault.read(file);
-        const categoryName = this.getCategoryFromFileName(file.basename);
-        if (categoryName) {
-            const defaultNamePattern = new RegExp(`name: New ${categoryName}`, 'i');
-
-            if (defaultNamePattern.test(fileContent)) {
-                new Notice("Please update the name fields.");
-                // You can implement UI highlighting here if the API supports or requires it
-            }
-        }
-    }
-
-    getCategoryFromFileName(fileName: string): string | null {
-        const parts = fileName.split(' ');
-        if (parts.length > 1) {
-            const categoryPart = parts[1];
-            const category = Category[categoryPart as keyof typeof Category];
-            return category !== undefined ? Category[category] : null;
-        }
-        return null;
-    }
 }
- 
- 
