@@ -44,28 +44,26 @@ export class NoteLinker extends Plugin {
     }
 
     private async linkElement(editor: Editor, cursor: EditorPosition, lineText: string) {
-        console.log("LINKK 1");
         const currentFile = this.app.workspace.getActiveFile();
         if (currentFile) {
             const currentContent = await this.app.vault.read(currentFile);
-            const { id: currentId } = this.parseElement(currentContent); // Parses the current document for an ID
-            console.log(`Current Note ID: ${currentId}`);
-        
-            const worldName = this.extractWorldName(currentFile.path); // Extract the world name based on the file's path
-            console.log(`Current World Name: ${worldName}`);
-        
+            const { id: currentId } = this.parseElement(currentContent);
+            
+            const worldName = this.extractWorldName(currentFile.path);
+            
             const match = /data-tooltip="(Single|Multi) (.*?)">/.exec(lineText);
             if (match) {
                 const elementType = match[2];
-                const elements = await this.fetchElements(elementType, currentId); // Pass the world name and current ID to fetch elements dynamically
-                console.log("ELEMENT AMOUNT " + elements.length);
-                // Open the selection modal with the fetched elements
-                new ElementSelectionModal(this.app, elements, (selectedElements) => {
+                const fieldName = match[2]; // Assume this captures the field name correctly
+                const elements = await this.fetchElements(elementType, currentId);
+                
+                new ElementSelectionModal(this.app, elements, elementType, fieldName, (selectedElements) => {
                     this.handleElementSelection(editor, cursor, lineText, selectedElements);
                 }).open();
             }
         }
     }
+    
     
     private async fetchElements(elementType: string, currentId: string): Promise<{ name: string; id: string }[]> {
         const topWorldName = await this.determineTopWorldFolder();
