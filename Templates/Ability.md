@@ -1,5 +1,3 @@
-# Ability Template
-
 ## Core
 - <span class="text-field" data-tooltip="Text">ID</span>:
 - <span class="text-field" data-tooltip="Text">Name</span>:

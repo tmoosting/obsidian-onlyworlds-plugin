@@ -1,6 +1,4 @@
-# Location Template
-
-## Core 
+# Core 
 - <span class="text-field" data-tooltip="Text">ID</span>:
 - <span class="text-field" data-tooltip="Text">Name</span>:
 - <span class="text-field" data-tooltip="Text">Description</span>:
