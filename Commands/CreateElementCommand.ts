@@ -16,10 +16,8 @@ export class CreateElementCommand {
         if (!templateContent) {
             new Notice(`Template for ${category} not found.`);
             return;
-        }
-
-        const newContent = this.insertIdInTemplate(templateContent, uuid);
-        await this.createNoteInCorrectFolder(newContent, category, uuid);
+        } 
+        await this.createNoteInCorrectFolder(templateContent, category, uuid);
     }
 
     async getTemplateContent(category: string): Promise<string | null> {
@@ -30,10 +28,25 @@ export class CreateElementCommand {
         }
         return null;
     }
+    insertNameInTemplate(content: string, name: string): string {
+        const lines = content.split('\n');
+        const nameLineIndex = lines.findIndex(line => line.includes('Name</span>:'));
+        if (nameLineIndex !== -1) {
+            lines[nameLineIndex] = lines[nameLineIndex].replace('Name</span>:', `Name</span>: ${name}`);
+        }
+        return lines.join('\n');
+    }
 
     insertIdInTemplate(content: string, id: string): string {
-        return content.replace("{{id}}", id);  
+        const lines = content.split('\n');
+        const idLineIndex = lines.findIndex(line => line.includes('ID</span>:'));
+        console.log("id : " + id);
+        if (idLineIndex !== -1) {
+            lines[idLineIndex] = lines[idLineIndex].replace('ID</span>:', `ID</span>: ${id}`);
+        }
+        return lines.join('\n');
     }
+
 
     async createNoteInCorrectFolder(content: string, category: string, id: string): Promise<void> {
         const topWorld = await this.determineTopWorldFolder();
@@ -43,23 +56,31 @@ export class CreateElementCommand {
         const baseName = `New ${category}`;
         let newNotePath = normalizePath(`${worldFolder}/${baseName}.md`);
         newNotePath = await this.generateUniqueFilename(worldFolder, baseName, 0);
+    
+        // Get the actual name from the filename, remove extension
+        const noteName = newNotePath.substring(newNotePath.lastIndexOf('/') + 1, newNotePath.lastIndexOf('.'));
         
+        // Insert the name into the template content
+        content = this.insertNameInTemplate(content, noteName);
+        content = this.insertIdInTemplate(content, id); // Ensuring ID is also updated
+    
         try {
             const createdFile = await this.app.vault.create(newNotePath, content);
-            new Notice(`New ${category} element created successfully with ID: ${id}`);
+            new Notice(`New ${category} element created successfully with ID: ${id}, Name: ${noteName}`);
             this.openNoteInNewPane(createdFile);
         } catch (error) {
             console.error(`Failed to create note: ${newNotePath}`, error);
             new Notice(`Failed to create note: ${newNotePath}`);
         }
     }
-
+    
     async generateUniqueFilename(folderPath: string, baseName: string, index: number): Promise<string> {
         let testPath = normalizePath(`${folderPath}/${baseName}${index ? ` ${index}` : ''}.md`);
         while (await this.app.vault.adapter.exists(testPath)) {
             index++;
             testPath = normalizePath(`${folderPath}/${baseName} ${index}.md`);
         }
+        
         return testPath;
     }
 
