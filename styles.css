@@ -55,3 +55,14 @@
     color: var(--text-link-hover);
     text-decoration: underline;
 }
+.node-character {
+    fill: blue; /* SVG fill color for character nodes */
+}
+
+.node-location {
+    fill: green; /* SVG fill color for location nodes */
+}
+
+.node-event {
+    fill: red; /* SVG fill color for event nodes */
+}

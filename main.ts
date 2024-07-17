@@ -9,14 +9,21 @@ import { NoteLinker } from './Scripts/NoteLinker';
 import Handlebars from 'handlebars';
 import { CreateElementCommand } from 'Commands/CreateElementCommand';
 import { TemplateSelectionModal } from 'Scripts/TemplateSelectionModal';
+import { GraphViewExtensions } from 'Extensions/GraphViewExtensions';
 
 export default class OnlyWorldsPlugin extends Plugin {
+  graphViewExtensions: GraphViewExtensions;
     noteLinker: NoteLinker;
 
       onload(): void {
     
-          this.registerHandlebarsHelpers();
-    
+        this.registerHandlebarsHelpers(); 
+
+        // doesnt work yet
+      //  this.graphViewExtensions = new GraphViewExtensions(this.app, this);
+      //   this.graphViewExtensions.initializeGraphView();
+      // this.addStyles();
+        
         this.noteLinker = new NoteLinker(this.app, this.manifest); 
         this.noteLinker.setupLinkerListeners();
 
@@ -28,10 +35,22 @@ export default class OnlyWorldsPlugin extends Plugin {
           console.log(`Linkifying IDs: ${ids}`);
           return ids.split(',').map(id => `[[${id.trim()}]]`).join(', ');
       });
+
+
         console.log("OW Plugin loaded");
       }
 
-   
+      addStyles() {
+        const style = document.createElement('style');
+        style.textContent = `
+            .graph-view.color-fill-character { color: blue; }
+            .graph-view.color-fill-location { color: green; }
+            .graph-view.color-fill-event { color: red; }
+            .graph-view.color-fill-default { color: grey; }
+            // Add more styles for other categories as needed
+        `;
+        document.head.appendChild(style);
+    }
 
       registerHandlebarsHelpers() {
         if (typeof Handlebars === 'undefined') {

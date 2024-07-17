@@ -1,5 +1,3 @@
-# {{name}}
-
 ## Core
 - <span class="text-field" data-tooltip="Text">ID</span>: {{id}}
 - <span class="text-field" data-tooltip="Text">Name</span>: {{name}}
