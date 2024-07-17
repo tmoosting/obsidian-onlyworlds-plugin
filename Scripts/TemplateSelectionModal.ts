@@ -34,18 +34,17 @@ export class TemplateSelectionModal extends Modal {
         inputEl.addEventListener('keydown', (event) => {
             if (event.key === 'Enter') {
                 event.preventDefault(); // Prevent the default form submit behavior
-                // Check if the current input value matches one of the categories
-                const currentInput = inputEl.value;
-                if (categories.includes(currentInput)) {
-                    this.executeCreation(currentInput);
+        
+                const inputValue = inputEl.value.trim();
+                // Try to find the first datalist option that starts with the input value
+                const matchedOption = Array.from(dataListEl.querySelectorAll('option'))
+                    .find(option => option.value.toLowerCase().startsWith(inputValue.toLowerCase()));
+        
+                if (matchedOption) {
+                    this.executeCreation(matchedOption.value);
                     this.close();
                 } else {
-                    // If no match, select the first suggestion from the datalist
-                    const firstOption = dataListEl.querySelector('option');
-                    if (firstOption) {
-                        this.executeCreation(firstOption.value);
-                        this.close();
-                    }
+                    new Notice('No matching category found.');
                 }
             }
         });
