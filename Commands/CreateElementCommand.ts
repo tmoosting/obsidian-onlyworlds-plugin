@@ -10,15 +10,16 @@ export class CreateElementCommand {
         this.manifest = manifest;
     }
 
-    async execute(category: string): Promise<void> {
+    async execute(category: string, name: string): Promise<void> {
         const uuid = uuidv7();
         const templateContent = await this.getTemplateContent(category);
         if (!templateContent) {
             new Notice(`Template for ${category} not found.`);
             return;
         } 
-        await this.createNoteInCorrectFolder(templateContent, category, uuid);
+        await this.createNoteInCorrectFolder(templateContent, category, uuid, name);
     }
+    
 
     async getTemplateContent(category: string): Promise<string | null> {
         const templatePath = normalizePath(`OnlyWorlds/Templates/${category}.md`);
@@ -48,31 +49,28 @@ export class CreateElementCommand {
     }
 
 
-    async createNoteInCorrectFolder(content: string, category: string, id: string): Promise<void> {
+    async createNoteInCorrectFolder(content: string, category: string, id: string, name: string): Promise<void> {
         const topWorld = await this.determineTopWorldFolder();
         const worldFolder = normalizePath(`OnlyWorlds/Worlds/${topWorld}/Elements/${category}`);
         await this.createFolderIfNeeded(worldFolder);
     
-        const baseName = `New ${category}`;
-        let newNotePath = normalizePath(`${worldFolder}/${baseName}.md`);
-        newNotePath = await this.generateUniqueFilename(worldFolder, baseName, 0);
+        let newNotePath = normalizePath(`${worldFolder}/${name}.md`);  // Use the provided name for the file
+        newNotePath = await this.generateUniqueFilename(worldFolder, name, 0);
     
-        // Get the actual name from the filename, remove extension
-        const noteName = newNotePath.substring(newNotePath.lastIndexOf('/') + 1, newNotePath.lastIndexOf('.'));
-        
-        // Insert the name into the template content
-        content = this.insertNameInTemplate(content, noteName);
-        content = this.insertIdInTemplate(content, id); // Ensuring ID is also updated
+        // Insert the name and ID into the template content
+        content = this.insertNameInTemplate(content, name);
+        content = this.insertIdInTemplate(content, id);
     
         try {
             const createdFile = await this.app.vault.create(newNotePath, content);
-            new Notice(`New ${category} element created successfully with ID: ${id}, Name: ${noteName}`);
+            new Notice(`New ${category} created with Name: ${name}`);
             this.openNoteInNewPane(createdFile);
         } catch (error) {
             console.error(`Failed to create note: ${newNotePath}`, error);
             new Notice(`Failed to create note: ${newNotePath}`);
         }
     }
+    
     
     async generateUniqueFilename(folderPath: string, baseName: string, index: number): Promise<string> {
         let testPath = normalizePath(`${folderPath}/${baseName}${index ? ` ${index}` : ''}.md`);

@@ -12,6 +12,7 @@ import { TemplateSelectionModal } from 'Modals/TemplateSelectionModal';
 import { GraphViewExtensions } from 'Extensions/GraphViewExtensions';
 import { NameChanger } from 'Listeners/NameChanger';
 import { ValidateWorldCommand } from 'Commands/ValidateWorldCommand';
+import { NameInputModal } from 'Modals/NameInputModal';
 
 export default class OnlyWorldsPlugin extends Plugin {
   graphViewExtensions: GraphViewExtensions;
@@ -123,12 +124,17 @@ export default class OnlyWorldsPlugin extends Plugin {
           id: 'create-element',
           name: 'Create New OnlyWorlds Element',
           callback: () => {
-              let modal = new TemplateSelectionModal(this.app, (category) => {
-                  new CreateElementCommand(this.app, this.manifest).execute(category);
+              let templateModal = new TemplateSelectionModal(this.app, (category) => {
+                  // Open the NameInputModal after selecting a category
+                  let nameModal = new NameInputModal(this.app, category, (cat, name) => {
+                      new CreateElementCommand(this.app, this.manifest).execute(cat, name);
+                  });
+                  nameModal.open();
               });
-              modal.open();
+              templateModal.open();
           }
       });
+  
       this.addCommand({
         id: 'validate-world',
         name: 'Validate World',
