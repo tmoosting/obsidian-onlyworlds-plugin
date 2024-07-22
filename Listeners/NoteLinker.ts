@@ -9,7 +9,7 @@ export class NoteLinker extends Plugin {
             id: 'link-to-element',
             name: 'Link an element',
             hotkeys: [{
-                modifiers: ["Shift"],
+                modifiers: ["Mod", "Shift"],
                 key: 'l'
             }],
             checkCallback: (checking: boolean) => {

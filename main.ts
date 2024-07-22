@@ -11,6 +11,7 @@ import { CreateElementCommand } from 'Commands/CreateElementCommand';
 import { TemplateSelectionModal } from 'Modals/TemplateSelectionModal';
 import { GraphViewExtensions } from 'Extensions/GraphViewExtensions';
 import { NameChanger } from 'Listeners/NameChanger';
+import { ValidateWorldCommand } from 'Commands/ValidateWorldCommand';
 
 export default class OnlyWorldsPlugin extends Plugin {
   graphViewExtensions: GraphViewExtensions;
@@ -77,6 +78,7 @@ export default class OnlyWorldsPlugin extends Plugin {
         const retrieveWorldCommand = new ImportWorldCommand(this.app, this.manifest);
         const sendWorldCommand = new ExportWorldCommand(this.app, this.manifest);        
         const createWorldCommand = new CreateWorldCommand(this.app, this.manifest);
+        const validateWorldCommand = new ValidateWorldCommand(this.app, this.manifest);
 
         // Register a command to create category folders
         this.addCommand({
@@ -115,6 +117,7 @@ export default class OnlyWorldsPlugin extends Plugin {
             name: 'Create World',
             callback: () => createWorldCommand.execute(),
         });
+      
 
         this.addCommand({
           id: 'create-element',
@@ -126,6 +129,11 @@ export default class OnlyWorldsPlugin extends Plugin {
               modal.open();
           }
       });
+      this.addCommand({
+        id: 'validate-world',
+        name: 'Validate World',
+        callback: () => validateWorldCommand.execute(),
+    });
     }
 
    
