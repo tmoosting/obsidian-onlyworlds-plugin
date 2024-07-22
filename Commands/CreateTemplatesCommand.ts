@@ -31,7 +31,7 @@ export class CreateTemplatesCommand {
                 content = content.replace("{{id}}", uuid); // Assume {{id}} is where the UUID should go
                 
                 await this.app.vault.create(targetPath, content);
-                new Notice(`Created template with ID: ${uuid}`);
+             //   new Notice(`Created template with ID: ${uuid}`);
             } else {
                 console.error(`Template file not found: ${sourcePath}`);
             }
@@ -44,7 +44,7 @@ export class CreateTemplatesCommand {
         if (!existingFolder) {
             try {
                 await this.app.vault.createFolder(normalizedPath);
-                new Notice(`Created folder: ${normalizedPath}`);
+          //      new Notice(`Created folder: ${normalizedPath}`);
             } catch (error) {
                 console.error(`Error creating folder: ${normalizedPath}`, error);
             }

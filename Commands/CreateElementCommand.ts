@@ -105,7 +105,7 @@ export class CreateElementCommand {
         if (!existingFolder) {
             try {
                 await this.app.vault.createFolder(normalizedPath);
-                new Notice(`Created folder: ${normalizedPath}`);
+            //    new Notice(`Created folder: ${normalizedPath}`);
             } catch (error) {
                 console.error(`Error creating folder: ${normalizedPath}`, error);
             }

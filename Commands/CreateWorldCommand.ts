@@ -49,7 +49,7 @@ export class CreateWorldCommand {
             const createTemplatesCommand = new CreateTemplatesCommand(this.app, this.manifest );
             await createTemplatesCommand.execute();
 
-            new Notice('World successfully created!');
+            new Notice('Successfully created world: ' + worldName);
         } catch (error) {
             console.error("Error during world creation:", error);
             new Notice('Failed to create world.');
@@ -68,7 +68,7 @@ export class CreateWorldCommand {
         if (!existingFolder) {
             try {
                 await this.app.vault.createFolder(folderPath);
-                new Notice(`Created folder: ${folderPath}`);
+          //      new Notice(`Created folder: ${folderPath}`);
             } catch (error) {
                 console.error(`Error creating folder: ${folderPath}`, error);
             }

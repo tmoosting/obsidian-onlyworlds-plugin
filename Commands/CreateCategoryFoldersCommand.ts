@@ -26,7 +26,7 @@ export class CreateCategoryFoldersCommand {
         if (!existingFolder) {
             try {
                 await this.app.vault.createFolder(folderPath);
-                new Notice(`Created folder: ${folderPath}`);
+               // new Notice(`Created folder: ${folderPath}`);
             } catch (error) {
                 console.error(`Error creating folder: ${folderPath}`, error);
             }
