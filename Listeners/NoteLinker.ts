@@ -128,34 +128,39 @@ export class NoteLinker extends Plugin {
 }
 
 
-    private handleElementSelection(editor: Editor, cursor: EditorPosition, lineText: string, selectedElements: { name: string; id: string }[]) {
-        // Get the current content of the line
-        let lineContent = editor.getLine(cursor.line);
-        console.log(`Original Line Content: ${lineContent}`);
-    
-        // Find the position to insert the new IDs
-        const insertionPoint = lineContent.indexOf('</span>:') + '</span>:'.length;
-    
-        // Extract the current values if any
-        let currentValues = lineContent.substring(insertionPoint).trim();
-        console.log(`Current Values Before Cleanup: ${currentValues}`);
-    
-        // Remove any trailing unwanted characters (like the unwanted dash and newlines)
-        currentValues = currentValues.replace(/[\r\n-]+/g, '').trim();
-        console.log(`Current Values After Cleanup: ${currentValues}`);
-    
-        // Append the new names to the current values
-        const newEntries = selectedElements.map(el => `[[${el.name}]]`).join(',');
-        const updatedValues = currentValues ? `${currentValues},${newEntries}` : newEntries;
-        console.log(`Updated Values: ${updatedValues}`);
-    
-        // Update the line content
-        const updatedLineContent = lineContent.substring(0, insertionPoint) + ' ' + updatedValues;
-        console.log(`Updated Line Content: ${updatedLineContent}`);
-    
-        // Replace the line with the updated content
-        editor.setLine(cursor.line, updatedLineContent);
+private handleElementSelection(editor: Editor, cursor: EditorPosition, lineText: string, selectedElements: { name: string; id: string }[]) {
+    const isMultiLink = /class="multi-link-field"/.test(lineText);
+    const isLink = /class="link-field"/.test(lineText);
+
+    let lineContent = editor.getLine(cursor.line);
+    const insertionPoint = lineContent.indexOf('</span>:') + '</span>:'.length;
+    let currentValues = lineContent.substring(insertionPoint).trim();
+
+    if (isMultiLink) {
+        // Existing values are preserved as links
+        let existingValues = currentValues ? currentValues.split(',').map(v => v.trim()) : [];
+
+        // Check and filter out already existing elements to prevent duplicates
+        let newValues = selectedElements
+            .filter(el => !existingValues.includes(`[[${el.name}]]`))
+            .map(el => `[[${el.name}]]`);
+
+        // Conditionally add a comma only if there are pre-existing elements, with no space after the comma
+        let updatedValues = existingValues.concat(newValues).join(',');
+
+        // Update the editor content with the new values
+        editor.setLine(cursor.line, lineContent.substring(0, insertionPoint) + ' ' + updatedValues);
+    } else if (isLink) {
+        // Single link field: Replace existing value with the new selection
+        let newValue = selectedElements.length > 0 ? `[[${selectedElements[0].name}]]` : '';
+        editor.setLine(cursor.line, lineContent.substring(0, insertionPoint) + ' ' + newValue);
     }
+
+    console.log(`Updated Line Content: ${lineContent}`);
+}
+
+
+
     
     
     
