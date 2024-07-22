@@ -30,19 +30,19 @@
 }
 
 .number-field {
-    color: whitesmoke;
-    border-bottom: 1px dotted rgb(154, 189, 154);
+    font-style: italic;
+    color: whitesmoke; 
 }
 
 .link-field {
     color: whitesmoke; 
-    border-bottom: 1px dotted blue;
+    border-bottom: 1px dotted rgb(114, 180, 208);
 
 }
 .multi-link-field {
     color: ghostwhite;
     text-decoration: none;
-    border-bottom: 1px dotted blue; 
+    border-bottom: 1px dotted rgb(27, 102, 232); 
 }
 
 .custom-link {

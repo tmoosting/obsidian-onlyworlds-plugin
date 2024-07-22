@@ -5,7 +5,7 @@ export class NoteLinker extends Plugin {
     private currentEditor: Editor | null = null;
 
     setupLinkerListeners() {
-        this.addCommand({  // Using `this.addCommand` here
+        this.addCommand({ 
             id: 'link-to-element',
             name: 'Link an element',
             hotkeys: [{
