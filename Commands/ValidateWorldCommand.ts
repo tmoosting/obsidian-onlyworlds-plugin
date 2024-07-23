@@ -15,27 +15,32 @@ export class ValidateWorldCommand {
 
     async execute() {
         console.log("Starting world validation...");
+    
+        // Reset counts each time the validation is run
+        this.errorCount = 0;
+        this.elementCount = 0;
+    
         const worldFolderName = await this.determineTopWorldFolder();
         const worldFolderPath = normalizePath(`OnlyWorlds/Worlds/${worldFolderName}/Elements`);
         const elementsFolder = this.app.vault.getAbstractFileByPath(worldFolderPath) as TFolder;
-
+    
         if (!elementsFolder || !(elementsFolder instanceof TFolder)) {
             console.error('Elements folder not found.');
             return;
         }
-
+    
         for (const categoryKey in Category) {
             const category = Category[categoryKey];
             if (!isNaN(Number(category))) continue; // Skip if category is not a string
-
+    
             const categoryPath = normalizePath(`${worldFolderPath}/${category}`);
             const categoryFolder = this.app.vault.getAbstractFileByPath(categoryPath) as TFolder;
-
+    
             if (!categoryFolder || !(categoryFolder instanceof TFolder)) {
                 console.log(`No elements found in category: ${category}`);
                 continue;
             }
-
+    
             console.log(`Validating category: ${category}`);
             for (const file of categoryFolder.children) {
                 if (file instanceof TFile) {
@@ -45,10 +50,11 @@ export class ValidateWorldCommand {
                 }
             }
         }
-
+    
         console.log(`Validation complete. Total elements scanned: ${this.elementCount}, Errors found: ${this.errorCount}`);
         new ValidateResultModal(this.app, this.elementCount, this.errorCount).open();
     }
+    
 
     async determineTopWorldFolder(): Promise<string> {
         const worldsPath = normalizePath('OnlyWorlds/Worlds');
