@@ -33,7 +33,7 @@ export default class OnlyWorldsPlugin extends Plugin {
       // this.nameChanger.onload(); 
        this.nameChanger = new NameChanger(this.app, this.manifest); 
        this.nameChanger.setupNameChangeListener();
-        this.noteLinker = new NoteLinker(this.app, this.manifest); 
+        this.noteLinker = new NoteLinker(this.app, this.manifest, this.worldService); 
         this.noteLinker.setupLinkerListeners();
 
         this.setupCommands();
