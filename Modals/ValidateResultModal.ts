@@ -14,6 +14,16 @@ export class ValidateResultModal extends Modal {
     private errorCount: number;
     private worldName: string;
 
+    private errorTooltips = {
+        numberErrors: 'Number fields can only have numeric (for now, whole) values',
+        maxNumberErrors: 'Hover or click the field name to see the max allowed value',
+        singleLinkFieldErrors: 'Can have one linked element, formatted as: [[NoteName]]',
+        multiLinkFieldErrors: 'Can have multiple links, formatted as: [[NoteName1]],[[NoteName2]],[[NoteName3]]',
+        missingIdErrors: 'Elements must always have an ID value. If missing, google: "generate uuidv7" and generate one',
+        nameMismatchErrors: 'Note names must exactly match value in Name field',
+        worldFileErrors: 'Verify that the World data file has an ID and Name value'
+    };
+
     constructor(app: App, errors: { 
         numberErrors: string[], 
         maxNumberErrors: string[], 
@@ -34,13 +44,14 @@ export class ValidateResultModal extends Modal {
         const { contentEl } = this;
         contentEl.empty();
 
-        contentEl.createEl('h1', { text: `World Validation Results for ${this.worldName}` });
+        contentEl.createEl('h1', { text: `Validated ${this.worldName}` });
 
         contentEl.createEl('p', { text: `Total elements scanned: ${this.elementCount}` });
         contentEl.createEl('p', { text: `Errors found: ${this.errorCount}` });
 
         if (this.errorCount > 0) {
-            contentEl.createEl('p', { text: `Please correct below issues before exporting ${this.worldName}.` });
+            contentEl.createEl('p', { text: `Please correct the issues below before exporting ${this.worldName}.` });
+            contentEl.createEl('p', { text: `Hover the error headers for details on formatting.` });
         } else {
             contentEl.createEl('p', { text: `No issues detected. ${this.worldName} is ready for export!` });
         }
@@ -52,14 +63,13 @@ export class ValidateResultModal extends Modal {
             if (errorList.length > 0) {
                 totalErrors += errorList.length;
                 const errorSection = contentEl.createDiv();
-                errorSection.createEl('h2', { text: `${this.formatTitle(key)}` });
+                const header = errorSection.createEl('h3', { text: `${this.formatTitle(key)}` });
+                header.setAttr('title', this.errorTooltips[key]); // Set tooltip
                 errorList.forEach((error: string) => {
-                    errorSection.createEl('p', { text: error });
+                    errorSection.createEl('p', { text: `- ${error}` });
                 });
             }
         });
-
-  
 
         const closeButton = contentEl.createEl('button', {
             text: 'Close',

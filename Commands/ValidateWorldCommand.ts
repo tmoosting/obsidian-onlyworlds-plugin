@@ -26,6 +26,7 @@ export class ValidateWorldCommand {
     }
     async execute() {
         console.log("Starting world validation...");
+        this.resetErrors(); // Reset errors before starting validation
         
         const worldFolderName = await this.determineTopWorldFolder();
         const worldFolderPath = normalizePath(`OnlyWorlds/Worlds/${worldFolderName}/Elements`);
@@ -165,7 +166,7 @@ export class ValidateWorldCommand {
                 const nameValue = parts.length > 1 ? parts[1].trim().replace(/["']/g, "") : ''; // Removing potential quotation marks
                 if (!nameValue || nameValue !== displayName) {
                     this.errorCount++;
-                    this.errors.nameMismatchErrors.push(`(${category})${displayName} has error in Name: field does not match file name`);
+                    this.errors.nameMismatchErrors.push(`(${category}) ${displayName} has error in Name: field does not match file name`);
                 } else {
                     nameFound = true;
                 }
@@ -173,7 +174,19 @@ export class ValidateWorldCommand {
         });
     }
     
-
+    resetErrors() {
+        this.errors = {
+            numberErrors: [] as string[],
+            maxNumberErrors: [] as string[],
+            singleLinkFieldErrors: [] as string[],
+            multiLinkFieldErrors: [] as string[],
+            missingIdErrors: [] as string[],
+            nameMismatchErrors: [] as string[],
+            worldFileErrors: [] as string[]
+        };
+        this.elementCount = 0;
+        this.errorCount = 0;
+    }
     
 }
 
