@@ -1,51 +1,65 @@
 import { App, Notice, requestUrl, FileSystemAdapter, normalizePath, TFile } from 'obsidian';
 import { Category } from '../enums';
 import { WorldKeySelectionModal } from 'Modals/WorldKeySelectionModal';
+import { ValidateWorldCommand } from './ValidateWorldCommand';
+import { WorldService } from 'Scripts/WorldService';
+import { ValidateExportResultModal } from 'Modals/ValidateExportResultModal';
 
 export class ExportWorldCommand {
     app: App;
     manifest: any;
+    worldService: WorldService;
+
     private apiUrl = 'https://www.onlyworlds.com/api/worlddata/';
 
-    constructor(app: App, manifest: any) {
+    constructor(app: App, manifest: any,  worldService: WorldService,) {
         this.app = app;
         this.manifest = manifest;
+        this.worldService = worldService;
     }
 
     async execute() {
         new WorldKeySelectionModal(this.app, async (worldKey: string, worldFolder: string) => {
             if (worldKey.length === 10) {
-                try {
-                    const worldData = await this.collectWorldData(worldFolder);  // Pass the selected world folder
-                    const payload = {
-                        worldKey: worldKey,
-                        worldData: worldData
-                    };
-
-                    console.log(`Sending data to URL: ${this.apiUrl}`);
-
-                    const response = await requestUrl({
-                        url: this.apiUrl,
-                        method: 'POST',
-                        contentType: 'application/json',
-                        body: JSON.stringify(payload)
-                    });
-
-                    if (response.status === 200 || response.status === 201) {
-                        new Notice('World data successfully sent. Status: ' + response.status);
-                    } else {
-                        console.error(`Failed to send world data, status code: ${response.status}`);
-                        new Notice(`Failed to send world data: ${response.status}`);
+                const validator = new ValidateWorldCommand(this.app, this.manifest, this.worldService, false);
+                await validator.execute();
+    
+                const validationModal = new ValidateExportResultModal(this.app, validator.errors, validator.elementCount, validator.errorCount, worldFolder);
+    
+                validationModal.setExportCallback(async () => {
+                    if (validator.errorCount === 0) {
+                        const worldData = await this.collectWorldData(worldFolder);  // Pass the selected world folder
+                        const payload = {
+                            worldKey: worldKey,
+                            worldData: worldData
+                        };
+    
+                        console.log(`Sending data to URL: ${this.apiUrl}`);
+    
+                        const response = await requestUrl({
+                            url: this.apiUrl,
+                            method: 'POST',
+                            contentType: 'application/json',
+                            body: JSON.stringify(payload)
+                        });
+    
+                        if (response.status === 200 || response.status === 201) {
+                            new Notice('World data successfully sent. Status: ' + response.status);
+                        } else {
+                            console.error(`Failed to send world data, status code: ${response.status}`);
+                            new Notice(`Failed to send world data: ${response.status}`);
+                        }
                     }
-                } catch (error) {
-                    console.error('Error sending world data:', error);
-                    new Notice('Error sending world data: ' + error.message);
-                }
+                });
+    
+                validationModal.open();
             } else {
                 new Notice('Invalid world key. Please ensure it is a 10-digit number.');
             }
         }).open();
     }
+    
+    
 
     async collectWorldData(worldFolder: string) {
         const fs: FileSystemAdapter = this.app.vault.adapter as FileSystemAdapter;
@@ -57,7 +71,7 @@ export class ExportWorldCommand {
         // Read the 'World' file content and parse it
         try {
             const worldFileContent = await fs.read(worldFilePath);
-            console.log(`Reading World file: ${worldFilePath}`);
+        //    console.log(`Reading World file: ${worldFilePath}`);
             const worldInfo = this.parseWorldFile(worldFileContent);
             worldData['World'] = worldInfo; // Directly assign the object, not in an array
         } catch (error) {
@@ -76,7 +90,7 @@ export class ExportWorldCommand {
                 console.log(`Collecting data for category: ${category}`);
                 const categoryData = await Promise.all(files.map(async (file) => {
                     const fileContent = await fs.read(file.path);
-                    console.log(`Reading file: ${file.path}`);
+                //    console.log(`Reading file: ${file.path}`);
                     return await this.parseTemplate(fileContent);
                 }));
     
@@ -125,15 +139,15 @@ export class ExportWorldCommand {
         // Extract world name from the active file path
         const currentFile = this.app.workspace.getActiveFile();
         const worldName = currentFile ? this.extractWorldName(currentFile.path) : "Unknown World";
-        console.log(`Current file path: ${currentFile?.path}`);
-        console.log(`Extracted world name: ${worldName}`);
+      //  console.log(`Current file path: ${currentFile?.path}`);
+      //  console.log(`Extracted world name: ${worldName}`);
     
         // Extract the element type from the surrounding line context
         const elementTypeMatch = /data-tooltip="(Single|Multi) ([^"]+)"/.exec(lineText);
         const elementType = elementTypeMatch ? elementTypeMatch[2] : null;
-        console.log(`Line text: ${lineText}`);
-        console.log(`Element type match: ${elementTypeMatch}`);
-        console.log(`Extracted element type: ${elementType}`);
+      //  console.log(`Line text: ${lineText}`);
+     //   console.log(`Element type match: ${elementTypeMatch}`);
+       // console.log(`Extracted element type: ${elementType}`);
     
         if (!elementType) {
             console.error("Element type not found in the linked text");
@@ -142,11 +156,11 @@ export class ExportWorldCommand {
     
         while ((match = linkPattern.exec(linkedText)) !== null) {
             const noteName = match[1];
-            console.log(`Processing link: ${noteName}`);
+         //   console.log(`Processing link: ${noteName}`);
     
             // Build the correct file path based on the world name and element type
             const linkedFilePath = normalizePath(`OnlyWorlds/Worlds/${worldName}/Elements/${elementType}/${noteName}.md`);
-            console.log(`Resolved file path: ${linkedFilePath}`);
+         //   console.log(`Resolved file path: ${linkedFilePath}`);
     
             const linkedFile = this.app.vault.getAbstractFileByPath(linkedFilePath);
     
@@ -155,7 +169,7 @@ export class ExportWorldCommand {
                 const fileContent = await this.app.vault.read(linkedFile);
                 const { id } = this.parseElement(fileContent); // Assumes parseElement can extract 'id' from note
                 ids.push(id);
-                console.log(`Extracted ID: ${id} from note: ${noteName}`);
+             //   console.log(`Extracted ID: ${id} from note: ${noteName}`);
             } else {
                 console.error(`Linked file not found: ${noteName}`);
             }
@@ -175,7 +189,7 @@ export class ExportWorldCommand {
             const sectionMatch = line.match(sectionPattern);
             if (sectionMatch) {
                 currentSection = this.toSnakeCase(sectionMatch[1]);
-                console.log(`Current section: ${currentSection}`);
+             //   console.log(`Current section: ${currentSection}`);
                 continue;
             }
     
@@ -183,18 +197,18 @@ export class ExportWorldCommand {
             if (match) {
                 let key = this.toSnakeCase(match[1].replace(/\*\*/g, ''));
                 const value = match[2].trim();
-                console.log(`Found key: ${key}, value: ${value}`);
+             //   console.log(`Found key: ${key}, value: ${value}`);
     
                 if (value.startsWith('[[')) {
                     // If value contains links, extract IDs
                     const ids = await this.extractLinkedIds(value, line);
                     data[key] = ids.join(',');
-                    console.log(`Extracted IDs for key ${key}: ${data[key]}`);
+                  //  console.log(`Extracted IDs for key ${key}: ${data[key]}`);
                 } else {
                     data[key] = value;
                 }
             } else {
-                console.log(`No match for line: ${line}`);
+               // console.log(`No match for line: ${line}`);
             }
         }
     

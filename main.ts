@@ -81,9 +81,9 @@ export default class OnlyWorldsPlugin extends Plugin {
         const createSettingsCommand = new CreateSettingsCommand(this.app, this.manifest);
         const createTemplatesCommand = new CreateTemplatesCommand(this.app, this.manifest);
         const retrieveWorldCommand = new ImportWorldCommand(this.app, this.manifest);
-        const sendWorldCommand = new ExportWorldCommand(this.app, this.manifest);        
+        const sendWorldCommand = new ExportWorldCommand(this.app, this.manifest, this.worldService);        
         const createWorldCommand = new CreateWorldCommand(this.app, this.manifest);
-        const validateWorldCommand = new ValidateWorldCommand(this.app, this.manifest, this.worldService);
+        const validateWorldCommand = new ValidateWorldCommand(this.app, this.manifest, this.worldService, true);
 
         // Register a command to create category folders
         this.addCommand({

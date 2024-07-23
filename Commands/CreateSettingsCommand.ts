@@ -17,7 +17,7 @@ export class CreateSettingsCommand {
             const content = `# OnlyWorlds Plugin Settings
 
 ## Primary World
-- **Name:** {{Specify the exact name of the active world here. If empty or no match, top world in hierarchy is used for export, validation and element creation}}
+- **Name:** {{Specify the exact name of the active world here. If empty or no match, top world in hierarchy is used for validation and element creation}}
  
 `;
 

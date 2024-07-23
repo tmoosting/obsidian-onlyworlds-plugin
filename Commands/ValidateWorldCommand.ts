@@ -7,6 +7,7 @@ export class ValidateWorldCommand {
     app: App;
     manifest: PluginManifest;
     worldService: WorldService;
+    manualTrigger: boolean;
 
     // Declaring error lists
     errors = {
@@ -22,10 +23,11 @@ export class ValidateWorldCommand {
     elementCount: number = 0;
     errorCount: number = 0;
 
-    constructor(app: App, manifest: PluginManifest, worldService: WorldService) {
+     constructor(app: App, manifest: PluginManifest, worldService: WorldService, manualTrigger: boolean = true) {
         this.app = app;
         this.manifest = manifest;
         this.worldService = worldService;
+        this.manualTrigger = manualTrigger;
     }
     async execute() {
         console.log("Starting world validation...");
@@ -47,8 +49,7 @@ export class ValidateWorldCommand {
             const categoryPath = normalizePath(`${worldFolderPath}/${category}`);
             const categoryFolder = this.app.vault.getAbstractFileByPath(categoryPath) as TFolder;
         
-            if (!categoryFolder || !(categoryFolder instanceof TFolder)) {
-                console.log(`No elements found in category: ${category}`);
+            if (!categoryFolder || !(categoryFolder instanceof TFolder)) { 
                 continue;
             }
          
@@ -62,7 +63,10 @@ export class ValidateWorldCommand {
         }
         
         console.log(`Validation complete. Total elements scanned: ${this.elementCount}, Errors found: ${this.errorCount}`);
-        new ValidateResultModal(this.app, this.errors, this.elementCount, this.errorCount, worldFolderName).open();
+      
+        if (this.manualTrigger){
+            new ValidateResultModal(this.app, this.errors, this.elementCount, this.errorCount, worldFolderName).open();
+        }
     }
     
    
