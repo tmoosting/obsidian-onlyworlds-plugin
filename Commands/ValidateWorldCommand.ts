@@ -66,43 +66,42 @@ export class ValidateWorldCommand {
         return !!idMatch && !!nameMatch;
     }
     validateElement(fileName: string, content: string) {
-      //  console.log(`Validating element: ${fileName}`); // Output element name for reference
-        const lines = content.split('\n');
-        lines.forEach(line => {
-            // Skip validation if line is empty or contains only whitespace
-            if (!line.trim()) return;
-    
-            if (line.includes('number-field')) {
-                const numberPart = line.split(':').pop();
-                if (numberPart && numberPart.trim()) {
-                    const numberMatch = numberPart.trim().match(/^(\d+)$/);
-                    if (!numberMatch) {
-                        console.error(`Invalid or missing number in number field: ${line} in ${fileName}`);
-                        this.errorCount++;
-                    }
+    console.log(`Validating element: ${fileName}`); // Output element name for reference
+    const lines = content.split('\n');
+    lines.forEach(line => {
+        if (!line.trim()) return;  // Skip empty or whitespace-only lines
+        if (line.includes('number-field')) {
+            const numberPart = line.split(':').pop();
+            if (numberPart && numberPart.trim()) {
+                const numberMatch = numberPart.trim().match(/^(\d+)$/);
+                if (!numberMatch) {
+                    console.error(`Invalid or missing number in number field: ${line} in ${fileName}`);
+                    this.errorCount++;
                 }
             }
-    
-            if (line.includes('link-field') || line.includes('multi-link-field')) {
-                const contentAfterColon = line.split(':').pop();
-                if (contentAfterColon && contentAfterColon.trim()) {
-                    const trimmedContent = contentAfterColon.trim();
-                    const linkMatches = trimmedContent.match(/\[\[([^\]]+)\]\]/g);
-                    if (linkMatches) {
-                        const linkContent = linkMatches.join('');
-                        const cleanContent = trimmedContent.replace(/,/g, '').replace(/\s/g, ''); // Remove commas and spaces for comparison
-                        if (cleanContent !== linkContent) {
-                            console.error(`Invalid or extra characters in link field: ${line} in ${fileName}`);
-                            this.errorCount++;
-                        }
-                    } else {
-                        console.error(`Invalid link format in link field: ${line} in ${fileName}`);
+        }
+
+        if (line.includes('link-field') || line.includes('multi-link-field')) {
+            const parts = line.split(':');
+            const contentAfterColon = parts.length > 1 ? parts[1].trim() : '';
+            if (contentAfterColon) {
+                const linkMatches = contentAfterColon.match(/\[\[[^\]]+\]\]/g);
+                if (linkMatches) {
+                    const linkContent = linkMatches.join('');
+                    const cleanContent = contentAfterColon.replace(/,/g, '').replace(/\s/g, ''); // Remove commas and spaces for comparison
+                    if (cleanContent !== linkContent.replace(/\s/g, '')) {
+                        console.error(`Invalid or extra characters in link field: ${line} in ${fileName}`);
                         this.errorCount++;
                     }
+                } else {
+                    console.error(`Invalid link format in link field: ${line} in ${fileName}`);
+                    this.errorCount++;
                 }
             }
-        });
-    }
+        }
+    });
+}
+
     
     
     
