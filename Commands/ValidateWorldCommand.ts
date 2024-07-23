@@ -40,8 +40,7 @@ export class ValidateWorldCommand {
                 console.log(`No elements found in category: ${category}`);
                 continue;
             }
-    
-            console.log(`Validating category: ${category}`);
+     
             for (const file of categoryFolder.children) {
                 if (file instanceof TFile) {
                     this.elementCount++;
@@ -71,42 +70,57 @@ export class ValidateWorldCommand {
         const nameMatch = content.match(/Name:\s*(\S+)/);
         return !!idMatch && !!nameMatch;
     }
-    validateElement(fileName: string, content: string) {
-    console.log(`Validating element: ${fileName}`); // Output element name for reference
-    const lines = content.split('\n');
-    lines.forEach(line => {
-        if (!line.trim()) return;  // Skip empty or whitespace-only lines
-        if (line.includes('number-field')) {
-            const numberPart = line.split(':').pop();
-            if (numberPart && numberPart.trim()) {
-                const numberMatch = numberPart.trim().match(/^(\d+)$/);
-                if (!numberMatch) {
-                    console.error(`Invalid or missing number in number field: ${line} in ${fileName}`);
-                    this.errorCount++;
-                }
-            }
-        }
-
-        if (line.includes('link-field') || line.includes('multi-link-field')) {
-            const parts = line.split(':');
-            const contentAfterColon = parts.length > 1 ? parts[1].trim() : '';
-            if (contentAfterColon) {
-                const linkMatches = contentAfterColon.match(/\[\[[^\]]+\]\]/g);
-                if (linkMatches) {
-                    const linkContent = linkMatches.join('');
-                    const cleanContent = contentAfterColon.replace(/,/g, '').replace(/\s/g, ''); // Remove commas and spaces for comparison
-                    if (cleanContent !== linkContent.replace(/\s/g, '')) {
-                        console.error(`Invalid or extra characters in link field: ${line} in ${fileName}`);
+    validateElement(fileName: string, content: string) { 
+        const lines = content.split('\n');
+        lines.forEach(line => {
+            if (!line.trim()) return;  // Skip empty or whitespace-only lines
+            
+            if (line.includes('number-field')) {
+                const numberPart = line.split(':').pop();
+                if (numberPart && numberPart.trim()) {
+                    // Extracting the number from the content
+                    const numberMatch = numberPart.trim().match(/^(\d+)$/);
+                    if (numberMatch) {
+                        const number = parseInt(numberMatch[1], 10);
+                        // Check if there's a max value specified in the field
+                        const maxMatch = line.match(/max:\s*(\d+)/);
+                        if (maxMatch) {
+                            const max = parseInt(maxMatch[1], 10);
+                            if (number > max) {
+                                console.error(`Number exceeds maximum limit: ${line} in ${fileName}`);
+                                this.errorCount++;
+                            }
+                        }
+                    } else {
+                        console.error(`Invalid or missing number in number field: ${line} in ${fileName}`);
                         this.errorCount++;
                     }
-                } else {
-                    console.error(`Invalid link format in link field: ${line} in ${fileName}`);
-                    this.errorCount++;
                 }
             }
-        }
-    });
-}
+    
+            if (line.includes('link-field') || line.includes('multi-link-field')) {
+                const parts = line.split(':');
+                const contentAfterColon = parts.length > 1 ? parts[1].trim() : '';
+                if (contentAfterColon) {
+                    const linkMatches = contentAfterColon.match(/\[\[[^\]]+\]\]/g);
+                    if (linkMatches) {
+                        const linkContent = linkMatches.join(','); // Include commas as they should be valid separators
+                        // Remove extra commas and spaces, except for the commas directly separating links
+                        const cleanContent = contentAfterColon.replace(/\s+/g, ' ').trim().replace(/(,\s*)+/g, ',');
+                        if (cleanContent !== linkContent) {
+                            console.error(`Invalid or extra characters in link field: ${line} in ${fileName}`);
+                            this.errorCount++;
+                        }
+                    } else {
+                        console.error(`Invalid link format in link field: ${line} in ${fileName}`);
+                        this.errorCount++;
+                    }
+                }
+            }
+        });
+    }
+    
+    
 
     
     
