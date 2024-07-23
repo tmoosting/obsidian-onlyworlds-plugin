@@ -19,13 +19,14 @@ export class ExportWorldCommand {
     }
 
     async execute() {
+        const activeWorldName = await this.worldService.getWorldName(); // Fetch the active world name
         new WorldKeySelectionModal(this.app, async (worldKey: string, worldFolder: string) => {
             if (worldKey.length === 10) {
                 const validator = new ValidateWorldCommand(this.app, this.manifest, this.worldService, false);
-                await validator.execute();
-    
+                await validator.execute(worldFolder); // Pass the chosen world folder name
+        
                 const validationModal = new ValidateExportResultModal(this.app, validator.errors, validator.elementCount, validator.errorCount, worldFolder);
-    
+        
                 validationModal.setExportCallback(async () => {
                     if (validator.errorCount === 0) {
                         const worldData = await this.collectWorldData(worldFolder);  // Pass the selected world folder
@@ -33,16 +34,16 @@ export class ExportWorldCommand {
                             worldKey: worldKey,
                             worldData: worldData
                         };
-    
+        
                         console.log(`Sending data to URL: ${this.apiUrl}`);
-    
+        
                         const response = await requestUrl({
                             url: this.apiUrl,
                             method: 'POST',
                             contentType: 'application/json',
                             body: JSON.stringify(payload)
                         });
-    
+        
                         if (response.status === 200 || response.status === 201) {
                             new Notice('World data successfully sent. Status: ' + response.status);
                         } else {
@@ -51,13 +52,14 @@ export class ExportWorldCommand {
                         }
                     }
                 });
-    
+        
                 validationModal.open();
             } else {
                 new Notice('Invalid world key. Please ensure it is a 10-digit number.');
             }
-        }).open();
+        }, activeWorldName).open(); // Pass the active world name to the modal
     }
+    
     
     
 

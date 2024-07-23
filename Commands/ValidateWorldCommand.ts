@@ -29,11 +29,14 @@ export class ValidateWorldCommand {
         this.worldService = worldService;
         this.manualTrigger = manualTrigger;
     }
-    async execute() {
+    async execute(worldFolderName?: string) {
         console.log("Starting world validation...");
         this.resetErrors(); // Reset errors before starting validation
         
-        const worldFolderName = await this.worldService.getWorldName();
+        if (!worldFolderName) {
+            worldFolderName = await this.worldService.getWorldName();
+        }
+        
         const worldFolderPath = normalizePath(`OnlyWorlds/Worlds/${worldFolderName}/Elements`);
         const elementsFolder = this.app.vault.getAbstractFileByPath(worldFolderPath) as TFolder;
         
@@ -64,7 +67,7 @@ export class ValidateWorldCommand {
         
         console.log(`Validation complete. Total elements scanned: ${this.elementCount}, Errors found: ${this.errorCount}`);
       
-        if (this.manualTrigger){
+        if (this.manualTrigger) {
             new ValidateResultModal(this.app, this.errors, this.elementCount, this.errorCount, worldFolderName).open();
         }
     }

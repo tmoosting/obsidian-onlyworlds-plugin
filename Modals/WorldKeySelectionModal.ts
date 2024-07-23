@@ -2,10 +2,12 @@ import { App, Modal, Notice, DropdownComponent, normalizePath, TFolder, TFile } 
 
 export class WorldKeySelectionModal extends Modal {
     onChoose: (worldKey: string, worldFolder: string) => void;
+    activeWorldName: string;
 
-    constructor(app: App, onChoose: (worldKey: string, worldFolder: string) => void) {
+    constructor(app: App, onChoose: (worldKey: string, worldFolder: string) => void, activeWorldName: string) {
         super(app);
         this.onChoose = onChoose;
+        this.activeWorldName = activeWorldName;
     }
 
     async onOpen() {
@@ -24,7 +26,7 @@ export class WorldKeySelectionModal extends Modal {
             dropdown.addOption(folder, folder);
         });
         if (worldFolders.length > 0) {
-            dropdown.setValue(worldFolders[0]); // Automatically select the first folder
+            dropdown.setValue(this.activeWorldName || worldFolders[0]); // Pre-select the active world name
         }
 
         const input = contentEl.createEl('input', {
