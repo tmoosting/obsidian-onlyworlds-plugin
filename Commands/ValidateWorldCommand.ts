@@ -8,8 +8,8 @@ export class ValidateWorldCommand {
 
     // Declaring error lists
     errors = {
-        numberStringErrors: [] as string[],
-        maxNumberStringErrors: [] as string[],
+        numberErrors: [] as string[],
+        maxNumberErrors: [] as string[],
         singleLinkFieldErrors: [] as string[],
         multiLinkFieldErrors: [] as string[],
         missingIdErrors: [] as string[],
@@ -24,43 +24,43 @@ export class ValidateWorldCommand {
         this.app = app;
         this.manifest = manifest;
     }
-
     async execute() {
         console.log("Starting world validation...");
-    
+        
         const worldFolderName = await this.determineTopWorldFolder();
         const worldFolderPath = normalizePath(`OnlyWorlds/Worlds/${worldFolderName}/Elements`);
         const elementsFolder = this.app.vault.getAbstractFileByPath(worldFolderPath) as TFolder;
-    
+        
         if (!elementsFolder || !(elementsFolder instanceof TFolder)) {
             console.error('Elements folder not found.');
             return;
         }
-    
+        
         for (const categoryKey in Category) {
             const category = Category[categoryKey];
             if (!isNaN(Number(category))) continue; // Skip if category is not a string
-    
+        
             const categoryPath = normalizePath(`${worldFolderPath}/${category}`);
             const categoryFolder = this.app.vault.getAbstractFileByPath(categoryPath) as TFolder;
-    
+        
             if (!categoryFolder || !(categoryFolder instanceof TFolder)) {
                 console.log(`No elements found in category: ${category}`);
                 continue;
             }
-     
+         
             for (const file of categoryFolder.children) {
                 if (file instanceof TFile) {
                     this.elementCount++;
                     const content = await this.app.vault.read(file);
-                    this.validateElement(file.name, content);
+                    this.validateElement(category, file.name, content);
                 }
             }
         }
-    
+        
         console.log(`Validation complete. Total elements scanned: ${this.elementCount}, Errors found: ${this.errorCount}`);
         new ValidateResultModal(this.app, this.errors, this.elementCount, this.errorCount, worldFolderName).open();
     }
+    
     
 
     async determineTopWorldFolder(): Promise<string> {
@@ -84,16 +84,18 @@ export class ValidateWorldCommand {
         return true;
     }
     
-    validateElement(fileName: string, content: string) {
+    validateElement(category: string, fileName: string, content: string) {
         let idFound = false;
         let nameFound = false;
         const lines = content.split('\n');
+        const displayName = fileName.replace('.md', '');
     
         lines.forEach(line => {
             if (!line.trim()) return;  // Skip empty or whitespace-only lines
     
             if (line.includes('number-field')) {
                 const numberPart = line.split(':').pop();
+                const fieldName = line.match(/data-tooltip="[^"]*">([^<]+)<\/span>/)?.[1]?.trim() || 'Unknown field';
                 if (numberPart && numberPart.trim()) {
                     // Extracting the number from the content
                     const numberMatch = numberPart.trim().match(/^(\d+)$/);
@@ -105,15 +107,12 @@ export class ValidateWorldCommand {
                             const max = parseInt(maxMatch[1], 10);
                             if (number > max) {
                                 this.errorCount++;
-                                const displayName = fileName.replace('.md', '');
-                                this.errors.maxNumberStringErrors.push(`${displayName} has error in ${line}: max value exceeded`);
+                                this.errors.maxNumberErrors.push(`(${category}) ${displayName} has error in ${fieldName}: max value exceeded`);
                             }
                         }
                     } else {
                         this.errorCount++;
-                        const displayName = fileName.replace('.md', ''); 
-                        this.errors.numberStringErrors.push(`${displayName} has error in ${line}: Invalid or missing number`);
-
+                        this.errors.numberErrors.push(`(${category}) ${displayName} has error in ${fieldName}: Invalid or missing number`);
                     }
                 }
             }
@@ -121,13 +120,14 @@ export class ValidateWorldCommand {
             if (line.includes('link-field')) {
                 const parts = line.split(':');
                 const contentAfterColon = parts.length > 1 ? parts[1].trim() : '';
+                const fieldName = line.match(/data-tooltip="[^"]*">([^<]+)<\/span>/)?.[1]?.trim() || 'Unknown field';
                 if (contentAfterColon) {
                     const linkMatches = contentAfterColon.match(/\[\[[^\]]+\]\]/g);
                     if (linkMatches && linkMatches.length == 1) {
                         // Valid single link field
                     } else if (!linkMatches || linkMatches.length == 0) {
                         this.errorCount++;
-                        this.errors.singleLinkFieldErrors.push(`Invalid link format in single link field: ${line} in ${fileName}`);
+                        this.errors.singleLinkFieldErrors.push(`(${category}) ${displayName} has error in ${fieldName}: Invalid link format`);
                     }
                 }
             }
@@ -135,13 +135,14 @@ export class ValidateWorldCommand {
             if (line.includes('multi-link-field')) {
                 const parts = line.split(':');
                 const contentAfterColon = parts.length > 1 ? parts[1].trim() : '';
+                const fieldName = line.match(/data-tooltip="[^"]*">([^<]+)<\/span>/)?.[1]?.trim() || 'Unknown field';
                 if (contentAfterColon) {
                     const linkMatches = contentAfterColon.match(/\[\[[^\]]+\]\]/g);
                     if (linkMatches && linkMatches.length > 1) {
                         // Valid multi-link field
                     } else {
                         this.errorCount++;
-                        this.errors.multiLinkFieldErrors.push(`Invalid format in multi-link field: ${line} in ${fileName}`);
+                        this.errors.multiLinkFieldErrors.push(`(${category}) ${displayName} has error in ${fieldName}: Invalid format`);
                     }
                 }
             }
@@ -152,7 +153,7 @@ export class ValidateWorldCommand {
                 const idValue = parts.length > 1 ? parts[1].trim() : '';
                 if (!idValue) {
                     this.errorCount++;
-                    this.errors.missingIdErrors.push(`ID field is empty in ${fileName}`);
+                    this.errors.missingIdErrors.push(`(${category}) ${displayName} has error in ID: field is empty`);
                 } else {
                     idFound = true;
                 }
@@ -162,16 +163,14 @@ export class ValidateWorldCommand {
             if (line.includes('<span class="text-field" data-tooltip="Text">Name</span>:')) {
                 const parts = line.split(':');
                 const nameValue = parts.length > 1 ? parts[1].trim().replace(/["']/g, "") : ''; // Removing potential quotation marks
-                if (!nameValue || nameValue !== fileName.replace('.md', '')) {
+                if (!nameValue || nameValue !== displayName) {
                     this.errorCount++;
-                    this.errors.nameMismatchErrors.push(`Name field does not match file name in ${fileName}`);
+                    this.errors.nameMismatchErrors.push(`(${category})${displayName} has error in Name: field does not match file name`);
                 } else {
                     nameFound = true;
                 }
             }
         });
-    
-        
     }
     
 
