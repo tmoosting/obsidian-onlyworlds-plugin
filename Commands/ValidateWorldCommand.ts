@@ -117,22 +117,22 @@ export class ValidateWorldCommand {
                     }
                 }
             }
-    
-            if (line.includes('link-field')) {
+            if (line.includes('"link-field')) {
                 const parts = line.split(':');
                 const contentAfterColon = parts.length > 1 ? parts[1].trim() : '';
                 const fieldName = line.match(/data-tooltip="[^"]*">([^<]+)<\/span>/)?.[1]?.trim() || 'Unknown field';
                 if (contentAfterColon) {
-                    const linkMatches = contentAfterColon.match(/\[\[[^\]]+\]\]/g);
-                    if (linkMatches && linkMatches.length == 1) {
+                    // Check if content matches exactly one link format and nothing else
+                    const validLinkFormat = /^\s*\[\[[^\]]+\]\]\s*$/;
+                    if (validLinkFormat.test(contentAfterColon)) {
                         // Valid single link field
-                    } else if (!linkMatches || linkMatches.length == 0) {
+                    } else {
                         this.errorCount++;
                         this.errors.singleLinkFieldErrors.push(`(${category}) ${displayName} has error in ${fieldName}: Invalid link format`);
                     }
                 }
             }
-    
+            
             if (line.includes('multi-link-field')) {
                 const parts = line.split(':');
                 const contentAfterColon = parts.length > 1 ? parts[1].trim() : '';

@@ -11,7 +11,7 @@
 - <span class="text-field" data-tooltip="Text">Psychology</span>: 
 - <span class="number-field" data-tooltip="Number">Height</span>: 
 - <span class="number-field" data-tooltip="Number">Weight</span>: 
-- <span class="link-field" data-tooltip="Multi Species">Species</span>: 
+- <span class="multi-link-field" data-tooltip="Multi Species">Species</span>: 
 - <span class="multi-link-field" data-tooltip="Multi Trait">Traits</span>: 
 - <span class="multi-link-field" data-tooltip="Multi Ability">Abilities</span>: 
 
