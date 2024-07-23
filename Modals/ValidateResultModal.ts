@@ -44,13 +44,13 @@ export class ValidateResultModal extends Modal {
         const { contentEl } = this;
         contentEl.empty();
 
-        contentEl.createEl('h1', { text: `Validated ${this.worldName}` });
+        contentEl.createEl('h1', { text: `Validating ${this.worldName}` });
 
         contentEl.createEl('p', { text: `Total elements scanned: ${this.elementCount}` });
         contentEl.createEl('p', { text: `Errors found: ${this.errorCount}` });
 
         if (this.errorCount > 0) {
-            contentEl.createEl('p', { text: `Please correct the issues below before exporting ${this.worldName}.` });
+            contentEl.createEl('p', { text: `Please correct these issues below before exporting ${this.worldName}.` });
             contentEl.createEl('p', { text: `Hover the error headers for details on formatting.` });
         } else {
             contentEl.createEl('p', { text: `No issues detected. ${this.worldName} is ready for export!` });

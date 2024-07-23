@@ -138,8 +138,9 @@ export class ValidateWorldCommand {
                 const contentAfterColon = parts.length > 1 ? parts[1].trim() : '';
                 const fieldName = line.match(/data-tooltip="[^"]*">([^<]+)<\/span>/)?.[1]?.trim() || 'Unknown field';
                 if (contentAfterColon) {
-                    const linkMatches = contentAfterColon.match(/\[\[[^\]]+\]\]/g);
-                    if (linkMatches && linkMatches.length > 1) {
+                    // Check if content matches one or more link formats separated by commas
+                    const validMultiLinkFormat = /^\s*(\[\[[^\]]+\]\]\s*,\s*)*\[\[[^\]]+\]\]\s*$/;
+                    if (validMultiLinkFormat.test(contentAfterColon)) {
                         // Valid multi-link field
                     } else {
                         this.errorCount++;
