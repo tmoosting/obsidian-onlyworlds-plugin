@@ -3,6 +3,7 @@ import Handlebars from 'handlebars';
 import { Category } from '../enums';
 import { WorldKeyModal } from 'Modals/WorldKeyModal'; 
 import { CreateTemplatesCommand } from './CreateTemplatesCommand';
+import { CreateSettingsCommand } from './CreateSettingsCommand';
 
 export class ImportWorldCommand {
     app: App;
@@ -51,9 +52,10 @@ export class ImportWorldCommand {
                         await this.generateWorldFile(worldData, worldFolderPath);
                     }
                                 // Generate templates in the new location 
+            const createSettingsCommand = new CreateSettingsCommand(this.app, this.manifest );
+            await createSettingsCommand.execute();
             const createTemplatesCommand = new CreateTemplatesCommand(this.app, this.manifest );
             await createTemplatesCommand.execute();
-    
                     // Generate element notes in the correct category folders under Elements
                     await this.generateElementNotes(elementsFolderPath, data, overwrite);
                 } catch (error) {

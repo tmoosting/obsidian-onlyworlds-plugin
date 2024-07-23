@@ -6,6 +6,7 @@ import { resolve } from 'path';
 import { Category } from '../enums';
 import { CreateTemplatesCommand } from './CreateTemplatesCommand'; // Ensure correct path
 import { WorldNameModal } from 'Modals/WorldNameModal';
+import { CreateSettingsCommand } from './CreateSettingsCommand';
 
 export class CreateWorldCommand {
     app: App;
@@ -45,7 +46,8 @@ export class CreateWorldCommand {
             const worldNoteContent = this.compileWorldNote(worldData);
             await this.app.vault.create(`${worldBasePath}/World.md`, worldNoteContent);
 
-            // Generate templates in the new location 
+            const createSettingsCommand = new CreateSettingsCommand(this.app, this.manifest );
+            await createSettingsCommand.execute();
             const createTemplatesCommand = new CreateTemplatesCommand(this.app, this.manifest );
             await createTemplatesCommand.execute();
 

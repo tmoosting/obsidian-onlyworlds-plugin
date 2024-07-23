@@ -8,7 +8,7 @@ export class TemplateSelectionModal extends Modal {
 
     onOpen() {
         let { contentEl } = this;
-        contentEl.createEl('h3', { text: 'Create new...' });
+        contentEl.createEl('h3', { text: 'Create element of category..' });
     
         // Create input field for category selection
         let inputEl = contentEl.createEl('input', {

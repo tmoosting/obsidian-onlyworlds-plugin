@@ -1,39 +1,61 @@
 import { App, TFolder, TFile, normalizePath } from 'obsidian';
 
 export class WorldService {
-  private app: App;
-  private worldName: string = 'DefaultWorld'; // Default world name as a fallback
+    private app: App;
+    private defaultWorldName: string = 'DefaultWorld'; // Default world name as a fallback
 
-  constructor(app: App) {
-    this.app = app;
-  }
+    constructor(app: App) {
+        this.app = app;
+    }
 
-  async getWorldName(): Promise<string> {
-    const worldsPath = normalizePath('OnlyWorlds/Worlds');
-    const worldsFolder = this.app.vault.getAbstractFileByPath(worldsPath);
-    if (worldsFolder instanceof TFolder && worldsFolder.children.length > 0) {
-      const subFolders = worldsFolder.children.filter(child => child instanceof TFolder);
-      if (subFolders.length > 0) {
-        const worldFolder = subFolders[0];
-        console.log("world folder: "  + worldFolder);
-        const worldFile = worldFolder.children.find(child => child instanceof TFile && child.name === 'World.md');
-        if (worldFile instanceof TFile) {
-          const content = await this.app.vault.read(worldFile);
-          const extractedName = this.extractWorldNameFromContent(content);
-          if (extractedName) {
-            this.worldName = extractedName; // Update world name if found
-          }
+    async getWorldName(): Promise<string> {
+        console.log("Starting to fetch world name from settings...");
+        const settingsWorldName = await this.getWorldNameFromSettings();
+        if (settingsWorldName && await this.verifyWorldExists(settingsWorldName)) {
+            console.log(`World name from settings: ${settingsWorldName}`);
+            return settingsWorldName;
+        } else {
+            console.log("No valid world name in settings or no matching folder, using top folder logic...");
+            return this.getWorldNameFromTopFolder();
         }
-      }
     }
-    return this.worldName; // Return either the extracted or default world name
-  }
 
-  private extractWorldNameFromContent(content: string): string | null {
-    const nameMatch = content.match(/^- \*\*Name:\*\* (.+)$/m); // Regex to match the specific name format
-    if (nameMatch && nameMatch[1]) {
-      return nameMatch[1].trim(); // Return the captured world name, trimmed
+    private async getWorldNameFromSettings(): Promise<string | null> {
+        const settingsPath = normalizePath('OnlyWorlds/Settings.md');
+        try {
+            const settingsFile = this.app.vault.getAbstractFileByPath(settingsPath) as TFile;
+            const content = await this.app.vault.read(settingsFile);
+            const match = content.match(/^- \*\*Name:\*\* (.+)$/m);
+            if (match && match[1].trim()) {
+                return match[1].trim();
+            }
+        } catch (error) {
+            console.log("Error reading settings file:", error);
+        }
+        return null; // Return null if settings file is not found or no name is specified
     }
-    return null; // Return null if no name is found
-  }
+
+    private async getWorldNameFromTopFolder(): Promise<string> {
+        const worldsPath = normalizePath('OnlyWorlds/Worlds');
+        const worldsFolder = this.app.vault.getAbstractFileByPath(worldsPath);
+        if (worldsFolder instanceof TFolder && worldsFolder.children.length > 0) {
+            const subFolders = worldsFolder.children.filter(child => child instanceof TFolder);
+            if (subFolders.length > 0) {
+                const worldFolder = subFolders[0];
+                return worldFolder.name; // Return the name of the first subfolder
+            }
+        }
+        return this.defaultWorldName; // Return default world name if no subfolder is found
+    }
+
+    private async verifyWorldExists(worldName: string): Promise<boolean> {
+        const worldsPath = normalizePath('OnlyWorlds/Worlds');
+        const worldsFolder = this.app.vault.getAbstractFileByPath(worldsPath);
+        if (worldsFolder instanceof TFolder) {
+            const exists = worldsFolder.children.some(child => child instanceof TFolder && child.name === worldName);
+            console.log(`Checking if world exists: ${worldName} - ${exists}`);
+            return exists;
+        }
+        return false;
+    }
 }

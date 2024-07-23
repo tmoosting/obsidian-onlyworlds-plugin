@@ -14,6 +14,7 @@ import { NameChanger } from 'Listeners/NameChanger';
 import { ValidateWorldCommand } from 'Commands/ValidateWorldCommand';
 import { NameInputModal } from 'Modals/NameInputModal';
 import { WorldService } from 'Scripts/WorldService';
+import { CreateSettingsCommand } from 'Commands/CreateSettingsCommand';
 
 export default class OnlyWorldsPlugin extends Plugin {
   graphViewExtensions: GraphViewExtensions;
@@ -77,6 +78,7 @@ export default class OnlyWorldsPlugin extends Plugin {
       setupCommands() {
        
         const createCategoryFoldersCommand = new CreateCategoryFoldersCommand(this.app, this.manifest);
+        const createSettingsCommand = new CreateSettingsCommand(this.app, this.manifest);
         const createTemplatesCommand = new CreateTemplatesCommand(this.app, this.manifest);
         const retrieveWorldCommand = new ImportWorldCommand(this.app, this.manifest);
         const sendWorldCommand = new ExportWorldCommand(this.app, this.manifest);        
@@ -97,6 +99,11 @@ export default class OnlyWorldsPlugin extends Plugin {
             id: 'setup-templates',
             name: 'Create Element Templates',
             callback: () => createTemplatesCommand.execute(),
+        });
+        this.addCommand({
+            id: 'setup-settings',
+            name: 'Create Settings File',
+            callback: () => createSettingsCommand.execute(),
         });
 
 
