@@ -119,7 +119,7 @@ export class ImportWorldCommand {
                     noteContent = await this.linkifyContent(noteContent, data);
                     
                     await fs.write(notePath, noteContent);
-                    new Notice(`Note created for: ${element.name}`);
+                   // new Notice(`Note created for: ${element.name}`);
                 }
           
             }
