@@ -71,10 +71,12 @@ export class ValidateWorldCommand {
         return !!idMatch && !!nameMatch;
     }
     validateElement(fileName: string, content: string) { 
+        let idFound = false;
+        let nameFound = false;
         const lines = content.split('\n');
         lines.forEach(line => {
             if (!line.trim()) return;  // Skip empty or whitespace-only lines
-            
+    
             if (line.includes('number-field')) {
                 const numberPart = line.split(':').pop();
                 if (numberPart && numberPart.trim()) {
@@ -104,9 +106,8 @@ export class ValidateWorldCommand {
                 if (contentAfterColon) {
                     const linkMatches = contentAfterColon.match(/\[\[[^\]]+\]\]/g);
                     if (linkMatches) {
-                        const linkContent = linkMatches.join(','); // Include commas as they should be valid separators
-                        // Remove extra commas and spaces, except for the commas directly separating links
-                        const cleanContent = contentAfterColon.replace(/\s+/g, ' ').trim().replace(/(,\s*)+/g, ',');
+                        const linkContent = linkMatches.join(',');
+                        const cleanContent = contentAfterColon.replace(/,+/g, ',').trim(); // Adjust to allow only single commas between links
                         if (cleanContent !== linkContent) {
                             console.error(`Invalid or extra characters in link field: ${line} in ${fileName}`);
                             this.errorCount++;
@@ -117,8 +118,36 @@ export class ValidateWorldCommand {
                     }
                 }
             }
+    
+            // Validation for ID field being non-empty
+            if (line.includes('<span class="text-field" data-tooltip="Text">ID</span>:')) {
+                const parts = line.split(':');
+                const idValue = parts.length > 1 ? parts[1].trim() : '';
+                if (!idValue) {
+                    console.error(`ID field is empty in ${fileName}`);
+                    this.errorCount++;
+                } else {
+                    idFound = true;
+                }
+            }
+    
+            // Validation for Name field matching the file name
+            if (line.includes('<span class="text-field" data-tooltip="Text">Name</span>:')) {
+                const parts = line.split(':');
+                const nameValue = parts.length > 1 ? parts[1].trim().replace(/["']/g, "") : ''; // Removing potential quotation marks
+                if (!nameValue || nameValue !== fileName.replace('.md', '')) {
+                    console.error(`Name field does not match file name in ${fileName}`);
+                    this.errorCount++;
+                } else {
+                    nameFound = true;
+                }
+            }
         });
+    
+      
     }
+    
+    
     
     
 
