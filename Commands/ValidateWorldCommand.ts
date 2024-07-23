@@ -1,10 +1,12 @@
 import { App, Notice, FileSystemAdapter, TFile, normalizePath, TFolder, PluginManifest } from 'obsidian';
 import { Category } from '../enums'; // Ensure this import is correct
 import { ValidateResultModal } from 'Modals/ValidateResultModal'; // Ensure path is correct
+import { WorldService } from 'Scripts/WorldService';
 
 export class ValidateWorldCommand {
     app: App;
     manifest: PluginManifest;
+    worldService: WorldService;
 
     // Declaring error lists
     errors = {
@@ -20,15 +22,16 @@ export class ValidateWorldCommand {
     elementCount: number = 0;
     errorCount: number = 0;
 
-    constructor(app: App, manifest: PluginManifest) {
+    constructor(app: App, manifest: PluginManifest, worldService: WorldService) {
         this.app = app;
         this.manifest = manifest;
+        this.worldService = worldService;
     }
     async execute() {
         console.log("Starting world validation...");
         this.resetErrors(); // Reset errors before starting validation
         
-        const worldFolderName = await this.determineTopWorldFolder();
+        const worldFolderName = await this.worldService.getWorldName();
         const worldFolderPath = normalizePath(`OnlyWorlds/Worlds/${worldFolderName}/Elements`);
         const elementsFolder = this.app.vault.getAbstractFileByPath(worldFolderPath) as TFolder;
         
@@ -62,17 +65,7 @@ export class ValidateWorldCommand {
         new ValidateResultModal(this.app, this.errors, this.elementCount, this.errorCount, worldFolderName).open();
     }
     
-    
-
-    async determineTopWorldFolder(): Promise<string> {
-        const worldsPath = normalizePath('OnlyWorlds/Worlds');
-        const worldsFolder = this.app.vault.getAbstractFileByPath(worldsPath);
-        if (worldsFolder instanceof TFolder) {
-            const subFolders = worldsFolder.children.filter(child => child instanceof TFolder);
-            return subFolders.length > 0 ? subFolders[0].name : 'DefaultWorld';
-        }
-        return 'DefaultWorld';
-    }
+   
 
     validateWorldFile(content: string): boolean {
         const idMatch = content.match(/ID:\s*(\S+)/);

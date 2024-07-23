@@ -13,14 +13,16 @@ import { GraphViewExtensions } from 'Extensions/GraphViewExtensions';
 import { NameChanger } from 'Listeners/NameChanger';
 import { ValidateWorldCommand } from 'Commands/ValidateWorldCommand';
 import { NameInputModal } from 'Modals/NameInputModal';
+import { WorldService } from 'Scripts/WorldService';
 
 export default class OnlyWorldsPlugin extends Plugin {
   graphViewExtensions: GraphViewExtensions;
     noteLinker: NoteLinker;
     nameChanger: NameChanger;
+    worldService: WorldService;
 
       onload(): void {
-    
+        this.worldService = new WorldService(this.app);
         this.registerHandlebarsHelpers(); 
 
         // doesnt work yet
@@ -79,7 +81,7 @@ export default class OnlyWorldsPlugin extends Plugin {
         const retrieveWorldCommand = new ImportWorldCommand(this.app, this.manifest);
         const sendWorldCommand = new ExportWorldCommand(this.app, this.manifest);        
         const createWorldCommand = new CreateWorldCommand(this.app, this.manifest);
-        const validateWorldCommand = new ValidateWorldCommand(this.app, this.manifest);
+        const validateWorldCommand = new ValidateWorldCommand(this.app, this.manifest, this.worldService);
 
         // Register a command to create category folders
         this.addCommand({
@@ -127,7 +129,7 @@ export default class OnlyWorldsPlugin extends Plugin {
               let templateModal = new TemplateSelectionModal(this.app, (category) => {
                   // Open the NameInputModal after selecting a category
                   let nameModal = new NameInputModal(this.app, category, (cat, name) => {
-                      new CreateElementCommand(this.app, this.manifest).execute(cat, name);
+                      new CreateElementCommand(this.app, this.manifest, this.worldService).execute(cat, name);
                   });
                   nameModal.open();
               });

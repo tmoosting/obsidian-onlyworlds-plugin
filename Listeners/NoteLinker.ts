@@ -1,9 +1,17 @@
 import { App, Plugin, MarkdownView, Editor, Notice, WorkspaceLeaf, EditorPosition, normalizePath, TFolder } from 'obsidian';
 import { ElementSelectionModal } from '../Modals/ElementSelectionModal';
+import { WorldService } from 'Scripts/WorldService';
+
 
 export class NoteLinker extends Plugin {
+    private worldService: WorldService;
     private currentEditor: Editor | null = null;
 
+ 
+    constructor(app: App, manifest: any, worldService: WorldService) {
+        super(app, manifest);  
+        this.worldService = worldService;  
+    }
     setupLinkerListeners() {
         this.addCommand({ 
             id: 'link-to-element',
@@ -66,7 +74,7 @@ export class NoteLinker extends Plugin {
     
     
     private async fetchElements(elementType: string, currentId: string): Promise<{ name: string; id: string }[]> {
-        const topWorldName = await this.determineTopWorldFolder();
+        const topWorldName = await this.worldService.getWorldName();
         const elementsPath = `OnlyWorlds/Worlds/${topWorldName}/Elements/${elementType}`;
         console.log(`Looking for elements in: ${elementsPath}`); // Confirm the path
     
@@ -88,18 +96,7 @@ export class NoteLinker extends Plugin {
         console.log(`Total elements added: ${elements.length}`); // Final count of elements added
         return elements;
     }
-    
-    
-    private async determineTopWorldFolder(): Promise<string> {
-        const worldsPath = normalizePath('OnlyWorlds/Worlds');
-        const worldsFolder = this.app.vault.getAbstractFileByPath(worldsPath);
-        if (worldsFolder instanceof TFolder) {
-            const subFolders = worldsFolder.children.filter(child => child instanceof TFolder);
-            return subFolders.length > 0 ? subFolders[0].name : 'DefaultWorld';
-        }
-        return 'DefaultWorld';  // Fallback if no subfolder is present
-    }
-    
+ 
 
     private extractWorldName(filePath: string): string {
         // Assumes the path format is 'OnlyWorlds/Worlds/{WorldName}/...'

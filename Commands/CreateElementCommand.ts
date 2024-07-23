@@ -1,13 +1,16 @@
 import { App, TFile, Notice, normalizePath, WorkspaceLeaf, TFolder } from 'obsidian';
+import { WorldService } from 'Scripts/WorldService';
 import { v7 as uuidv7 } from 'uuid';
 
 export class CreateElementCommand {
     app: App;
     manifest: any;
+    worldService: WorldService;
 
-    constructor(app: App, manifest: any) {
+    constructor(app: App, manifest: any, worldService: WorldService) {
         this.app = app;
         this.manifest = manifest;
+        this.worldService = worldService;
     }
 
     async execute(category: string, name: string): Promise<void> {
@@ -50,7 +53,7 @@ export class CreateElementCommand {
 
 
     async createNoteInCorrectFolder(content: string, category: string, id: string, name: string): Promise<void> {
-        const topWorld = await this.determineTopWorldFolder();
+        const topWorld =  await this.worldService.getWorldName();
         const worldFolder = normalizePath(`OnlyWorlds/Worlds/${topWorld}/Elements/${category}`);
         await this.createFolderIfNeeded(worldFolder);
     
