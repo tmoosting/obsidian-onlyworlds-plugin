@@ -8,7 +8,7 @@ export class NameInputModal extends Modal {
     }
 
     onOpen() {
-        this.titleEl.setText(`Enter Name for the New ${this.category}`);
+        this.titleEl.setText(`Enter a name for the new ${this.category}`);
 
         let inputEl = this.contentEl.createEl('input', {
             type: 'text',

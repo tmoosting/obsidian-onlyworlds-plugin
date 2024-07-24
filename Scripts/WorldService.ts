@@ -25,7 +25,7 @@ export class WorldService {
         try {
             const settingsFile = this.app.vault.getAbstractFileByPath(settingsPath) as TFile;
             const content = await this.app.vault.read(settingsFile);
-            const match = content.match(/^- \*\*Name:\*\* (.+)$/m);
+            const match = content.match(/^- \*\*Primary World Name:\*\* (.+)$/m);
             if (match && match[1].trim()) {
                 return match[1].trim();
             }

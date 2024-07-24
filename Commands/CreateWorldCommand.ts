@@ -53,7 +53,7 @@ export class CreateWorldCommand {
 
             new Notice('Successfully created world: ' + worldName);
         } catch (error) {
-            console.error("Error during world creation:", error);
+            console.error("Errorrrrr during world creation:", error);
             new Notice('Failed to create world.');
         }
     }
