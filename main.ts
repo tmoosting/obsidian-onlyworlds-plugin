@@ -15,6 +15,7 @@ import { ValidateWorldCommand } from 'Commands/ValidateWorldCommand';
 import { NameInputModal } from 'Modals/NameInputModal';
 import { WorldService } from 'Scripts/WorldService';
 import { CreateSettingsCommand } from 'Commands/CreateSettingsCommand';
+import { CreateReadmeCommand } from 'Commands/CreateReadmeCommand';
 
 export default class OnlyWorldsPlugin extends Plugin {
   graphViewExtensions: GraphViewExtensions;
@@ -47,15 +48,16 @@ export default class OnlyWorldsPlugin extends Plugin {
       this.setupCommands();
       setTimeout(() => { 
         this.callDelayedFunctions();
-    }, 200);  
+    }, 500);  
 
 
-        console.log("OW Plugin loaded");
       }
   
 
       callDelayedFunctions(){
         this.analyzeSettingsFile() ; 
+
+        console.log("OW Plugin loaded"); 
       }
 
       addStyles() {
@@ -85,9 +87,10 @@ export default class OnlyWorldsPlugin extends Plugin {
 
       setupCommands() {
        
-        const createCategoryFoldersCommand = new CreateCategoryFoldersCommand(this.app, this.manifest);
-        const createSettingsCommand = new CreateSettingsCommand(this.app, this.manifest);
+        const createReadmeCommand = new CreateReadmeCommand(this.app, this.manifest);
         const createTemplatesCommand = new CreateTemplatesCommand(this.app, this.manifest);
+        const createSettingsCommand = new CreateSettingsCommand(this.app, this.manifest);
+        const createCategoryFoldersCommand = new CreateCategoryFoldersCommand(this.app, this.manifest);
         const retrieveWorldCommand = new ImportWorldCommand(this.app, this.manifest);
         const sendWorldCommand = new ExportWorldCommand(this.app, this.manifest, this.worldService);        
         const createWorldCommand = new CreateWorldCommand(this.app, this.manifest);
@@ -112,6 +115,11 @@ export default class OnlyWorldsPlugin extends Plugin {
             id: 'setup-settings',
             name: 'Create Settings File',
             callback: () => createSettingsCommand.execute(),
+        });
+        this.addCommand({
+            id: 'setup-readme',
+            name: 'Create Readme File',
+            callback: () => createReadmeCommand.execute(),
         });
 
 
@@ -162,8 +170,7 @@ export default class OnlyWorldsPlugin extends Plugin {
    
     async analyzeSettingsFile() {
       const settingsPath = normalizePath('OnlyWorlds/Settings.md');
-      console.log(`Checking for settings at path: ${settingsPath}`);  // Log the exact path being checked
-  
+      
       try {
           const settingsFile = this.app.vault.getAbstractFileByPath(settingsPath);
           if (!settingsFile) {
