@@ -1,4 +1,4 @@
-import { Plugin } from 'obsidian';
+import { Plugin, TFile, normalizePath } from 'obsidian';
 import { Category } from 'enums'; 
 import { CreateCategoryFoldersCommand } from './Commands/CreateCategoryFoldersCommand';
 import { CreateTemplatesCommand } from './Commands/CreateTemplatesCommand';
@@ -23,21 +23,19 @@ export default class OnlyWorldsPlugin extends Plugin {
     worldService: WorldService;
 
       onload(): void {
+
         this.worldService = new WorldService(this.app);
         this.registerHandlebarsHelpers(); 
 
-        // doesnt work yet
+        // didnt get custom graphview working yet
       //  this.graphViewExtensions = new GraphViewExtensions(this.app, this);
       //   this.graphViewExtensions.initializeGraphView();
-      // this.addStyles();
-      // this.nameChanger = new NameChanger(this.app, this.manifest);
-      // this.nameChanger.onload(); 
+      // this.addStyles(); 
        this.nameChanger = new NameChanger(this.app, this.manifest); 
        this.nameChanger.setupNameChangeListener();
         this.noteLinker = new NoteLinker(this.app, this.manifest, this.worldService); 
         this.noteLinker.setupLinkerListeners();
 
-        this.setupCommands();
 
         Handlebars.registerHelper('linkify', (ids:string) => {
           if (!ids) return '';
@@ -46,8 +44,18 @@ export default class OnlyWorldsPlugin extends Plugin {
           return ids.split(',').map(id => `[[${id.trim()}]]`).join(', ');
       });
 
+      this.setupCommands();
+      setTimeout(() => { 
+        this.callDelayedFunctions();
+    }, 200);  
+
 
         console.log("OW Plugin loaded");
+      }
+  
+
+      callDelayedFunctions(){
+        this.analyzeSettingsFile() ; 
       }
 
       addStyles() {
@@ -152,4 +160,57 @@ export default class OnlyWorldsPlugin extends Plugin {
     }
 
    
+    async analyzeSettingsFile() {
+      const settingsPath = normalizePath('OnlyWorlds/Settings.md');
+      console.log(`Checking for settings at path: ${settingsPath}`);  // Log the exact path being checked
+  
+      try {
+          const settingsFile = this.app.vault.getAbstractFileByPath(settingsPath);
+          if (!settingsFile) {
+              console.log("Settings file not found, skipping check for creation of individual element commands.");
+              return;
+          }
+          
+          if (settingsFile instanceof TFile) {
+             // console.log("Settings file confirmed as TFile, proceeding to read.");
+              const content = await this.app.vault.read(settingsFile);
+              const individualCreationEnabled = this.parseSettingsForIndividualCreation(content);
+            //  console.log(`Individual Element Creation enabled: ${individualCreationEnabled}`);
+  
+              if (individualCreationEnabled) {
+                  this.registerIndividualCreationCommands();
+              }
+          } else {
+              console.log("Found item is not a file, possibly a directory, skipping command creation.");
+          }
+      } catch (error) {
+          console.error("Error accessing or reading settings file:", error); 
+      }
+  }
+  
+  
+
+  parseSettingsForIndividualCreation(content: string): boolean {
+    const match = content.match(/^- \*\*Individual Element Creation Commands:\*\* (\w+)/m);
+    return match ? match[1].toLowerCase() === 'yes' : false;
+}
+
+  registerIndividualCreationCommands() {
+      Object.keys(Category).filter(key => isNaN(Number(key))).forEach(category => {
+          const commandId = `create-new-${category.toLowerCase()}`;
+          const commandName = `Create new ${category}`;
+
+          this.addCommand({
+              id: commandId,
+              name: commandName,
+              callback: () => {
+                  let nameModal = new NameInputModal(this.app, category, (cat, name) => {
+                      new CreateElementCommand(this.app, this.manifest, this.worldService).execute(cat, name);
+                  });
+                  nameModal.open();
+              }
+          });
+         // console.log(`Registered command: ${commandName}`);
+      });
+  }
 }

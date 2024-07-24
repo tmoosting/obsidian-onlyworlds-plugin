@@ -16,9 +16,15 @@ export class CreateSettingsCommand {
         if (!fileExists) {
             const content = `# OnlyWorlds Plugin Settings
 
-## Primary World
-- **Name:** {{Specify the exact name of the active world here. If empty or no match, top world in hierarchy is used for validation and element creation}}
- 
+
+*Specify the name of the world you are working on here. Affects element creation and manual validation. 
+When empty, defaults to first in the hierarchy under /Worlds/*
+- **Primary World Name:** 
+
+*Change to 'Yes', then reload Obsidian, to include a separate creation command for each element category. 
+('Create new Character), ('Create new Location), etc*
+- **Individual Element Creation Commands:** No
+
 `;
 
             await this.app.vault.create(settingsPath, content);
