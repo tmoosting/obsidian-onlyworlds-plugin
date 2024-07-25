@@ -90,20 +90,21 @@ export default class OnlyWorldsPlugin extends Plugin {
         const createReadmeCommand = new CreateReadmeCommand(this.app, this.manifest);
         const createTemplatesCommand = new CreateTemplatesCommand(this.app, this.manifest);
         const createSettingsCommand = new CreateSettingsCommand(this.app, this.manifest);
-        const createCategoryFoldersCommand = new CreateCategoryFoldersCommand(this.app, this.manifest);
+     //   const createCategoryFoldersCommand = new CreateCategoryFoldersCommand(this.app, this.manifest);
         const retrieveWorldCommand = new ImportWorldCommand(this.app, this.manifest);
         const sendWorldCommand = new ExportWorldCommand(this.app, this.manifest, this.worldService);        
         const createWorldCommand = new CreateWorldCommand(this.app, this.manifest);
         const validateWorldCommand = new ValidateWorldCommand(this.app, this.manifest, this.worldService, true);
 
-        // Register a command to create category folders
-        this.addCommand({
-            id: 'create-category-folders',
-            name: 'Create Element Folders',
-            callback: () => {
-                createCategoryFoldersCommand.execute();
-            }
-        });
+        // manually handled in create/import world commands, no need for user to do this
+        // // Register a command to create category folders
+        // this.addCommand({
+        //     id: 'create-category-folders',
+        //     name: 'Create Element Folders',
+        //     callback: () => {
+        //         createCategoryFoldersCommand.execute();
+        //     }
+        // });
 
         // Register a command to copy template files to user vault
         this.addCommand({
