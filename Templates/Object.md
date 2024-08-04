@@ -1,18 +1,17 @@
-## Core
+## Base
 - <span class="text-field" data-tooltip="Text">ID</span>: 
 - <span class="text-field" data-tooltip="Text">Name</span>: 
 - <span class="text-field" data-tooltip="Text">Description</span>: 
 - <span class="text-field" data-tooltip="Text">Supertype</span>: 
 - <span class="text-field" data-tooltip="Text">Subtype</span>: 
-- <span class="text-field" data-tooltip="Text">Image URL</span>: 
+- <span class="text-field" data-tooltip="Text">Image_URL</span>: 
 
 ## Form
 - <span class="text-field" data-tooltip="Text">Aesthetics</span>: 
 - <span class="number-field" data-tooltip="Number">Weight</span>: 
 - <span class="number-field" data-tooltip="Number">Amount</span>: 
-- <span class="link-field" data-tooltip="Single Object">Parent Object</span>: 
+- <span class="link-field" data-tooltip="Single Object">Parent_object</span>: 
 - <span class="multi-link-field" data-tooltip="Multi Construct">Technology</span>: 
-- <span class="reverse-link-field" data-tooltip="Multi Object">Components</span>: 
 
 ## Function
 - <span class="text-field" data-tooltip="Text">Utility</span>: 
@@ -23,8 +22,6 @@
 ## World
 - <span class="text-field" data-tooltip="Text">Origins</span>: 
 - <span class="link-field" data-tooltip="Single Location">Location</span>: 
-- <span class="reverse-link-field" data-tooltip="Multi Title">Titles</span>: 
-- <span class="reverse-link-field" data-tooltip="Multi Institution">Claimants</span>: 
 
 ## Games
 - <span class="text-field" data-tooltip="Text">Craftsmanship</span>: 

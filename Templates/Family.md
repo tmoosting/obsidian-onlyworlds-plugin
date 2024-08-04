@@ -1,16 +1,15 @@
-## Core
+## Base
 - <span class="text-field" data-tooltip="Text">ID</span>: 
 - <span class="text-field" data-tooltip="Text">Name</span>: 
 - <span class="text-field" data-tooltip="Text">Description</span>: 
 - <span class="text-field" data-tooltip="Text">Supertype</span>: 
 - <span class="text-field" data-tooltip="Text">Subtype</span>: 
-- <span class="text-field" data-tooltip="Text">Image URL</span>: 
+- <span class="text-field" data-tooltip="Text">Image_URL</span>: 
 
 ## Community
 - <span class="text-field" data-tooltip="Text">Spirit</span>: 
 - <span class="multi-link-field" data-tooltip="Multi Family">Alliances</span>: 
 - <span class="multi-link-field" data-tooltip="Multi Family">Rivalries</span>: 
-- <span class="reverse-link-field" data-tooltip="Multi Character">Members</span>: 
 
 ## Lineage
 - <span class="text-field" data-tooltip="Text">History</span>: 
@@ -29,5 +28,3 @@
 - <span class="text-field" data-tooltip="Text">Traditions</span>: 
 - <span class="link-field" data-tooltip="Single Location">Estate</span>: 
 - <span class="multi-link-field" data-tooltip="Multi Object">Heirlooms</span>: 
-- <span class="reverse-link-field" data-tooltip="Multi Event">Events</span>: 
- 

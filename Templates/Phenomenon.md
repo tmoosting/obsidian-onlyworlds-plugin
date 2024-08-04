@@ -1,10 +1,10 @@
-## Core
+## Base
 - <span class="text-field" data-tooltip="Text">ID</span>: 
 - <span class="text-field" data-tooltip="Text">Name</span>: 
 - <span class="text-field" data-tooltip="Text">Description</span>: 
 - <span class="text-field" data-tooltip="Text">Supertype</span>: 
 - <span class="text-field" data-tooltip="Text">Subtype</span>: 
-- <span class="text-field" data-tooltip="Text">Image URL</span>: 
+- <span class="text-field" data-tooltip="Text">Image_URL</span>: 
 
 ## Manifest
 - <span class="text-field" data-tooltip="Text">Presence</span>: 
@@ -14,7 +14,6 @@
 - <span class="multi-link-field" data-tooltip="Multi Trait">Empowerments</span>: 
 - <span class="multi-link-field" data-tooltip="Multi Location">Environments</span>: 
 - <span class="multi-link-field" data-tooltip="Multi Species">Carriers</span>: 
-- <span class="reverse-link-field" data-tooltip="Multi Event">Occurrences</span>: 
 
 ## Actuate
 - <span class="text-field" data-tooltip="Text">Effect</span>: 
@@ -24,4 +23,3 @@
 - <span class="multi-link-field" data-tooltip="Multi Character">Enablers</span>: 
 - <span class="multi-link-field" data-tooltip="Multi Construct">Triggers</span>: 
 - <span class="multi-link-field" data-tooltip="Multi Phenomenon">Affinity</span>: 
-- <span class="reverse-link-field" data-tooltip="Multi Ability">Utility</span>: 

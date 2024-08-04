@@ -22,5 +22,4 @@
 ## World
 - <span class="text-field" data-tooltip="Text">Prevalence</span>: {{prevalence}}
 - <span class="link-field" data-tooltip="Single Phenomenon">System</span>: {{linkify system}}
-- <span class="link-field" data-tooltip="Single Construct">Construct</span>: {{linkify construct}}
-- <span class="reverse-link-field" data-tooltip="Multi Character">Wielders</span>: {{linkify wielders}}
+- <span class="link-field" data-tooltip="Single Construct">Construct</span>: {{linkify construct}} 

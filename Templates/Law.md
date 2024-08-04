@@ -1,17 +1,16 @@
-## Core
+## Base
 - <span class="text-field" data-tooltip="Text">ID</span>: 
 - <span class="text-field" data-tooltip="Text">Name</span>: 
 - <span class="text-field" data-tooltip="Text">Description</span>: 
 - <span class="text-field" data-tooltip="Text">Supertype</span>: 
 - <span class="text-field" data-tooltip="Text">Subtype</span>: 
-- <span class="text-field" data-tooltip="Text">Image URL</span>: 
+- <span class="text-field" data-tooltip="Text">Image_URL</span>: 
 
 ## Code
 - <span class="text-field" data-tooltip="Text">Decree</span>: 
 - <span class="number-field" data-tooltip="Number">Date</span>: 
 - <span class="text-field" data-tooltip="Text">Purpose</span>: 
 - <span class="link-field" data-tooltip="Single Institution">Author</span>: 
-- <span class="reverse-link-field" data-tooltip="Multi Institution">Employers</span>: 
 
 ## Compulsion
 - <span class="multi-link-field" data-tooltip="Multi Location">Jurisdictions</span>: 
