@@ -1,17 +1,16 @@
-## Core
-- <span class="text-field" data-tooltip="Text">ID</span>: {{id}}
+## Base
+- <span class="text-field" data-tooltip="Text">Id</span>: {{id}}
 - <span class="text-field" data-tooltip="Text">Name</span>: {{name}}
 - <span class="text-field" data-tooltip="Text">Description</span>: {{description}}
 - <span class="text-field" data-tooltip="Text">Supertype</span>: {{supertype}}
 - <span class="text-field" data-tooltip="Text">Subtype</span>: {{subtype}}
-- <span class="text-field" data-tooltip="Text">Image URL</span>: {{image_url}}
+- <span class="text-field" data-tooltip="Text">Image_url</span>: {{image_url}}
 
 ## Foundation
 - <span class="text-field" data-tooltip="Text">Premise</span>: {{premise}}
-- <span class="number-field" data-tooltip="Number">Found Date</span>: {{found_date}}
-- <span class="number-field" data-tooltip="Number">End Date</span>: {{end_date}}
-- <span class="link-field" data-tooltip="Single Institution">Parent Institution</span>: {{linkify parent_institution}}
-- <span class="reverse-link-field" data-tooltip="Multi Institution">Dominion</span>: {{linkify dominion}}
+- <span class="number-field" data-tooltip="Number">Found_date</span>: {{found_date}}
+- <span class="number-field" data-tooltip="Number">End_date</span>: {{end_date}}
+- <span class="link-field" data-tooltip="Single Institution">Parent_institution</span>: {{linkify parent_institution}}
 
 ## Claim
 - <span class="multi-link-field" data-tooltip="Multi Territory">Territories</span>: {{linkify territories}}

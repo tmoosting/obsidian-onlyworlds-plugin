@@ -1,16 +1,16 @@
-## Core
-- <span class="text-field" data-tooltip="Text">ID</span>: {{id}}
+## Base
+- <span class="text-field" data-tooltip="Text">Id</span>: {{id}}
 - <span class="text-field" data-tooltip="Text">Name</span>: {{name}}
 - <span class="text-field" data-tooltip="Text">Description</span>: {{description}}
 - <span class="text-field" data-tooltip="Text">Supertype</span>: {{supertype}}
 - <span class="text-field" data-tooltip="Text">Subtype</span>: {{subtype}}
-- <span class="text-field" data-tooltip="Text">Image URL</span>: {{image_url}}
+- <span class="text-field" data-tooltip="Text">Image_url</span>: {{image_url}}
 
 ## Formation
 - <span class="text-field" data-tooltip="Text">Composition</span>: {{composition}}
 - <span class="number-field" data-tooltip="Number">Count</span>: {{count}}
-- <span class="number-field" data-tooltip="Number">Formation Date</span>: {{formation_date}}
-- <span class="link-field" data-tooltip="Single Institution">Operator</span>: {{linkify _operator}}
+- <span class="number-field" data-tooltip="Number">Formation_date</span>: {{formation_date}}
+- <span class="link-field" data-tooltip="Single Institution">Operator</span>: {{linkify operator}}
 - <span class="multi-link-field" data-tooltip="Multi Construct">Equipment</span>: {{linkify equipment}}
 
 ## Agency

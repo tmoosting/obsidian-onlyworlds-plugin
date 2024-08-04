@@ -1,10 +1,10 @@
-## Core
-- <span class="text-field" data-tooltip="Text">ID</span>: {{id}}
+## Base
+- <span class="text-field" data-tooltip="Text">Id</span>: {{id}}
 - <span class="text-field" data-tooltip="Text">Name</span>: {{name}}
 - <span class="text-field" data-tooltip="Text">Description</span>: {{description}}
 - <span class="text-field" data-tooltip="Text">Supertype</span>: {{supertype}}
 - <span class="text-field" data-tooltip="Text">Subtype</span>: {{subtype}}
-- <span class="text-field" data-tooltip="Text">Image URL</span>: {{image_url}}
+- <span class="text-field" data-tooltip="Text">Image_url</span>: {{image_url}}
 
 ## Mechanics
 - <span class="text-field" data-tooltip="Text">Usage</span>: {{usage}}
@@ -22,4 +22,4 @@
 ## World
 - <span class="text-field" data-tooltip="Text">Prevalence</span>: {{prevalence}}
 - <span class="link-field" data-tooltip="Single Phenomenon">System</span>: {{linkify system}}
-- <span class="link-field" data-tooltip="Single Construct">Construct</span>: {{linkify construct}} 
+- <span class="link-field" data-tooltip="Single Construct">Construct</span>: {{linkify construct}}

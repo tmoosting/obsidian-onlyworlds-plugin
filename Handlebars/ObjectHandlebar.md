@@ -1,18 +1,17 @@
-## Core
-- <span class="text-field" data-tooltip="Text">ID</span>: {{id}}
+## Base
+- <span class="text-field" data-tooltip="Text">Id</span>: {{id}}
 - <span class="text-field" data-tooltip="Text">Name</span>: {{name}}
 - <span class="text-field" data-tooltip="Text">Description</span>: {{description}}
 - <span class="text-field" data-tooltip="Text">Supertype</span>: {{supertype}}
 - <span class="text-field" data-tooltip="Text">Subtype</span>: {{subtype}}
-- <span class="text-field" data-tooltip="Text">Image URL</span>: {{image_url}}
+- <span class="text-field" data-tooltip="Text">Image_url</span>: {{image_url}}
 
 ## Form
 - <span class="text-field" data-tooltip="Text">Aesthetics</span>: {{aesthetics}}
 - <span class="number-field" data-tooltip="Number">Weight</span>: {{weight}}
 - <span class="number-field" data-tooltip="Number">Amount</span>: {{amount}}
-- <span class="link-field" data-tooltip="Single Object">Parent Object</span>: {{linkify parent_object}}
+- <span class="link-field" data-tooltip="Single Object">Parent_object</span>: {{linkify parent_object}}
 - <span class="multi-link-field" data-tooltip="Multi Construct">Technology</span>: {{linkify technology}}
-- <span class="reverse-link-field" data-tooltip="Multi Object">Components</span>: {{linkify components}}
 
 ## Function
 - <span class="text-field" data-tooltip="Text">Utility</span>: {{utility}}
@@ -23,8 +22,6 @@
 ## World
 - <span class="text-field" data-tooltip="Text">Origins</span>: {{origins}}
 - <span class="link-field" data-tooltip="Single Location">Location</span>: {{linkify location}}
-- <span class="reverse-link-field" data-tooltip="Multi Title">Titles</span>: {{linkify titles}}
-- <span class="reverse-link-field" data-tooltip="Multi Institution">Claimants</span>: {{linkify claimants}}
 
 ## Games
 - <span class="text-field" data-tooltip="Text">Craftsmanship</span>: {{craftsmanship}}

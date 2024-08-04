@@ -1,10 +1,10 @@
-## Core
-- <span class="text-field" data-tooltip="Text">ID</span>: {{id}}
+## Base
+- <span class="text-field" data-tooltip="Text">Id</span>: {{id}}
 - <span class="text-field" data-tooltip="Text">Name</span>: {{name}}
 - <span class="text-field" data-tooltip="Text">Description</span>: {{description}}
 - <span class="text-field" data-tooltip="Text">Supertype</span>: {{supertype}}
 - <span class="text-field" data-tooltip="Text">Subtype</span>: {{subtype}}
-- <span class="text-field" data-tooltip="Text">Image URL</span>: {{image_url}}
+- <span class="text-field" data-tooltip="Text">Image_url</span>: {{image_url}}
 
 ## Syntax
 - <span class="text-field" data-tooltip="Text">Writing</span>: {{writing}}
@@ -18,4 +18,3 @@
 - <span class="number-field" data-tooltip="Number">Speakers</span>: {{speakers}}
 - <span class="multi-link-field" data-tooltip="Multi Language">Dialects</span>: {{linkify dialects}}
 - <span class="multi-link-field" data-tooltip="Multi Location">Range</span>: {{linkify range}}
-- <span class="reverse-link-field" data-tooltip="Multi Species">Species</span>: {{linkify species}}
