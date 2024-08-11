@@ -18,11 +18,11 @@ export class CreateSettingsCommand {
 
 
 *Specify the name of the world you are working on here. Affects element creation and manual validation. 
-When empty, defaults to first in the hierarchy under /Worlds/*
+When empty, defaults to first in the hierarchy under OnlyWorlds/Worlds/*
 - **Primary World Name:** 
 
 *Change to 'Yes', then reload Obsidian, to include a separate creation command for each element category. 
-('Create new Character), ('Create new Location), etc*
+('Create new Character', 'Create new Location', etc)*
 - **Individual Element Creation Commands:** No
 
 `;

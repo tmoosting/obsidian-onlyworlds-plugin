@@ -1,5 +1,3 @@
-# World Overview: {{name}}
-
 ## Core 
 - **ID:** {{id}}
 - **API Key:** {{api_key}}

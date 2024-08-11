@@ -18,6 +18,7 @@ import { CreateSettingsCommand } from 'Commands/CreateSettingsCommand';
 import { CreateReadmeCommand } from 'Commands/CreateReadmeCommand';
 import { CopyWorldCommand } from 'Commands/CopyWorldCommand';
 import { PasteWorldCommand } from 'Commands/PasteWorldCommand';
+import { RenameWorldCommand } from 'Commands/RenameWorldCommand';
 
 export default class OnlyWorldsPlugin extends Plugin {
   graphViewExtensions: GraphViewExtensions;
@@ -99,6 +100,7 @@ export default class OnlyWorldsPlugin extends Plugin {
         const validateWorldCommand = new ValidateWorldCommand(this.app, this.manifest, this.worldService, true);
         const pasteWorldCommand = new PasteWorldCommand(this.app, this.manifest);
         const copyWorldCommand = new CopyWorldCommand(this.app, this.manifest, this.worldService);
+        const renameWorldCommand = new RenameWorldCommand(this.app, this.manifest);
 
         // manually handled in create/import world commands, no need for user to do this
         // // Register a command to create category folders
@@ -179,6 +181,11 @@ export default class OnlyWorldsPlugin extends Plugin {
         id: 'copy-world',
         name: 'Copy World',
         callback: () => copyWorldCommand.execute(),
+    });
+      this.addCommand({
+        id: 'rename-world',
+        name: 'Rename World',
+        callback: () => renameWorldCommand.execute(),
     });
    
 
