@@ -1,3 +1,4 @@
+import { Category } from 'enums';
 import { App, Modal, Notice } from 'obsidian';
 
 export class WorldPasteModal extends Modal {
@@ -52,43 +53,29 @@ export class WorldPasteModal extends Modal {
         };
     }
 
-    isValidJSON(str: string): boolean {
+    
+    
+     isValidJSON(str: string): boolean {
         try {
             const data = JSON.parse(str);
-            const requiredCategories = [
-                "Character", "Object", "Location", "Species", "Territory", "Institution", 
-                "Family", "Creature", "Collective", "Trait", "Phenomenon", "Title", "Ability", 
-                "Language", "Law", "Relation", "Event", "Construct"
-            ];
     
-            // Check for all required categories
-            for (let category of requiredCategories) {
+            const categories = Object.values(Category).filter(key => typeof key === 'string');
+
+            // Validate existence of categories
+            for (let category of categories) {
                 if (!data[category] || !Array.isArray(data[category])) {
                     return false; // Each category must exist and be an array
                 }
             }
     
-            // Special handling for "World" to ensure it contains specific fields
-            const requiredWorldFields = [
-                "id", "api_key", "name", "description", "user_id", "ow_version", 
-                "image_url", "focus_text", "time_format_names", "time_format_equivalents", 
-                "time_basic_unit", "time_current", "time_range_min", "time_range_max"
-            ];
-    
-            const world = data["World"];
-            if (!world || typeof world !== 'object') {
+            // Check only for the existence of the World object
+            if (!data.World || typeof data.World !== 'object') {
                 return false;
-            }
-    
-            for (let field of requiredWorldFields) {
-                if (world[field] === undefined) {
-                    return false; // Each specified field must exist in the "World" object
-                }
             }
     
             return true; // All checks passed
         } catch (e) {
-            return false;
+            return false;  // In case of an error during parsing
         }
     }
     
