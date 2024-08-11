@@ -44,7 +44,7 @@ export default class OnlyWorldsPlugin extends Plugin {
         Handlebars.registerHelper('linkify', (ids:string) => {
           if (!ids) return '';
           // Log the input IDs to verify they're being received correctly.
-          console.log(`Linkifying IDs: ${ids}`);
+          console.log(`Linkifying Ids: ${ids}`);
           return ids.split(',').map(id => `[[${id.trim()}]]`).join(', ');
       });
 
@@ -112,22 +112,23 @@ export default class OnlyWorldsPlugin extends Plugin {
         //     }
         // });
 
-        // Register a command to copy template files to user vault
-        this.addCommand({
-            id: 'setup-templates',
-            name: 'Create Element Templates',
-            callback: () => createTemplatesCommand.execute(),
-        });
-        this.addCommand({
-            id: 'setup-settings',
-            name: 'Create Settings File',
-            callback: () => createSettingsCommand.execute(),
-        });
-        this.addCommand({
-            id: 'setup-readme',
-            name: 'Create Readme File',
-            callback: () => createReadmeCommand.execute(),
-        });
+         
+        // These excluded as user should not need to call them anyways; and settings/readme require fix on no existing folders
+        // this.addCommand({
+        //     id: 'setup-templates',
+        //     name: 'Create Templates',
+        //     callback: () => createTemplatesCommand.execute(),
+        // });
+        // this.addCommand({
+        //     id: 'setup-settings',
+        //     name: 'Create Settings',
+        //     callback: () => createSettingsCommand.execute(),
+        // });
+        // this.addCommand({
+        //     id: 'setup-readme',
+        //     name: 'Create Readme',
+        //     callback: () => createReadmeCommand.execute(),
+        // });
 
 
           // Register a command to fetch world data and convert to notes
@@ -154,7 +155,7 @@ export default class OnlyWorldsPlugin extends Plugin {
 
         this.addCommand({
           id: 'create-element',
-          name: 'Create New OnlyWorlds Element',
+          name: 'Create New Element',
           callback: () => {
               let templateModal = new TemplateSelectionModal(this.app, (category) => {
                   // Open the NameInputModal after selecting a category

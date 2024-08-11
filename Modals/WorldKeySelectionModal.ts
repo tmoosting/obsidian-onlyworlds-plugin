@@ -32,7 +32,7 @@ export class WorldKeySelectionModal extends Modal {
         const input = contentEl.createEl('input', {
             type: 'text',
             placeholder: 'Please enter 10-digit world key',
-            value: '0094340200'
+            value: '0075037444'
         });
         input.style.width = '100%'; 
 
