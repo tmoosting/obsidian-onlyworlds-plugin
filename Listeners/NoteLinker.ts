@@ -85,11 +85,11 @@ export class NoteLinker extends Plugin {
         for (const file of files) {
             const content = await this.app.vault.read(file);
             const { name, id } = this.parseElement(content);
-            console.log(`Checking file: ${file.path}, Found ID: ${id}, Name: ${name}`); // Detailed log for each file
+            console.log(`Checking file: ${file.path}, Found Id: ${id}, Name: ${name}`); // Detailed log for each file
     
             if (id !== currentId) {
                 elements.push({ name, id });
-                console.log(`Added element: ${name} with ID: ${id}`); // Log each element added
+                console.log(`Added element: ${name} with Id: ${id}`); // Log each element added
             }
         }
     
@@ -115,10 +115,10 @@ export class NoteLinker extends Plugin {
     const idMatch = content.match(/<span class="text-field" data-tooltip="Text">Id<\/span>:\s*([\w-]+)/);
     const nameMatch = content.match(/<span class="text-field" data-tooltip="Text">Name<\/span>:\s*(.+)/);
 
-    const id = idMatch ? idMatch[1].trim() : "Unknown ID";
+    const id = idMatch ? idMatch[1].trim() : "Unknown Id";
     const name = nameMatch ? nameMatch[1].trim() : "Unnamed Element";
 
-    console.log(`Parsed ID: ${id}`);
+    console.log(`Parsed Id: ${id}`);
     console.log(`Parsed Name: ${name}`);
 
     return { id, name };

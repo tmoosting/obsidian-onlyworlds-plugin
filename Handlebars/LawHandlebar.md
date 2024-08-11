@@ -1,5 +1,5 @@
 ## Core
-- <span class="text-field" data-tooltip="Text">ID</span>: {{id}}
+- <span class="text-field" data-tooltip="Text">Id</span>: {{id}}
 - <span class="text-field" data-tooltip="Text">Name</span>: {{name}}
 - <span class="text-field" data-tooltip="Text">Description</span>: {{description}}
 - <span class="text-field" data-tooltip="Text">Supertype</span>: {{supertype}}

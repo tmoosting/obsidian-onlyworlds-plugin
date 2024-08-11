@@ -220,13 +220,13 @@ export class CopyWorldCommand {
     private parseElement(content: string): { name: string, id: string } {
         console.log("Parsing element content...");
         // Adjust the regex to capture the full ID including dashes
-        const idMatch = content.match(/<span class="text-field" data-tooltip="Text">ID<\/span>:\s*([^\s<]+)/);
+        const idMatch = content.match(/<span class="text-field" data-tooltip="Text">Id<\/span>:\s*([^\s<]+)/);
         const nameMatch = content.match(/<span class="text-field" data-tooltip="Text">Name<\/span>:\s*([^\s<]+)/);
         
-        const id = idMatch ? idMatch[1].trim() : "Unknown ID";
+        const id = idMatch ? idMatch[1].trim() : "Unknown Id";
         const name = nameMatch ? nameMatch[1].trim() : "Unnamed Element";
         
-        console.log(`Parsed ID: ${id}`);
+        console.log(`Parsed Id: ${id}`);
         console.log(`Parsed Name: ${name}`);
         
         return { id, name };

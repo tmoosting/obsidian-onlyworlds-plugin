@@ -25,7 +25,7 @@ export class ElementSelectionModal extends Modal {
             this.elements.forEach(element => {
                 new Setting(contentEl)
                     .setName(element.name)
-                    .setDesc(`ID: ${element.id}`)
+                    .setDesc(`Id: ${element.id}`)
                     .addButton(button => {
                         button.setButtonText('Select')
                             .onClick(() => {

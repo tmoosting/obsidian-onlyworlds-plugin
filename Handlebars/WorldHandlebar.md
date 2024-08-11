@@ -1,9 +1,9 @@
 ## Core 
-- **ID:** {{id}}
+- **Id:** {{id}}
 - **API Key:** {{api_key}}
 - **Name:** {{name}}
 - **Description:** {{description}}
-- **User ID:** {{user_id}}
+- **User Id:** {{user_id}}
 - **Version:** {{ow_version}}
 - **Image URL:** {{image_url}}
 

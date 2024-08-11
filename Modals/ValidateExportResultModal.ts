@@ -19,9 +19,9 @@ export class ValidateExportResultModal extends Modal {
         maxNumberErrors: 'Hover or click the field name to see the max allowed value',
         singleLinkFieldErrors: 'Can have one linked element, formatted as: [[NoteName]]',
         multiLinkFieldErrors: 'Can have multiple links, formatted as: [[NoteName1]],[[NoteName2]],[[NoteName3]]',
-        missingIdErrors: 'Elements must always have an ID value. If missing, google: "generate uuidv7" and generate one',
+        missingIdErrors: 'Elements must always have an Id value. If missing, google: "generate uuidv7" and generate one',
         nameMismatchErrors: 'Note names must exactly match value in Name field',
-        worldFileErrors: 'Verify that the World data file has an ID and Name value'
+        worldFileErrors: 'Verify that the World data file has an Id and Name value'
     };
 
     constructor(app: App, errors: { 

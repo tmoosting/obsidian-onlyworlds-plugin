@@ -43,10 +43,10 @@ export class CreateElementCommand {
 
     insertIdInTemplate(content: string, id: string): string {
         const lines = content.split('\n');
-        const idLineIndex = lines.findIndex(line => line.includes('ID</span>:'));
+        const idLineIndex = lines.findIndex(line => line.includes('Id</span>:'));
         console.log("id : " + id);
         if (idLineIndex !== -1) {
-            lines[idLineIndex] = lines[idLineIndex].replace('ID</span>:', `ID</span>: ${id}`);
+            lines[idLineIndex] = lines[idLineIndex].replace('Id</span>:', `Id</span>: ${id}`);
         }
         return lines.join('\n');
     }

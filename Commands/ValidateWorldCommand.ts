@@ -75,11 +75,11 @@ export class ValidateWorldCommand {
    
 
     validateWorldFile(content: string): boolean {
-        const idMatch = content.match(/ID:\s*(\S+)/);
+        const idMatch = content.match(/Id:\s*(\S+)/);
         const nameMatch = content.match(/Name:\s*(\S+)/);
         if (!idMatch || !nameMatch) {
             this.errorCount++;
-            this.errors.worldFileErrors.push(`World file format error detected: please check ID and Name fields each have values`);
+            this.errors.worldFileErrors.push(`World file format error detected: please check Id and Name fields each have values`);
             return false;
         }
         return true;
@@ -150,12 +150,12 @@ export class ValidateWorldCommand {
             }
     
             // Validation for ID field being non-empty
-            if (line.includes('<span class="text-field" data-tooltip="Text">ID</span>:')) {
+            if (line.includes('<span class="text-field" data-tooltip="Text">Id</span>:')) {
                 const parts = line.split(':');
                 const idValue = parts.length > 1 ? parts[1].trim() : '';
                 if (!idValue) {
                     this.errorCount++;
-                    this.errors.missingIdErrors.push(`(${category}) ${displayName} has error in ID: field is empty`);
+                    this.errors.missingIdErrors.push(`(${category}) ${displayName} has error in Id: field is empty`);
                 } else {
                     idFound = true;
                 }

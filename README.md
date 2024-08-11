@@ -39,7 +39,7 @@ To kickstart your worldbuilding journey within Obsidian:
 
 ### Editing Guidelines
 - The **Name** field of an element must match the note name.
-- Each element must have a unique ID, generated automatically. Use the **Create Element** command to ensure uniqueness. If duplicating manually, ensure to generate a new UUIDv7.
+- Each element must have a unique Id, generated automatically. Use the **Create Element** command to ensure uniqueness. If duplicating manually, ensure to generate a new UUIDv7.
 
 ## Commands
 - **Create README/Templates/Settings**: Automatically executed during world creation/import. Manual execution is unnecessary unless restoration is needed.
