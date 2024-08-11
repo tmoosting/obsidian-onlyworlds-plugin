@@ -155,7 +155,7 @@ export default class OnlyWorldsPlugin extends Plugin {
 
         this.addCommand({
           id: 'create-element',
-          name: 'Create New Element',
+          name: 'Create Element',
           callback: () => {
               let templateModal = new TemplateSelectionModal(this.app, (category) => {
                   // Open the NameInputModal after selecting a category

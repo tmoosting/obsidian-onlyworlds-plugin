@@ -1,59 +1,62 @@
 # OnlyWorlds Plugin for Obsidian
 
-Welcome to **OnlyWorlds**, a comprehensive plugin designed to seamlessly integrate the worldbuilding capabilities of the **OnlyWorlds framework** into your Obsidian vault. This tool enables you to convert, create, export, and import richly detailed worlds right within your personal knowledge base.
+This plugin provides complete workflows for world creation, building, and management, fully compatible with the OnlyWorlds framework
 
-## OnlyWorlds Framework
-A robust, cross-platform solution for world creators, enabling the design, sharing, and simulation of immersive worlds. Discover more about the framework and access technical resources through the following links:
-- General Information: [OnlyWorlds Website](https://www.onlyworlds.com)
-- Technical Documentation: [OnlyWorlds Tech Docs](https://onlyworlds.github.io)
+It functions as a standalone tool for organizing worlds and also facilitates the transfer of these worlds across various other tools and games
 
-With this plugin, users can start from scratch or import existing worlds to adapt, expand, and enrich their storytelling or game design processes.
+More information about OnlyWorlds in this [technical documentation](https://onlyworlds.github.io)
 
-## Core Files and Folders
-By utilizing **OnlyWorlds**, the following structure is automatically established within your vault through commands like **Create World** or **Import World**:
-- **OnlyWorlds**: A top-level parent folder.
-- **Worlds**: A subdirectory containing individual folders for each world you manage.
-  - Each world folder includes a `World.md` file and an **Elements** folder.
-- **Elements**: Divided into 18 subfolders, each representing a category like Character, Location, etc.
-- **Templates**: Contains pre-defined templates for each of the 18 element categories. These templates facilitate element creation and should remain unedited.
-- **Settings**: A configuration file allowing user-specific adjustments.
-
+ 
 ## Getting Started
-To kickstart your worldbuilding journey within Obsidian:
-1. Press `Ctrl+P` and execute the **Create World** command to set up all necessary files automatically.
-2. Use the **Create Element** command to begin adding elements like a Character or a Location.
-3. If you’re transitioning from another platform, use the **Import World** command to bring your existing OnlyWorlds into Obsidian.
+Create a world and required structures with the Create World command (Ctrl + P)
 
-### Navigating and Linking Elements
-- Navigate to `OnlyWorlds/Worlds/NewWorld/Elements/Character`.
-- To link a Character’s birthplace, navigate to the Birthplace field, click behind it, and press `Ctrl/Cmd + Shift + L`, then select the location.
+Use the Create Element command to fill your world with elements of  [various categories](https://onlyworlds.github.io/docs/framework/categories.html)
+
+
+Integrate existing world content, or create new, by shaping elements through their attribute fields. Join community [discussions](https://github.com/OnlyWorlds/OnlyWorlds/discussions) on improving  field definitions
+
+Convert your worlds into a shippable JSON data format for local copy and online use, with various [tools](https://onlyworlds.github.io/docs/tools/) currently available
+
+## Folder Structure
+- **OnlyWorlds/**: Parent folder at top of vault
+    - **Templates/**: Should not be modified
+    - **Worlds/**: Directory for user worlds 
+        - **WorldOne/**:  
+            - **Elements/**: Elements for the user to edit
+            - **World**: World configuration file 
+            - **World Data**: Output file for Copy World command (in JSON)
+        - **WorldTwo/**:  
+            - ..
+    - **README**: ..
+    - **Settings**: A few plugin options
+
+## Commands 
+
+- `Create World` Create a new world file and necessary files
+- `Paste World`  Create necessary files and world directly from a World Data string - `Import World` Create necessary files and world from online World Data using a world key
+- `Copy World` Create World Data string for a world in your vault
+- `Export World` Send World Data of your world online using a world key
+- `Rename World`  Alter the name of your world (safely)
+- `Validate World`  Manual call that is forced on export for ensuring correct content and formatting
+ - `Create Element`  Choose a category, then enter a name to create
+ - `Create {Category}`  Enable 18 direct category creation commands in Settings  
 
 ## Element Editing
-### Linkable Fields
-- Fields with **blue dotted lines** are linkable and can contain multiple links.
-- Fields with **light blue dotted lines** are restricted to a single link.
+- **Normal fields**: Accept text of any length
 
-### Field Types
-- **Italic fields**: Numeric only. Hover over the field name to view any maximum value constraints.
-- **Other fields**: Accept text of any length.
+- **Italic fields**: Numeric only. Hover or click the field to see potential maximum value
+
+- **Link fields** (underlined): Place cursor behind, then Ctrl + Shift + L to view pickable elements. Light blue for single reference, dark multi
 
 ### Editing Guidelines
-- The **Name** field of an element must match the note name.
-- Each element must have a unique Id, generated automatically. Use the **Create Element** command to ensure uniqueness. If duplicating manually, ensure to generate a new UUIDv7.
+- The **Name** field of an element must match the note name
+- Each element must have a unique Id, generated automatically with **Create Element** command. When duplicating manually, ensure to generate a [new UUIDv7](https://www.uuidgenerator.net/version7)
 
-## Commands
-- **Create README/Templates/Settings**: Automatically executed during world creation/import. Manual execution is unnecessary unless restoration is needed.
-- **Create World**: Initializes a new world along with all required files and folders.
-- **Import World**: Imports a world using a specific world key from the OnlyWorlds server. To overwrite existing worlds, delete the old folder first.
-- **Export World**: Saves your world under a specified world key to the OnlyWorlds server.
-- **Validate World**: Ensures all world data and elements are correctly formatted. This command must pass without errors before exporting and can be run manually for checks.
-
-## Settings
-Adjust plugin settings to tailor the OnlyWorlds experience:
-- Select the **active world** for ongoing work.
-- Enable quick commands for creating elements from each of the 18 categories, streamlining the element creation process.
-
+## Settings 
+- Write the **active world** name for ongoing work 
+- Enable quick commands for creating elements for each of the 18 categories   
+   
 ## Contact and Contribution
-We welcome contributions and feedback on the OnlyWorlds plugin. Please visit our [documentation](https://onlyworlds.github.io) and [website](https://www.onlyworlds.com) for more information and to get involved in the development.
+Feedback and contribution for this plugin or anything OnlyWorlds is always welcome, via  [discord](https://discord.gg/twCjqvVBwb) or [github](https://github.com/OnlyWorlds/OnlyWorlds) or [reddit](https://www.reddit.com/r/OnlyWorlds/) or [email](onlyworldsdev@gmail.com)
 
-For assistance and further engagement with the community, refer to the links provided in the introduction.
+  
