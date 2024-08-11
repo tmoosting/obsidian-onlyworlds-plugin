@@ -51,7 +51,6 @@ export class ValidateResultModal extends Modal {
 
         if (this.errorCount > 0) {
             contentEl.createEl('p', { text: `Please correct these issues below before exporting ${this.worldName}.` });
-            contentEl.createEl('p', { text: `Hover the error headers for details on formatting.` });
         } else {
             contentEl.createEl('p', { text: `No issues detected. ${this.worldName} is ready for export!` });
         }

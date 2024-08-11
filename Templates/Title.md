@@ -9,10 +9,10 @@
 ## Nature
 - <span class="text-field" data-tooltip="Text">Privileges</span>: 
 - <span class="text-field" data-tooltip="Text">Conditions</span>: 
-- <span class="number-field" data-tooltip="Number">Create_date</span>: 
-- <span class="number-field" data-tooltip="Number">Assign_date</span>: 
-- <span class="number-field" data-tooltip="Number">Revoke_date</span>: 
-- <span class="number-field" data-tooltip="Number">Hierarchy</span>: 
+- <span class="number-field" data-tooltip="Number, max: 0">Create_date</span>: 
+- <span class="number-field" data-tooltip="Number, max: 0">Assign_date</span>: 
+- <span class="number-field" data-tooltip="Number, max: 0">Revoke_date</span>: 
+- <span class="number-field" data-tooltip="Number, max: 0">Hierarchy</span>: 
 
 ## Issue
 - <span class="text-field" data-tooltip="Text">Rights</span>: 
@@ -27,3 +27,4 @@
 - <span class="link-field" data-tooltip="Single Territory">Territory</span>: 
 - <span class="link-field" data-tooltip="Single Collective">Collective</span>: 
 - <span class="link-field" data-tooltip="Single Construct">Construct</span>: 
+

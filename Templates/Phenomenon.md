@@ -9,7 +9,7 @@
 ## Manifest
 - <span class="text-field" data-tooltip="Text">Presence</span>: 
 - <span class="text-field" data-tooltip="Text">Scope</span>: 
-- <span class="number-field" data-tooltip="Number">Duration</span>: 
+- <span class="number-field" data-tooltip="Number, max: 0">Duration</span>: 
 - <span class="text-field" data-tooltip="Text">Intensity</span>: 
 - <span class="multi-link-field" data-tooltip="Multi Trait">Empowerments</span>: 
 - <span class="multi-link-field" data-tooltip="Multi Location">Environments</span>: 
@@ -23,3 +23,4 @@
 - <span class="multi-link-field" data-tooltip="Multi Character">Enablers</span>: 
 - <span class="multi-link-field" data-tooltip="Multi Construct">Triggers</span>: 
 - <span class="multi-link-field" data-tooltip="Multi Phenomenon">Affinity</span>: 
+
