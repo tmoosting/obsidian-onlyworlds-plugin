@@ -26,18 +26,13 @@ export class RenameWorldCommand {
         modal.open();
     }
 
-    async renameWorldFile(oldWorldName: string, newWorldName: string) {
+     async renameWorldFile(oldWorldName: string, newWorldName: string) {
         const worldFilePath = normalizePath(`OnlyWorlds/Worlds/${oldWorldName}/World.md`);
-        try {
-            const fs: FileSystemAdapter = this.app.vault.adapter as FileSystemAdapter;
-            const worldFileContent = await fs.read(worldFilePath);
-            const updatedContent = this.updateWorldNameInContent(worldFileContent, newWorldName);
-            await fs.write(worldFilePath, updatedContent);
-            new Notice('World name updated successfully.');
-        } catch (error) {
-            console.error('Error updating World file:', error);
-            new Notice('Failed to update World file: ' + error.message);
-        }
+        const fs: FileSystemAdapter = this.app.vault.adapter as FileSystemAdapter;
+        const worldFileContent = await fs.read(worldFilePath);
+        const updatedContent = this.updateWorldNameInContent(worldFileContent, newWorldName);
+        await fs.write(worldFilePath, updatedContent);
+        new Notice('World file name updated successfully.');
     }
 
     private updateWorldNameInContent(content: string, newName: string): string {
@@ -50,18 +45,12 @@ export class RenameWorldCommand {
         }
         return lines.join('\n');
     }
-    async renameWorldFolder(oldWorldName: string, newWorldName: string) {
+     async renameWorldFolder(oldWorldName: string, newWorldName: string) {
         const fs: FileSystemAdapter = this.app.vault.adapter as FileSystemAdapter;
         const oldPath = `OnlyWorlds/Worlds/${oldWorldName}`;
         const newPath = `OnlyWorlds/Worlds/${newWorldName}`;
-
-        try {
-            await fs.rename(oldPath, newPath);
-            new Notice(`World folder renamed successfully from '${oldWorldName}' to '${newWorldName}'.`);
-        } catch (error) {
-            console.error('Failed to rename world folder:', error);
-            new Notice('Failed to rename world folder.');
-        }
+        await fs.rename(oldPath, newPath);
+        new Notice(`World folder renamed successfully from '${oldWorldName}' to '${newWorldName}'.`);
     }
 
   
