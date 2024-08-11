@@ -43,7 +43,7 @@ export class CopyWorldCommand {
             navigator.clipboard.writeText(worldDataJSON);
     
             // Modal confirmation
-            new WorldCopyModal(this.app, `${activeWorldName} copied to clipboard and to World Data File`).open();
+            new WorldCopyModal(this.app, `${activeWorldName}`).open();
             new Notice(`World data file updated for ${activeWorldName}.`);
         } catch (error) {
             console.error('Error during world data processing:', error);

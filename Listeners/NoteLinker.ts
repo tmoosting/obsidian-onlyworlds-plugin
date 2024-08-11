@@ -112,7 +112,7 @@ export class NoteLinker extends Plugin {
   private parseElement(content: string): { name: string, id: string } {
     console.log("Parsing element content...");
     // Adjust the regex to capture the full ID including dashes and potential special characters
-    const idMatch = content.match(/<span class="text-field" data-tooltip="Text">ID<\/span>:\s*([\w-]+)/);
+    const idMatch = content.match(/<span class="text-field" data-tooltip="Text">Id<\/span>:\s*([\w-]+)/);
     const nameMatch = content.match(/<span class="text-field" data-tooltip="Text">Name<\/span>:\s*(.+)/);
 
     const id = idMatch ? idMatch[1].trim() : "Unknown ID";

@@ -17,7 +17,7 @@ export class CreateSettingsCommand {
             const content = `# OnlyWorlds Plugin Settings
 
 
-*Specify the name of the world you are working on here. Affects element creation and manual validation. 
+*Specify the name of the world you are working on here. Affects element creation commands, copy world command, and manual validation command.  
 When empty, defaults to first in the hierarchy under OnlyWorlds/Worlds/*
 - **Primary World Name:** 
 

@@ -1,16 +1,19 @@
 import { Modal, App } from 'obsidian';
 
 export class WorldCopyModal extends Modal {
-    message: string;
+    worldName: string;
 
-    constructor(app: App, message: string) {
+    constructor(app: App, worldName: string) {
         super(app);
-        this.message = message;
+        this.worldName = worldName;
     }
 
     onOpen() {
         let { contentEl } = this;
-        contentEl.createEl('h3', { text: this.message });
+        contentEl.createEl('h3', { text: `Copied ${this.worldName}` });
+        contentEl.createEl('p', {
+            text: `Full ${this.worldName} data has been placed on your clipboard, and in a note in its folder called World Data File.`
+        });
         contentEl.createEl('button', { text: 'OK', type: 'button' }, (button) => {
             button.onclick = () => this.close();
         });
